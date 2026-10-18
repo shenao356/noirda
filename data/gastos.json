@@ -1,8 +1,51 @@
 {
-  "marca": "NOIRDA",
-  "propietario": "Santiago Varelas",
+  "marca": "NOIRDA Opulence",
+  "propietario": "Liam Varelas",
+  "telefono": "3045345642",
   "moneda": "COP",
-  "ultimaActualizacion": "2026-10-18T04:13:29.685Z",
+  "ultimaActualizacion": "2026-10-18T04:25:00.000Z",
+  "empleados": [
+    {
+      "id": 1,
+      "nombre": "Liam Varelas",
+      "documento": "1037648921",
+      "cargo": "Administrador Tienda",
+      "telefono": "3045345642",
+      "email": "liamvarelas@gmail.com",
+      "tipoPago": "mensual",
+      "tarifa": 10000000
+    },
+    {
+      "id": 2,
+      "nombre": "Kim Zuluaga",
+      "documento": "1028394857",
+      "cargo": "Costurero / Modista",
+      "telefono": "3124567890",
+      "email": "kimzuluaga@gmail.com",
+      "tipoPago": "quincenal",
+      "tarifa": 500000
+    },
+    {
+      "id": 3,
+      "nombre": "Luna Gil",
+      "documento": "1019283746",
+      "cargo": "Vendedor / Atención Almacén",
+      "telefono": "3156789012",
+      "email": "lunagil@gmail.com",
+      "tipoPago": "horas",
+      "tarifa": 15000
+    },
+    {
+      "id": 4,
+      "nombre": "Santiago Henao",
+      "documento": "1048291039",
+      "cargo": "Seguridad / Servicios Generales",
+      "telefono": "3001234567",
+      "email": "shenao356@gmail.com",
+      "tipoPago": "mensual",
+      "tarifa": 25000000
+    }
+  ],
   "compras": [
     {
       "fecha": "2026-10-18",

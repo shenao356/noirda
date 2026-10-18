@@ -1,6 +1,7 @@
 /**
- * NOIRDA - Control de Gastos, Compras de Mercancía y Nómina
- * Diseñado para Santiago Varelas | NOIRDA Fashion Store
+ * NOIRDA Opulence - Atelier & Fashion Store
+ * Control de Gastos, Compras de Mercancía, Nómina y Directorio de Personal
+ * Diseñado exclusivamente para Liam Varelas (Cel: 3045345642)
  * Arquitectura 100% Responsiva con IndexedDB y Soporte Multi-Dispositivo
  */
 
@@ -10,7 +11,7 @@
 class NoirdaDB {
   constructor() {
     this.dbName = 'NoirdaExpensesDB';
-    this.version = 1;
+    this.version = 2;
     this.db = null;
   }
 
@@ -29,6 +30,10 @@ class NoirdaDB {
           const nominaStore = db.createObjectStore('nomina', { keyPath: 'id', autoIncrement: true });
           nominaStore.createIndex('fecha', 'fecha', { unique: false });
           nominaStore.createIndex('periodo', ['anio', 'mes'], { unique: false });
+        }
+        if (!db.objectStoreNames.contains('empleados')) {
+          const empleadosStore = db.createObjectStore('empleados', { keyPath: 'id', autoIncrement: true });
+          empleadosStore.createIndex('nombre', 'nombre', { unique: false });
         }
         if (!db.objectStoreNames.contains('config')) {
           db.createObjectStore('config', { keyPath: 'key' });
@@ -105,9 +110,12 @@ const App = {
   db: new NoirdaDB(),
   compras: [],
   nomina: [],
+  empleados: [],
+  comprasFiltradasActuales: [],
   config: {
-    brandName: 'NOIRDA',
-    ownerName: 'Santiago Varelas',
+    brandName: 'NOIRDA Opulence',
+    ownerName: 'Liam Varelas',
+    ownerPhone: '3045345642',
     currency: 'COP',
     logoData: null,
     showKpiTotal: true,
@@ -170,6 +178,7 @@ const App = {
 
     this.iniciarPeriodosSelector();
     this.aplicarConfiguracionVisual();
+    this.iniciarPantallaBienvenida();
     this.configurarEventos();
     this.renderTodo();
   },
@@ -193,9 +202,19 @@ const App = {
     } catch (e) {
       console.warn('Usando configuración por defecto');
     }
+
+    // Regla fija e inmutable: La tienda pertenece a Liam Varelas y su marca es NOIRDA Opulence
+    this.config.brandName = 'NOIRDA Opulence';
+    this.config.ownerName = 'Liam Varelas';
+    this.config.ownerPhone = '3045345642';
   },
 
   async guardarConfiguracion() {
+    // Proteger identidad oficial
+    this.config.brandName = 'NOIRDA Opulence';
+    this.config.ownerName = 'Liam Varelas';
+    this.config.ownerPhone = '3045345642';
+
     try {
       localStorage.setItem('noirda_config_v2', JSON.stringify(this.config));
     } catch (e) {
@@ -205,10 +224,25 @@ const App = {
     this.aplicarConfiguracionVisual();
   },
 
-  // Cargar registros de compras y nómina
+  // Cargar registros de compras, nómina y empleados
   async cargarDatos() {
     this.compras = (await this.db.getAll('compras')).sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
     this.nomina = (await this.db.getAll('nomina')).sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    this.empleados = (await this.db.getAll('empleados')) || [];
+
+    // Sembrar directorio oficial de empleados si está vacío
+    if (this.empleados.length === 0) {
+      const empleadosBase = [
+        { id: 1, nombre: 'Liam Varelas', cargo: 'Director Creativo & Propietario', documento: '1037648921', telefono: '3045345642', email: 'liamvarelas@gmail.com', tipoPago: 'mensual', tarifa: 10000000, notas: 'Gestión y dirección general' },
+        { id: 2, nombre: 'Kim Zuluaga', cargo: 'Costurero / Modista', documento: '1028394857', telefono: '3124567890', email: 'kimzuluaga@gmail.com', tipoPago: 'quincenal', tarifa: 500000, notas: 'Confección y costura' },
+        { id: 3, nombre: 'Luna Gil', cargo: 'Vendedor / Atención Almacén', documento: '1019283746', telefono: '3156789012', email: 'lunagil@gmail.com', tipoPago: 'horas', tarifa: 15000, notas: 'Ventas y styling' },
+        { id: 4, nombre: 'Carlos Gómez', cargo: 'Logística & Bodega de Ropa', documento: '1048291039', telefono: '3001234567', email: 'carlos@noirda.com', tipoPago: 'dias', tarifa: 55000, notas: 'Recepción y percheros' }
+      ];
+      for (const emp of empleadosBase) {
+        await this.db.put('empleados', emp);
+      }
+      this.empleados = empleadosBase;
+    }
   },
 
   // Generar datos iniciales demostrativos para Noirda
@@ -317,8 +351,8 @@ const App = {
       <rect x="20" y="20" width="560" height="760" fill="none" stroke="#d4af37" stroke-width="2" stroke-dasharray="8 4" rx="12"/>
       <circle cx="300" cy="110" r="45" fill="#1c222e" stroke="#d4af37" stroke-width="2"/>
       <text x="300" y="125" font-family="sans-serif" font-size="44" font-weight="bold" fill="#d4af37" text-anchor="middle">N</text>
-      <text x="300" y="195" font-family="sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="4">NOIRDA</text>
-      <text x="300" y="225" font-family="sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Santiago Varelas | Soporte Contable</text>
+      <text x="300" y="195" font-family="sans-serif" font-size="26" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="4">NOIRDA OPULENCE</text>
+      <text x="300" y="225" font-family="sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Liam Varelas | Propietario (3045345642)</text>
       <line x1="60" y1="260" x2="540" y2="260" stroke="#2a3242" stroke-width="2"/>
       <text x="60" y="310" font-family="sans-serif" font-size="14" fill="#94a3b8">COMPROBANTE / FACTURA:</text>
       <text x="60" y="340" font-family="sans-serif" font-size="22" font-weight="bold" fill="#ffffff">${ref}</text>
@@ -464,10 +498,25 @@ const App = {
     const inGitToken = document.getElementById('inputGithubToken');
     const togGitAuto = document.getElementById('toggleGithubAutoSync');
 
+    const welcomeImg = document.getElementById('welcomeLogoImg');
+    if (welcomeImg && logoSrc) welcomeImg.src = logoSrc;
+
     if (inGitUser) inGitUser.value = this.config.githubUser || '';
     if (inGitRepo) inGitRepo.value = this.config.githubRepo || 'NOIRDA';
     if (inGitToken) inGitToken.value = this.config.githubToken || '';
     if (togGitAuto) togGitAuto.checked = !!this.config.githubAutoSync;
+  },
+
+  iniciarPantallaBienvenida() {
+    const welcome = document.getElementById('welcomeScreen');
+    if (!welcome) return;
+
+    const omitir = localStorage.getItem('noirda_omitir_bienvenida') === 'true';
+    if (omitir) {
+      welcome.classList.add('fade-out');
+    } else {
+      welcome.classList.remove('fade-out');
+    }
   },
 
   actualizarOpcionesCategorias() {
@@ -504,13 +553,15 @@ const App = {
     this.renderConsolidadoMensual();
     this.renderTablaCompras();
     this.renderTablaNomina();
+    this.renderEmpleados();
     this.renderGaleriaRecibos();
     this.renderBadges();
   },
 
   renderBadges() {
-    document.getElementById('badgeCompras').textContent = this.compras.length;
-    document.getElementById('badgeNomina').textContent = this.nomina.length;
+    const bC = document.getElementById('badgeCompras'); if (bC) bC.textContent = this.compras.length;
+    const bN = document.getElementById('badgeNomina'); if (bN) bN.textContent = this.nomina.length;
+    const bE = document.getElementById('badgeEmpleados'); if (bE) bE.textContent = this.empleados.length;
   },
 
   // Filtrado de elementos por Mes y Año
@@ -778,14 +829,56 @@ const App = {
   },
 
   // ===================================================================
-  // TABLA DE COMPRAS DE MERCANCÍA
+  // TABLA DE COMPRAS DE MERCANCÍA & FILTROS AVANZADOS
   // ===================================================================
+  actualizarSelectProveedores() {
+    const select = document.getElementById('filtroProveedorCompra');
+    if (!select) return;
+
+    const currentVal = select.value;
+    const proveedores = Array.from(new Set(this.compras.map(c => c.proveedor).filter(Boolean))).sort();
+
+    select.innerHTML = `<option value="todos">Todos los distribuidores</option>` +
+      proveedores.map(p => `<option value="${p}">${p}</option>`).join('');
+
+    if (proveedores.includes(currentVal)) {
+      select.value = currentVal;
+    }
+  },
+
+  limpiarFiltrosCompras() {
+    const s = document.getElementById('searchCompras');
+    const c = document.getElementById('filtroCategoriaCompra');
+    const p = document.getElementById('filtroProveedorCompra');
+    const d = document.getElementById('filtroFechaDesdeCompra');
+    const h = document.getElementById('filtroFechaHastaCompra');
+    const m = document.getElementById('filtroMetodoPagoCompra');
+
+    if (s) s.value = '';
+    if (c) c.value = 'todas';
+    if (p) p.value = 'todos';
+    if (d) d.value = '';
+    if (h) h.value = '';
+    if (m) m.value = 'todos';
+
+    this.renderTablaCompras();
+  },
+
   renderTablaCompras() {
     const tbody = document.getElementById('tbodyCompras');
     if (!tbody) return;
 
+    this.actualizarSelectProveedores();
+
     let items = this.filtrarPorPeriodo(this.compras);
+    
+    // Filtros avanzados
     const searchVal = document.getElementById('searchCompras')?.value.toLowerCase().trim();
+    const catVal = document.getElementById('filtroCategoriaCompra')?.value;
+    const provVal = document.getElementById('filtroProveedorCompra')?.value;
+    const desdeVal = document.getElementById('filtroFechaDesdeCompra')?.value;
+    const hastaVal = document.getElementById('filtroFechaHastaCompra')?.value;
+    const metodoVal = document.getElementById('filtroMetodoPagoCompra')?.value;
 
     if (searchVal) {
       items = items.filter(c =>
@@ -796,12 +889,36 @@ const App = {
       );
     }
 
+    if (catVal && catVal !== 'todas') {
+      items = items.filter(c => c.categoria === catVal);
+    }
+
+    if (provVal && provVal !== 'todos') {
+      items = items.filter(c => c.proveedor === provVal);
+    }
+
+    if (desdeVal) {
+      items = items.filter(c => c.fecha >= desdeVal);
+    }
+
+    if (hastaVal) {
+      items = items.filter(c => c.fecha <= hastaVal);
+    }
+
+    if (metodoVal && metodoVal !== 'todos') {
+      items = items.filter(c => c.metodoPago === metodoVal);
+    }
+
+    this.comprasFiltradasActuales = items;
+
     const total = items.reduce((sum, c) => sum + Number(c.monto || 0), 0);
-    document.getElementById('sumatoriaComprasFiltradas').textContent = this.formatearDinero(total);
-    document.getElementById('conteoComprasFiltradas').textContent = `${items.length} facturas registradas`;
+    const sumEl = document.getElementById('sumatoriaComprasFiltradas');
+    const cntEl = document.getElementById('conteoComprasFiltradas');
+    if (sumEl) sumEl.textContent = this.formatearDinero(total);
+    if (cntEl) cntEl.textContent = `(${items.length} compras)`;
 
     if (items.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:var(--text-dim);">No se encontraron compras en este periodo o búsqueda.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:var(--text-dim);">No se encontraron compras con los filtros seleccionados.</td></tr>`;
       return;
     }
 
@@ -835,9 +952,169 @@ const App = {
     `).join('');
   },
 
+  exportarComprasPDF() {
+    const items = this.comprasFiltradasActuales || this.compras;
+    const printSheet = document.getElementById('comprasPrintSheet');
+    if (!printSheet) return;
+
+    const total = items.reduce((sum, c) => sum + Number(c.monto || 0), 0);
+    const fechaActual = new Date().toLocaleDateString('es-CO');
+
+    const catMap = {};
+    items.forEach(c => {
+      catMap[c.categoria] = (catMap[c.categoria] || 0) + Number(c.monto || 0);
+    });
+
+    const catRows = Object.entries(catMap)
+      .map(([cat, val]) => `<tr><td style="padding:4px 0;"><strong>${cat}</strong></td><td style="text-align:right; padding:4px 0;">${this.formatearDinero(val)}</td></tr>`)
+      .join('');
+
+    const tableRows = items.map((c, idx) => `
+      <tr style="border-bottom:1px solid #e5e7eb;">
+        <td style="padding:6px 8px;">${idx + 1}</td>
+        <td style="padding:6px 8px; font-weight:600;">${c.fecha}</td>
+        <td style="padding:6px 8px;">${c.numeroFactura || 'S/N'}</td>
+        <td style="padding:6px 8px; font-weight:700;">${c.proveedor}</td>
+        <td style="padding:6px 8px;">${c.descripcion}</td>
+        <td style="padding:6px 8px;">${c.categoria}</td>
+        <td style="padding:6px 8px;">${c.metodoPago}</td>
+        <td style="padding:6px 8px; text-align:right; font-weight:800;">${this.formatearDinero(c.monto)}</td>
+      </tr>
+    `).join('');
+
+    printSheet.innerHTML = `
+      <div style="font-family:'Outfit', sans-serif; padding: 24px; color:#111;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #d4af37; padding-bottom:14px; margin-bottom:18px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <img src="logo.jpg" style="width:65px; height:65px; border-radius:50%; border:2px solid #d4af37; object-fit:cover;" alt="NOIRDA Opulence">
+            <div>
+              <h1 style="font-family:'Cinzel', serif; font-size:22px; margin:0; letter-spacing:2px; color:#0a0c10;">NOIRDA OPULENCE</h1>
+              <p style="margin:2px 0 0 0; font-size:12px; color:#555; text-transform:uppercase;">Informe Consolidado Oficial de Compras de Mercancía</p>
+              <p style="margin:2px 0 0 0; font-size:12px; color:#222;"><strong>Propietario:</strong> Liam Varelas | <strong>Contacto:</strong> 3045345642</p>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="background:#0a0c10; color:#d4af37; padding:4px 10px; border-radius:4px; font-weight:800; font-size:11px;">CONSOLIDADO DE COMPRAS</div>
+            <div style="font-size:12px; color:#666; margin-top:4px;">Fecha emisión: ${fechaActual}</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
+          <div style="flex:1; background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:12px;">
+            <span style="font-size:11px; text-transform:uppercase; color:#6b7280; font-weight:600;">Monto Total en Compras</span>
+            <div style="font-size:24px; font-weight:800; color:#111827;">${this.formatearDinero(total)}</div>
+            <span style="font-size:12px; color:#555;">${items.length} facturas registradas</span>
+          </div>
+
+          <div style="flex:1; background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:12px;">
+            <span style="font-size:11px; text-transform:uppercase; color:#6b7280; font-weight:600;">Inversión por Categorías</span>
+            <table style="width:100%; font-size:12px; margin-top:4px;">
+              ${catRows}
+            </table>
+          </div>
+        </div>
+
+        <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;">
+          <thead>
+            <tr style="background:#111827; color:#fff;">
+              <th style="padding:8px 6px; text-align:left;">#</th>
+              <th style="padding:8px 6px; text-align:left;">Fecha</th>
+              <th style="padding:8px 6px; text-align:left;">Factura</th>
+              <th style="padding:8px 6px; text-align:left;">Proveedor</th>
+              <th style="padding:8px 6px; text-align:left;">Descripción</th>
+              <th style="padding:8px 6px; text-align:left;">Categoría</th>
+              <th style="padding:8px 6px; text-align:left;">Pago</th>
+              <th style="padding:8px 6px; text-align:right;">Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRows}
+          </tbody>
+          <tfoot>
+            <tr style="background:#f3f4f6; font-weight:800; border-top:2px solid #111;">
+              <td colspan="7" style="padding:10px 6px; text-align:right;">TOTAL CONSOLIDADO:</td>
+              <td style="padding:10px 6px; text-align:right; font-size:14px;">${this.formatearDinero(total)}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div style="margin-top:40px; display:flex; justify-content:space-between;">
+          <div style="text-align:center; width:220px; border-top:1px solid #111; padding-top:6px;">
+            <strong>Liam Varelas</strong><br>
+            <span style="font-size:11px; color:#555;">Propietario / NOIRDA Opulence</span><br>
+            <span style="font-size:11px; color:#555;">Cel: 3045345642</span>
+          </div>
+          <div style="text-align:right; font-size:11px; color:#888;">
+            Documento contable oficial de NOIRDA Opulence.<br>
+            Generado automáticamente.
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.classList.add('printing-compras');
+    window.print();
+    setTimeout(() => {
+      document.body.classList.remove('printing-compras');
+    }, 1000);
+  },
+
+  enviarComprasCorreo() {
+    const items = this.comprasFiltradasActuales || this.compras;
+    const total = items.reduce((sum, c) => sum + Number(c.monto || 0), 0);
+    const fechaActual = new Date().toLocaleDateString('es-CO');
+
+    let body = `CONSOLIDADO DE COMPRAS DE MERCANCÍA - NOIRDA OPULENCE\n`;
+    body += `Propietario: Liam Varelas | Cel: 3045345642\n`;
+    body += `Fecha de Emisión: ${fechaActual}\n`;
+    body += `--------------------------------------------------\n`;
+    body += `TOTAL INVERTIDO EN COMPRAS: ${this.formatearDinero(total)}\n`;
+    body += `CANTIDAD DE FACTURAS: ${items.length}\n`;
+    body += `--------------------------------------------------\n\n`;
+    body += `DETALLE DE FACTURAS:\n`;
+
+    items.forEach((c, idx) => {
+      body += `${idx + 1}. [${c.fecha}] ${c.proveedor} - ${c.categoria}\n`;
+      body += `   Factura: ${c.numeroFactura || 'S/N'} | Monto: ${this.formatearDinero(c.monto)} | Pago: ${c.metodoPago}\n`;
+      body += `   Prendas: ${c.descripcion}\n\n`;
+    });
+
+    body += `--------------------------------------------------\n`;
+    body += `Generado por software financiero NOIRDA Opulence.\n`;
+
+    const subject = encodeURIComponent(`Consolidado de Compras - NOIRDA Opulence (${fechaActual})`);
+    const mailtoUrl = `mailto:?subject=${subject}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+  },
+
   // ===================================================================
-  // TABLA DE NÓMINA DE TRABAJADORES
+  // TABLA DE NÓMINA DE TRABAJADORES & COMPROBANTES
   // ===================================================================
+  generarTextoWhatsappNomina(item) {
+    let msg = `*NOIRDA OPULENCE - COMPROBANTE DE NÓMINA*\n`;
+    msg += `👔 Propietario: Liam Varelas (Cel: 3045345642)\n`;
+    msg += `-------------------------------------------\n`;
+    msg += `👤 Colaborador: *${item.trabajador}*\n`;
+    if (item.documento) msg += `🆔 C.C.: ${item.documento}\n`;
+    msg += `💼 Cargo: ${item.cargo}\n`;
+    msg += `📅 Periodo: ${item.periodo} (${item.fecha})\n`;
+    if (item.modoTiempo === 'horas' && item.cantidadTiempo) {
+      msg += `⏱️ Horas laboradas: ${item.cantidadTiempo} hrs a ${this.formatearDinero(item.tarifaTiempo)}/hr\n`;
+    } else if (item.modoTiempo === 'dias' && item.cantidadTiempo) {
+      msg += `⏱️ Días laborados: ${item.cantidadTiempo} días a ${this.formatearDinero(item.tarifaTiempo)}/día\n`;
+    }
+    msg += `💵 Sueldo Base: ${this.formatearDinero(item.sueldoBase)}\n`;
+    if (item.bonos > 0) msg += `🎁 Bonos / Comisión: +${this.formatearDinero(item.bonos)}\n`;
+    if (item.deducciones > 0) msg += `🔻 Deducciones: -${this.formatearDinero(item.deducciones)}\n`;
+    msg += `-------------------------------------------\n`;
+    msg += `💰 *TOTAL NETO PAGADO: ${this.formatearDinero(item.neto)}*\n`;
+    msg += `💳 Método: ${item.metodoPago || 'Transferencia'}${item.referencia ? ' (Ref: ' + item.referencia + ')' : ''}\n`;
+    if (item.notas) msg += `📝 Notas: ${item.notas}\n`;
+    msg += `-------------------------------------------\n`;
+    msg += `✨ ¡Gracias por tu compromiso con NOIRDA Opulence!`;
+    return msg;
+  },
+
   renderTablaNomina() {
     const tbody = document.getElementById('tbodyNomina');
     if (!tbody) return;
@@ -849,47 +1126,462 @@ const App = {
       items = items.filter(n =>
         (n.trabajador && n.trabajador.toLowerCase().includes(searchVal)) ||
         (n.cargo && n.cargo.toLowerCase().includes(searchVal)) ||
-        (n.periodo && n.periodo.toLowerCase().includes(searchVal))
+        (n.periodo && n.periodo.toLowerCase().includes(searchVal)) ||
+        (n.documento && n.documento.includes(searchVal)) ||
+        (n.whatsapp && n.whatsapp.includes(searchVal))
       );
     }
 
     const total = items.reduce((sum, n) => sum + Number(n.neto || 0), 0);
-    document.getElementById('sumatoriaNominaFiltrada').textContent = this.formatearDinero(total);
-    document.getElementById('conteoNominaFiltrada').textContent = `${items.length} pagos de nómina`;
+    const sumEl = document.getElementById('sumatoriaNominaFiltrada');
+    const cntEl = document.getElementById('conteoNominaFiltrada');
+    if (sumEl) sumEl.textContent = this.formatearDinero(total);
+    if (cntEl) cntEl.textContent = `${items.length} trabajadores pagados`;
 
     if (items.length === 0) {
       tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:30px; color:var(--text-dim);">No se encontraron pagos de nómina en este periodo o búsqueda.</td></tr>`;
       return;
     }
 
-    tbody.innerHTML = items.map(n => `
-      <tr>
-        <td data-label="Fecha Pago" style="font-weight:600; white-space:nowrap;">${n.fecha}</td>
-        <td data-label="Colaborador" style="font-weight:700;">${n.trabajador}</td>
-        <td data-label="Cargo / Función"><span class="badge-tag purple">${n.cargo}</span></td>
-        <td data-label="Periodo" style="font-size:12px; color:var(--text-muted);">${n.periodo}</td>
-        <td data-label="Sueldo Base">${this.formatearDinero(n.sueldoBase)}</td>
-        <td data-label="Bonos / Ventas" style="color:var(--emerald-primary);">+${this.formatearDinero(n.bonos || 0)}</td>
-        <td data-label="Deducciones" style="color:var(--danger-primary);">${n.deducciones > 0 ? '-' + this.formatearDinero(n.deducciones) : '$0'}</td>
-        <td data-label="Neto Pagado" style="font-weight:800; color:var(--gold-light);">${this.formatearDinero(n.neto)}</td>
-        <td data-label="Comprobante">
-          ${n.reciboData ? `
-            <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('nomina', ${n.id})">
-              <i class="fa-solid fa-file-invoice-dollar"></i> Recibo Pago
+    tbody.innerHTML = items.map(n => {
+      let tiempoStr = this.formatearDinero(n.sueldoBase);
+      if (n.modoTiempo === 'horas' && n.cantidadTiempo) {
+        tiempoStr = `${n.cantidadTiempo} hrs (${this.formatearDinero(n.sueldoBase)})`;
+      } else if (n.modoTiempo === 'dias' && n.cantidadTiempo) {
+        tiempoStr = `${n.cantidadTiempo} días (${this.formatearDinero(n.sueldoBase)})`;
+      }
+
+      const tel = (n.whatsapp || '').replace(/\D/g, '');
+      const numWa = tel.length === 10 ? '57' + tel : tel;
+
+      return `
+        <tr>
+          <td data-label="Fecha Pago" style="font-weight:600; white-space:nowrap;">${n.fecha}</td>
+          <td data-label="Trabajador" style="font-weight:700;">
+            <div>${n.trabajador}</div>
+            ${n.whatsapp ? `<small style="color:#34d399;"><i class="fa-brands fa-whatsapp"></i> ${n.whatsapp}</small>` : ''}
+          </td>
+          <td data-label="Cargo / Área"><span class="badge-tag purple">${n.cargo}</span></td>
+          <td data-label="Periodo" style="font-size:12px; color:var(--text-muted);">${n.periodo}</td>
+          <td data-label="Tiempo / Base">${tiempoStr}</td>
+          <td data-label="Bonos / Comisión" style="color:var(--emerald-primary);">+${this.formatearDinero(n.bonos || 0)}</td>
+          <td data-label="Deducciones" style="color:var(--danger-primary);">${n.deducciones > 0 ? '-' + this.formatearDinero(n.deducciones) : '$0'}</td>
+          <td data-label="Neto Pagado" style="font-weight:800; color:var(--gold-light);">${this.formatearDinero(n.neto)}</td>
+          <td data-label="Soporte">
+            ${n.reciboData ? `
+              <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('nomina', ${n.id})">
+                <i class="fa-solid fa-paperclip"></i> Ver
+              </button>
+            ` : `<span class="receipt-none">Sin foto</span>`}
+          </td>
+          <td data-label="WhatsApp / Acciones">
+            <div class="action-buttons-cell">
+              <button class="btn-table-action" style="color:var(--gold-light); border-color:rgba(212,175,55,0.4);" onclick="App.abrirComprobanteNomina(${n.id})" title="Ver e imprimir comprobante oficial PDF">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </button>
+              ${numWa ? `
+                <a href="https://wa.me/${numWa}?text=${encodeURIComponent(this.generarTextoWhatsappNomina(n))}" target="_blank" class="btn-table-action" style="color:#25D366; border-color:rgba(37,211,102,0.4);" title="Enviar comprobante por WhatsApp al trabajador">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </a>
+              ` : `
+                <button class="btn-table-action" style="color:#25D366; border-color:rgba(37,211,102,0.4);" onclick="App.abrirComprobanteNomina(${n.id})" title="Enviar por WhatsApp">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </button>
+              `}
+              <button class="btn-table-action" onclick="App.editarRegistro('nomina', ${n.id})" title="Editar">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button class="btn-table-action delete" onclick="App.eliminarRegistro('nomina', ${n.id})" title="Eliminar">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  // ===================================================================
+  // DIRECTORIO DE EMPLEADOS (BASE DE DATOS DE PERSONAL)
+  // ===================================================================
+  renderEmpleados() {
+    const grid = document.getElementById('empleadosGrid');
+    if (!grid) return;
+
+    const searchVal = document.getElementById('searchEmpleados')?.value.toLowerCase().trim() || '';
+    let emps = this.empleados;
+
+    if (searchVal) {
+      emps = emps.filter(e =>
+        (e.nombre && e.nombre.toLowerCase().includes(searchVal)) ||
+        (e.cargo && e.cargo.toLowerCase().includes(searchVal)) ||
+        (e.telefono && e.telefono.includes(searchVal)) ||
+        (e.documento && e.documento.includes(searchVal))
+      );
+    }
+
+    this.actualizarSelectorEmpleadosNomina();
+
+    if (emps.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px dashed var(--border-color); color: var(--text-dim);">
+          <i class="fa-solid fa-users" style="font-size: 32px; margin-bottom: 10px; display: block; color: var(--gold-primary);"></i>
+          <p>No se encontraron empleados registrados en la base de datos.</p>
+          <button class="btn-action-primary" style="margin-top: 14px;" onclick="App.abrirModalEmpleado()">
+            <i class="fa-solid fa-user-plus"></i> Registrar Primer Empleado
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = emps.map(e => {
+      const iniciales = (e.nombre || 'EM')
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(n => n[0].toUpperCase())
+        .join('');
+
+      const telClean = (e.telefono || '').replace(/\D/g, '');
+      const numWa = telClean.length === 10 ? '57' + telClean : telClean;
+
+      let tipoTexto = 'Mensual';
+      if (e.tipoPago === 'horas') tipoTexto = 'Por Hora';
+      if (e.tipoPago === 'dias') tipoTexto = 'Por Día';
+      if (e.tipoPago === 'quincenal') tipoTexto = 'Quincenal';
+
+      return `
+        <div class="employee-card">
+          <div>
+            <div class="emp-card-header">
+              <div class="emp-avatar">${iniciales}</div>
+              <div class="emp-title-info">
+                <h3>${e.nombre}</h3>
+                <span class="emp-cargo-badge">${e.cargo}</span>
+              </div>
+            </div>
+
+            <div class="emp-card-meta">
+              <div class="emp-meta-item">
+                <i class="fa-solid fa-id-card text-gold"></i>
+                <span>C.C.: ${e.documento || 'No registrada'}</span>
+              </div>
+              <div class="emp-meta-item">
+                <i class="fa-brands fa-whatsapp text-emerald"></i>
+                <span>${e.telefono}</span>
+              </div>
+              ${e.email ? `
+                <div class="emp-meta-item">
+                  <i class="fa-regular fa-envelope text-blue"></i>
+                  <span>${e.email}</span>
+                </div>
+              ` : ''}
+              <div class="emp-meta-item">
+                <i class="fa-solid fa-coins text-gold"></i>
+                <span>Tarifa Base: <strong>${this.formatearDinero(e.tarifa || 0)}</strong> (${tipoTexto})</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="emp-actions-row">
+            <a href="https://wa.me/${numWa}?text=Hola%20${encodeURIComponent(e.nombre)}%2C%20te%20contacto%20de%20NOIRDA%20Opulence" target="_blank" class="btn-whatsapp-sm" title="Enviar WhatsApp directo">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp
+            </a>
+            <button class="btn-secondary" style="font-size:12px; padding:6px 10px;" onclick="App.abrirNominaParaEmpleado(${e.id})" title="Pagar nómina a este colaborador">
+              <i class="fa-solid fa-hand-holding-dollar"></i> Pagar
             </button>
-          ` : `<span class="receipt-none">Sin comprobante</span>`}
-        </td>
-        <td data-label="Acciones">
-          <div class="action-buttons-cell">
-            <button class="btn-table-action" onclick="App.editarRegistro('nomina', ${n.id})" title="Editar">
+            <button class="btn-table-action" onclick="App.editarEmpleado(${e.id})" title="Editar">
               <i class="fa-solid fa-pen"></i>
             </button>
-            <button class="btn-table-action delete" onclick="App.eliminarRegistro('nomina', ${n.id})" title="Eliminar">
+            <button class="btn-table-action delete" onclick="App.eliminarEmpleado(${e.id})" title="Eliminar">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
-        </td>
-      </tr>
+        </div>
+      `;
+    }).join('');
+  },
+
+  actualizarSelectorEmpleadosNomina() {
+    const select = document.getElementById('nominaEmpleadoSelect');
+    if (!select) return;
+
+    select.innerHTML = `<option value="">-- Seleccionar Trabajador (o escribir nuevo abajo) --</option>` +
+      this.empleados.map(e => `<option value="${e.id}">${e.nombre} (${e.cargo})</option>`).join('');
+  },
+
+  abrirModalEmpleado(id = null) {
+    const modal = document.getElementById('modalEmpleado');
+    const form = document.getElementById('formEmpleado');
+    form.reset();
+    document.getElementById('empleadoId').value = '';
+
+    if (id) {
+      const emp = this.empleados.find(e => e.id === id);
+      if (emp) {
+        document.getElementById('modalEmpleadoTitulo').textContent = 'Editar Empleado';
+        document.getElementById('empleadoId').value = emp.id;
+        document.getElementById('empleadoNombre').value = emp.nombre;
+        document.getElementById('empleadoDocumento').value = emp.documento || '';
+        document.getElementById('empleadoTelefono').value = emp.telefono;
+        document.getElementById('empleadoEmail').value = emp.email || '';
+        document.getElementById('empleadoCargo').value = emp.cargo;
+        document.getElementById('empleadoTipoPago').value = emp.tipoPago || 'mensual';
+        document.getElementById('empleadoTarifa').value = emp.tarifa || 0;
+        document.getElementById('empleadoNotas').value = emp.notas || '';
+      }
+    } else {
+      document.getElementById('modalEmpleadoTitulo').textContent = 'Registrar Nuevo Empleado';
+    }
+
+    modal.classList.add('active');
+  },
+
+  async guardarEmpleado(e) {
+    e.preventDefault();
+    const idVal = document.getElementById('empleadoId').value;
+    const datos = {
+      nombre: document.getElementById('empleadoNombre').value.trim(),
+      documento: document.getElementById('empleadoDocumento').value.trim(),
+      telefono: document.getElementById('empleadoTelefono').value.trim(),
+      email: document.getElementById('empleadoEmail').value.trim(),
+      cargo: document.getElementById('empleadoCargo').value,
+      tipoPago: document.getElementById('empleadoTipoPago').value,
+      tarifa: parseFloat(document.getElementById('empleadoTarifa').value) || 0,
+      notas: document.getElementById('empleadoNotas').value.trim()
+    };
+
+    if (idVal) {
+      datos.id = parseInt(idVal);
+    } else {
+      datos.id = Date.now();
+    }
+
+    await this.db.put('empleados', datos);
+    
+    const idx = this.empleados.findIndex(em => em.id === datos.id);
+    if (idx >= 0) {
+      this.empleados[idx] = datos;
+    } else {
+      this.empleados.push(datos);
+    }
+    localStorage.setItem('noirda_empleados', JSON.stringify(this.empleados));
+
+    this.renderEmpleados();
+    this.renderBadges();
+    this.cerrarModal('modalEmpleado');
+    this.mostrarToast(idVal ? 'Empleado actualizado correctamente' : 'Empleado registrado con éxito', 'success');
+
+    if (this.config.githubAutoSync && this.config.githubToken) {
+      this.sincronizarConGithub(true);
+    }
+  },
+
+  editarEmpleado(id) {
+    this.abrirModalEmpleado(id);
+  },
+
+  async eliminarEmpleado(id) {
+    const emp = this.empleados.find(e => e.id === id);
+    if (!emp) return;
+    if (!confirm(`¿Estás seguro de eliminar a "${emp.nombre}" de la base de datos de empleados?`)) return;
+
+    await this.db.delete('empleados', id);
+    this.empleados = this.empleados.filter(e => e.id !== id);
+    localStorage.setItem('noirda_empleados', JSON.stringify(this.empleados));
+    this.renderEmpleados();
+    this.renderBadges();
+    this.mostrarToast('Empleado eliminado', 'info');
+
+    if (this.config.githubAutoSync && this.config.githubToken) {
+      this.sincronizarConGithub(true);
+    }
+  },
+
+  abrirNominaParaEmpleado(empId) {
+    this.abrirModalNomina();
+    const emp = this.empleados.find(e => e.id === empId);
+    if (emp) {
+      this.cargarDatosEmpleadoEnNomina(emp);
+    }
+  },
+
+  cargarDatosEmpleadoEnNomina(emp) {
+    if (!emp) return;
+    const select = document.getElementById('nominaEmpleadoSelect');
+    if (select) select.value = emp.id;
+
+    document.getElementById('nominaTrabajador').value = emp.nombre;
+    document.getElementById('nominaDocumento').value = emp.documento || '';
+    document.getElementById('nominaWhatsapp').value = emp.telefono || '';
+    document.getElementById('nominaEmail').value = emp.email || '';
+    document.getElementById('nominaCargo').value = emp.cargo || '';
+    
+    const modoSelect = document.getElementById('nominaModoTiempo');
+    if (modoSelect) {
+      if (emp.tipoPago === 'horas') {
+        modoSelect.value = 'horas';
+      } else if (emp.tipoPago === 'dias') {
+        modoSelect.value = 'dias';
+      } else {
+        modoSelect.value = 'fijo';
+      }
+      this.actualizarModoTiempoNomina();
+    }
+
+    if (emp.tipoPago === 'horas' || emp.tipoPago === 'dias') {
+      const tarifaInp = document.getElementById('nominaTarifaTiempo');
+      if (tarifaInp) tarifaInp.value = emp.tarifa || 0;
+      this.calcularSubtotalTiempo();
+    } else {
+      document.getElementById('nominaSueldoBase').value = emp.tarifa || 0;
+      this.calcularNetoNomina();
+    }
+  },
+
+  actualizarModoTiempoNomina() {
+    const modo = document.getElementById('nominaModoTiempo')?.value || 'fijo';
+    const box = document.getElementById('boxCalculoTiempo');
+    const lblCant = document.getElementById('lblCantidadTiempo');
+    const lblTar = document.getElementById('lblTarifaTiempo');
+    
+    if (modo === 'horas') {
+      box?.classList.remove('hidden');
+      if (lblCant) lblCant.textContent = 'Horas Laboradas';
+      if (lblTar) lblTar.textContent = 'Tarifa por Hora ($)';
+      this.calcularSubtotalTiempo();
+    } else if (modo === 'dias') {
+      box?.classList.remove('hidden');
+      if (lblCant) lblCant.textContent = 'Días Laborados';
+      if (lblTar) lblTar.textContent = 'Tarifa por Día ($)';
+      this.calcularSubtotalTiempo();
+    } else {
+      box?.classList.add('hidden');
+      this.calcularNetoNomina();
+    }
+  },
+
+  calcularSubtotalTiempo() {
+    const cant = parseFloat(document.getElementById('nominaCantidadTiempo')?.value) || 0;
+    const tarifa = parseFloat(document.getElementById('nominaTarifaTiempo')?.value) || 0;
+    const subtotal = cant * tarifa;
+    
+    const disp = document.getElementById('displaySubtotalTiempo');
+    if (disp) disp.textContent = this.formatearDinero(subtotal);
+
+    const baseInp = document.getElementById('nominaSueldoBase');
+    if (baseInp) baseInp.value = subtotal;
+
+    this.calcularNetoNomina();
+  },
+
+  abrirComprobanteNomina(id) {
+    const n = this.nomina.find(item => item.id === id);
+    if (!n) return;
+
+    this.itemNominaActual = n;
+
+    document.getElementById('voucherNumero').textContent = `REC-NOM-${String(n.id).padStart(4, '0')}`;
+    document.getElementById('voucherFechaEmision').textContent = `Fecha emisión: ${n.fecha}`;
+    document.getElementById('voucherNombreTrabajador').textContent = n.trabajador;
+    document.getElementById('voucherDocTrabajador').textContent = n.documento || 'No registrada';
+    document.getElementById('voucherCargoTrabajador').textContent = n.cargo;
+    document.getElementById('voucherPeriodoTrabajador').textContent = n.periodo;
+    document.getElementById('voucherTelefonoTrabajador').textContent = n.whatsapp || 'No registrado';
+    document.getElementById('voucherMedioPago').textContent = `${n.metodoPago || 'Transferencia'}${n.referencia ? ' (' + n.referencia + ')' : ''}`;
+
+    let detalleTiempo = 'Salario Base Asignado';
+    if (n.modoTiempo === 'horas' && n.cantidadTiempo) {
+      detalleTiempo = `${n.cantidadTiempo} Horas laboradas a ${this.formatearDinero(n.tarifaTiempo || 0)}/hr`;
+    } else if (n.modoTiempo === 'dias' && n.cantidadTiempo) {
+      detalleTiempo = `${n.cantidadTiempo} Días laborados a ${this.formatearDinero(n.tarifaTiempo || 0)}/día`;
+    }
+
+    const tbody = document.getElementById('voucherTableBody');
+    if (tbody) {
+      tbody.innerHTML = `
+        <tr>
+          <td><strong>Salario Base / Tiempo Laborado</strong></td>
+          <td>${detalleTiempo}</td>
+          <td style="text-align:right; font-weight:600;">${this.formatearDinero(n.sueldoBase)}</td>
+        </tr>
+        ${Number(n.bonos || 0) > 0 ? `
+          <tr>
+            <td><strong>Bonificaciones / Comisiones</strong></td>
+            <td>Comisión por ventas y cumplimiento de metas</td>
+            <td style="text-align:right; font-weight:600; color:#10b981;">+${this.formatearDinero(n.bonos)}</td>
+          </tr>
+        ` : ''}
+        ${Number(n.deducciones || 0) > 0 ? `
+          <tr>
+            <td><strong>Deducciones / Anticipos</strong></td>
+            <td>Descuentos pactados o seguridad social</td>
+            <td style="text-align:right; font-weight:600; color:#ef4444;">-${this.formatearDinero(n.deducciones)}</td>
+          </tr>
+        ` : ''}
+      `;
+    }
+
+    document.getElementById('voucherTotalNeto').textContent = this.formatearDinero(n.neto);
+    document.getElementById('voucherNotas').textContent = n.notas || 'Sin observaciones.';
+    document.getElementById('voucherFirmaNombre').textContent = n.trabajador;
+    document.getElementById('voucherFirmaDoc').textContent = n.documento ? `C.C. ${n.documento}` : 'Firma de Recibido';
+
+    document.getElementById('modalComprobanteNomina').classList.add('active');
+  },
+
+  imprimirVoucher() {
+    document.body.classList.add('printing-voucher');
+    window.print();
+    setTimeout(() => {
+      document.body.classList.remove('printing-voucher');
+    }, 1000);
+  },
+
+  enviarWhatsappVoucher(item) {
+    const n = item || this.itemNominaActual;
+    if (!n) return;
+    const tel = (n.whatsapp || '').replace(/\D/g, '');
+    const msg = this.generarTextoWhatsappNomina(n);
+    const numDestino = tel.length === 10 ? '57' + tel : tel;
+    const url = numDestino ? `https://wa.me/${numDestino}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  },
+
+  enviarEmailVoucher(item) {
+    const n = item || this.itemNominaActual;
+    if (!n) return;
+
+    const email = n.email || '';
+    const subject = encodeURIComponent(`Comprobante Oficial de Nómina - NOIRDA Opulence (${n.periodo})`);
+
+    let body = `NOIRDA OPULENCE - ATELIER & FASHION STORE\n`;
+    body += `Propietario: Liam Varelas | Cel: 3045345642\n`;
+    body += `COMPROBANTE OFICIAL DE PAGO DE NÓMINA\n`;
+    body += `--------------------------------------------------\n`;
+    body += `Colaborador: ${n.trabajador}\n`;
+    if (n.documento) body += `Cédula: ${n.documento}\n`;
+    body += `Cargo: ${n.cargo}\n`;
+    body += `Periodo: ${n.periodo} (Fecha: ${n.fecha})\n`;
+    if (n.modoTiempo === 'horas' && n.cantidadTiempo) {
+      body += `Tiempo Laborado: ${n.cantidadTiempo} Horas a ${this.formatearDinero(n.tarifaTiempo)}/hr\n`;
+    } else if (n.modoTiempo === 'dias' && n.cantidadTiempo) {
+      body += `Tiempo Laborado: ${n.cantidadTiempo} Días a ${this.formatearDinero(n.tarifaTiempo)}/día\n`;
+    }
+    body += `Sueldo Base: ${this.formatearDinero(n.sueldoBase)}\n`;
+    if (n.bonos > 0) body += `Bonificaciones / Comisiones: +${this.formatearDinero(n.bonos)}\n`;
+    if (n.deducciones > 0) body += `Deducciones: -${this.formatearDinero(n.deducciones)}\n`;
+    body += `--------------------------------------------------\n`;
+    body += `TOTAL NETO PAGADO: ${this.formatearDinero(n.neto)}\n`;
+    body += `Medio de Pago: ${n.metodoPago || 'Transferencia'}${n.referencia ? ' (' + n.referencia + ')' : ''}\n`;
+    if (n.notas) body += `Observaciones: ${n.notas}\n`;
+    body += `--------------------------------------------------\n`;
+    body += `Comprobante verificado por Liam Varelas - NOIRDA Opulence.\n`;
+
+    const mailtoUrl = email ? `mailto:${email}?subject=${subject}&body=${encodeURIComponent(body)}` : `mailto:?subject=${subject}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+  },
     `).join('');
   },
 
@@ -1128,12 +1820,22 @@ const App = {
     const form = document.getElementById('formNomina');
     form.reset();
 
+    this.actualizarSelectorEmpleadosNomina();
+
     document.getElementById('nominaId').value = '';
     document.getElementById('nominaFecha').value = new Date().toISOString().split('T')[0];
     const mesActualNombre = this.obtenerNombreMes((new Date().getMonth() + 1).toString().padStart(2, '0'));
     document.getElementById('nominaPeriodo').value = `Mes ${mesActualNombre} ${new Date().getFullYear()}`;
     document.getElementById('nominaBonos').value = 0;
     document.getElementById('nominaDeducciones').value = 0;
+    document.getElementById('nominaDocumento').value = '';
+    document.getElementById('nominaWhatsapp').value = '';
+    document.getElementById('nominaEmail').value = '';
+    
+    const modoSel = document.getElementById('nominaModoTiempo');
+    if (modoSel) modoSel.value = 'fijo';
+    this.actualizarModoTiempoNomina();
+
     document.getElementById('displayNetoCalculado').textContent = '$0';
     this.reciboTempNomina = null;
     this.actualizarPreviewRecibo('nomina', null);
@@ -1146,7 +1848,18 @@ const App = {
         document.getElementById('nominaFecha').value = item.fecha;
         document.getElementById('nominaPeriodo').value = item.periodo;
         document.getElementById('nominaTrabajador').value = item.trabajador;
+        document.getElementById('nominaDocumento').value = item.documento || '';
+        document.getElementById('nominaWhatsapp').value = item.whatsapp || '';
+        document.getElementById('nominaEmail').value = item.email || '';
         document.getElementById('nominaCargo').value = item.cargo;
+
+        if (modoSel) {
+          modoSel.value = item.modoTiempo || 'fijo';
+          this.actualizarModoTiempoNomina();
+        }
+        if (item.cantidadTiempo) document.getElementById('nominaCantidadTiempo').value = item.cantidadTiempo;
+        if (item.tarifaTiempo) document.getElementById('nominaTarifaTiempo').value = item.tarifaTiempo;
+
         document.getElementById('nominaSueldoBase').value = item.sueldoBase;
         document.getElementById('nominaBonos').value = item.bonos || 0;
         document.getElementById('nominaDeducciones').value = item.deducciones || 0;
@@ -1248,13 +1961,28 @@ const App = {
     const deducciones = parseFloat(document.getElementById('nominaDeducciones').value) || 0;
     const neto = this.calcularNetoNomina();
 
+    const nombreTrabajador = document.getElementById('nominaTrabajador').value.trim();
+    const docTrabajador = document.getElementById('nominaDocumento').value.trim();
+    const telTrabajador = document.getElementById('nominaWhatsapp').value.trim();
+    const emailTrabajador = document.getElementById('nominaEmail').value.trim();
+    const cargoTrabajador = document.getElementById('nominaCargo').value;
+    const modoTiempo = document.getElementById('nominaModoTiempo')?.value || 'fijo';
+    const cantTiempo = parseFloat(document.getElementById('nominaCantidadTiempo')?.value) || 0;
+    const tarifaTiempo = parseFloat(document.getElementById('nominaTarifaTiempo')?.value) || 0;
+
     const datosNomina = {
       fecha,
       anio: parseInt(anio),
       mes: mes,
       periodo: document.getElementById('nominaPeriodo').value.trim(),
-      trabajador: document.getElementById('nominaTrabajador').value.trim(),
-      cargo: document.getElementById('nominaCargo').value,
+      trabajador: nombreTrabajador,
+      documento: docTrabajador,
+      whatsapp: telTrabajador,
+      email: emailTrabajador,
+      cargo: cargoTrabajador,
+      modoTiempo,
+      cantidadTiempo: cantTiempo,
+      tarifaTiempo,
       sueldoBase: base,
       bonos: bonos,
       deducciones: deducciones,
@@ -1269,6 +1997,27 @@ const App = {
 
     if (idVal) {
       datosNomina.id = parseInt(idVal);
+    }
+
+    // Auto-actualizar o agregar empleado si tiene teléfono
+    if (telTrabajador) {
+      const empExistente = this.empleados.find(e => e.nombre.toLowerCase() === nombreTrabajador.toLowerCase());
+      if (!empExistente) {
+        const nuevoEmp = {
+          id: Date.now(),
+          nombre: nombreTrabajador,
+          documento: docTrabajador,
+          telefono: telTrabajador,
+          email: emailTrabajador,
+          cargo: cargoTrabajador,
+          tipoPago: modoTiempo,
+          tarifa: tarifaTiempo || base,
+          notas: ''
+        };
+        await this.db.put('empleados', nuevoEmp);
+        this.empleados.push(nuevoEmp);
+        localStorage.setItem('noirda_empleados', JSON.stringify(this.empleados));
+      }
     }
 
     await this.db.put('nomina', datosNomina);
@@ -1368,8 +2117,8 @@ const App = {
     const nominaAExportar = filtroPeriodo ? this.filtrarPorPeriodo(this.nomina) : this.nomina;
 
     let csv = '\uFEFF'; // UTF-8 BOM para acentos en Microsoft Excel
-    csv += 'REPORTE CONTABLE DE GASTOS - NOIRDA\r\n';
-    csv += `Propietario: Santiago Varelas\r\n`;
+    csv += 'REPORTE FINANCIERO Y CONTABLE - NOIRDA OPULENCE\r\n';
+    csv += `Propietario: Liam Varelas (Cel: 3045345642)\r\n`;
     csv += `Generado el: ${new Date().toLocaleDateString('es-CO')} ${new Date().toLocaleTimeString('es-CO')}\r\n`;
     csv += `Periodo: ${filtroPeriodo ? (this.filtroMes === 'todos' ? 'Año ' + this.filtroAnio : this.obtenerNombreMes(this.filtroMes) + ' ' + this.filtroAnio) : 'Histórico Total'}\r\n\r\n`;
 
@@ -1509,12 +2258,14 @@ const App = {
 
       // 2. Preparar el payload
       const payload = {
-        marca: this.config.brandName,
-        propietario: this.config.ownerName,
-        moneda: this.config.currency,
+        marca: 'NOIRDA Opulence',
+        propietario: 'Liam Varelas',
+        telefono: '3045345642',
+        moneda: this.config.currency || 'COP',
         logoData: this.config.logoData,
         customCategories: this.config.customCategories,
         ultimaActualizacion: new Date().toISOString(),
+        empleados: this.empleados,
         compras: this.compras,
         nomina: this.nomina
       };
@@ -1606,9 +2357,15 @@ const App = {
       for (const c of data.compras) await this.db.put('compras', c);
       for (const n of data.nomina) await this.db.put('nomina', n);
 
+      if (data.empleados && Array.isArray(data.empleados) && data.empleados.length > 0) {
+        await this.db.clear('empleados');
+        for (const e of data.empleados) await this.db.put('empleados', e);
+      }
+
       // Sincronizar marca y logo si existen en GitHub
-      if (data.marca) this.config.brandName = data.marca;
-      if (data.propietario) this.config.ownerName = data.propietario;
+      this.config.brandName = 'NOIRDA Opulence';
+      this.config.ownerName = 'Liam Varelas';
+      this.config.ownerPhone = '3045345642';
       if (data.moneda) this.config.currency = data.moneda;
       if (data.logoData !== undefined && data.logoData !== null) this.config.logoData = data.logoData;
       if (data.customCategories) this.config.customCategories = data.customCategories;
@@ -1769,6 +2526,69 @@ const App = {
       }
     });
 
+    // Filtros de Compras (Categoría, Proveedor, Fechas, Método de Pago)
+    ['filtroCategoriaCompra', 'filtroMetodoPagoCompra', 'filtroFechaDesdeCompra', 'filtroFechaHastaCompra'].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', () => this.renderTablaCompras());
+    });
+    document.getElementById('filtroProveedorCompra')?.addEventListener('input', () => this.renderTablaCompras());
+
+    document.getElementById('btnLimpiarFiltrosCompras')?.addEventListener('click', () => {
+      const cat = document.getElementById('filtroCategoriaCompra'); if (cat) cat.value = 'todas';
+      const prov = document.getElementById('filtroProveedorCompra'); if (prov) prov.value = '';
+      const fDesde = document.getElementById('filtroFechaDesdeCompra'); if (fDesde) fDesde.value = '';
+      const fHasta = document.getElementById('filtroFechaHastaCompra'); if (fHasta) fHasta.value = '';
+      const met = document.getElementById('filtroMetodoPagoCompra'); if (met) met.value = 'todos';
+      this.renderTablaCompras();
+      this.mostrarToast('Filtros de mercancía restablecidos', 'info');
+    });
+
+    document.getElementById('btnExportarComprasPDF')?.addEventListener('click', () => this.exportarComprasPDF());
+    document.getElementById('btnEnviarComprasCorreo')?.addEventListener('click', () => this.enviarComprasCorreo());
+
+    // Selector de empleados en Nómina y Modo de Tiempo (Horas/Días)
+    document.getElementById('nominaEmpleadoSelect')?.addEventListener('change', (e) => {
+      const empId = parseInt(e.target.value);
+      if (empId) {
+        const emp = this.empleados.find(x => x.id === empId);
+        if (emp) this.cargarDatosEmpleadoEnNomina(emp);
+      }
+    });
+
+    document.getElementById('nominaModoTiempo')?.addEventListener('change', () => {
+      this.actualizarModoTiempoNomina();
+    });
+
+    ['nominaCantidadTiempo', 'nominaTarifaTiempo'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', () => this.calcularSubtotalTiempo());
+    });
+
+    // Directorio de Personal / Empleados
+    document.getElementById('btnAbrirModalEmpleado')?.addEventListener('click', () => this.abrirModalEmpleado());
+    document.getElementById('formEmpleado')?.addEventListener('submit', (e) => this.guardarEmpleado(e));
+    document.getElementById('searchEmpleados')?.addEventListener('input', () => this.renderEmpleados());
+
+    // Acciones de Comprobante Oficial de Nómina
+    document.getElementById('btnPrintComprobanteNomina')?.addEventListener('click', () => this.imprimirVoucher());
+    document.getElementById('btnImprimirVoucherFinal')?.addEventListener('click', () => this.imprimirVoucher());
+    document.getElementById('btnEnviarWhatsappVoucher')?.addEventListener('click', () => this.enviarWhatsappVoucher());
+    document.getElementById('btnEnviarEmailVoucher')?.addEventListener('click', () => this.enviarEmailVoucher());
+
+    // Pantalla de Bienvenida (Ingreso y Reingreso)
+    const welcome = document.getElementById('welcomeScreen');
+    document.getElementById('btnEntrarApp')?.addEventListener('click', () => {
+      const chkOmitir = document.getElementById('chkNoMostrarBienvenida');
+      if (chkOmitir && chkOmitir.checked) {
+        localStorage.setItem('noirda_omitir_bienvenida', 'true');
+      }
+      welcome?.classList.add('fade-out');
+    });
+
+    const abrirBienvenida = () => {
+      welcome?.classList.remove('fade-out');
+    };
+    document.getElementById('btnReabrirBienvenida')?.addEventListener('click', abrirBienvenida);
+    document.getElementById('btnMobileBrandInfo')?.addEventListener('click', abrirBienvenida);
+
     // 7. Cierre de modales
     document.querySelectorAll('[data-close]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1889,12 +2709,13 @@ const App = {
     });
 
     document.getElementById('btnGuardarAjustesMarca')?.addEventListener('click', async () => {
-      this.config.brandName = document.getElementById('inputBrandName').value.trim() || 'NOIRDA';
-      this.config.ownerName = document.getElementById('inputOwnerName').value.trim() || 'Santiago Varelas';
-      this.config.currency = document.getElementById('inputMoneda').value;
+      this.config.brandName = 'NOIRDA Opulence';
+      this.config.ownerName = 'Liam Varelas';
+      this.config.ownerPhone = '3045345642';
+      this.config.currency = document.getElementById('inputMoneda')?.value || 'COP';
       await this.guardarConfiguracion();
       this.renderTodo();
-      this.mostrarToast('Identidad de marca guardada con éxito', 'success');
+      this.mostrarToast('Identidad oficial de NOIRDA Opulence guardada', 'success');
 
       if (this.config.githubAutoSync && this.config.githubToken) {
         this.sincronizarConGithub(true);

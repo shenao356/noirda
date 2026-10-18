@@ -36,8 +36,8 @@ def run_server():
     url_red = f"http://{local_ip}:{PORT}"
 
     print("=" * 65)
-    print("      NOIRDA | SISTEMA DE CONTROL DE GASTOS Y CONTABILIDAD")
-    print("      Propietario: Santiago Varelas")
+    print("      NOIRDA Opulence | SISTEMA DE CONTROL DE FINANZAS Y GASTOS")
+    print("      Propietario: Liam Varelas | Cel: 3045345642")
     print("=" * 65)
     print(f"\n[+] Servidor iniciado correctamente.")
     print(f"\n[-] Para usar en esta computadora (PC):")
@@ -60,7 +60,7 @@ def run_server():
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
-            print("\nServidor detenido. ¡Hasta pronto, Santiago!")
+            print("\nServidor detenido. ¡Hasta pronto, Liam!")
             sys.exit(0)
 
 if __name__ == "__main__":

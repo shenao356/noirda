@@ -1,9 +1,9 @@
 @echo off
-title NOIRDA - Control de Gastos y Contabilidad
+title NOIRDA Opulence - Control de Finanzas
 cd /d "%~dp0"
 echo ===================================================
-echo     Iniciando NOIRDA Control de Gastos...
-echo     Propietario: Santiago Varelas
+echo     Iniciando NOIRDA Opulence Finanzas...
+echo     Propietario: Liam Varelas (Cel: 3045345642)
 echo ===================================================
 echo.
 python server.py

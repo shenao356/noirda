@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NOIRDA | Control de Gastos y Contabilidad</title>
-  <meta name="description" content="Sistema de control de compras de mercancía, nómina y recibos para Noirda - Santiago Varelas">
+  <title>NOIRDA Opulence | Atelier & Control Financiero</title>
+  <meta name="description" content="Software de control financiero, compras de mercancía, nómina y recibos para NOIRDA Opulence - Liam Varelas">
   
   <!-- Favicon & PWA Theme -->
   <meta name="theme-color" content="#0d0f12">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2311141a'/><text x='50%' y='62%' font-size='52' font-family='sans-serif' font-weight='900' fill='%23e0a96d' text-anchor='middle'>N</text></svg>">
+  <link rel="icon" href="logo.jpg">
   
-  <!-- Google Fonts: Syne & Plus Jakarta Sans for fashion brand luxury feel -->
+  <!-- Google Fonts: Cinzel (Luxury Brand) + Outfit (Modern Cool Legible UI) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- FontAwesome / Feather-like icons via CDN -->
+  <!-- FontAwesome 6.5.1 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Chart.js for interactive analytics -->
@@ -25,38 +25,88 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="theme-noir">
+
+  <!-- PANTALLA DE BIENVENIDA NOIRDA OPULENCE -->
+  <div class="welcome-screen-overlay" id="welcomeScreen">
+    <div class="welcome-card">
+      <div class="welcome-logo-badge">
+        <img src="logo.jpg" alt="NOIRDA Opulence" class="welcome-logo-img" id="welcomeLogoImg">
+      </div>
+      <h1 class="welcome-title">NOIRDA OPULENCE</h1>
+      <p class="welcome-tagline">Atelier & Fashion Store • Control Financiero</p>
+      
+      <div class="welcome-badge-grid">
+        <div class="welcome-pill">
+          <i class="fa-solid fa-crown text-gold"></i>
+          <span><strong>Propietario:</strong> Liam Varelas</span>
+        </div>
+        <a href="https://wa.me/573045345642" target="_blank" class="welcome-pill whatsapp-pill" title="WhatsApp Oficial">
+          <i class="fa-brands fa-whatsapp text-emerald"></i>
+          <span>3045345642</span>
+        </a>
+      </div>
+
+      <p class="welcome-desc">
+        Bienvenido a tu software exclusivo de finanzas, compras de mercancía, pagos de nómina y archivo de recibos de la tienda.
+      </p>
+
+      <div class="welcome-features">
+        <div class="feat-item"><i class="fa-solid fa-shirt text-gold"></i> <span>Compras de Ropa & Proveedores</span></div>
+        <div class="feat-item"><i class="fa-solid fa-file-invoice-dollar text-gold"></i> <span>Comprobantes PDF & WhatsApp</span></div>
+        <div class="feat-item"><i class="fa-solid fa-address-book text-gold"></i> <span>Directorio de Empleados</span></div>
+        <div class="feat-item"><i class="fa-solid fa-cloud-arrow-up text-gold"></i> <span>Sincronización en la Nube</span></div>
+      </div>
+
+      <div class="welcome-actions">
+        <button class="btn-welcome-enter" id="btnEntrarApp">
+          <span>Ingresar al Sistema</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="welcome-footer-note">
+        <label class="welcome-checkbox">
+          <input type="checkbox" id="chkNoMostrarBienvenida">
+          <span>Omitir pantalla en los próximos ingresos</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
   <div id="app" class="app-container">
 
     <!-- SIDEBAR (Desktop & Tablet) -->
     <aside class="sidebar" id="sidebar">
       <div class="brand-header">
         <div class="brand-logo-container" id="sidebarLogoContainer">
-          <div class="brand-logo-circle" id="sidebarLogoCircle">
-            <span class="logo-letter">N</span>
-          </div>
-          <img id="sidebarLogoImg" class="brand-logo-img hidden" alt="Noirda Logo">
+          <img id="sidebarLogoImg" src="logo.jpg" class="brand-logo-img" alt="NOIRDA Opulence Logo">
         </div>
         <div class="brand-info">
-          <h1 class="brand-title" id="displayBrandName">NOIRDA</h1>
-          <p class="brand-owner" id="displayOwnerName">Santiago Varelas</p>
-          <span class="brand-tag">Gestión & Gastos</span>
+          <h1 class="brand-title" id="displayBrandName">NOIRDA OPULENCE</h1>
+          <p class="brand-owner" id="displayOwnerName"><i class="fa-solid fa-crown text-gold"></i> Liam Varelas</p>
+          <a href="https://wa.me/573045345642" target="_blank" class="brand-contact-link"><i class="fa-brands fa-whatsapp text-emerald"></i> 3045345642</a>
         </div>
       </div>
 
       <nav class="sidebar-nav">
         <a href="#dashboard" class="nav-item active" data-tab="dashboard">
-          <i class="fa-solid fa-chart-pie"></i>
+          <i class="fa-solid fa-chart-line"></i>
           <span>Consolidado</span>
         </a>
         <a href="#compras" class="nav-item" data-tab="compras">
-          <i class="fa-solid fa-boxes-packing"></i>
+          <i class="fa-solid fa-shirt"></i>
           <span>Mercancía</span>
           <span class="badge" id="badgeCompras">0</span>
         </a>
         <a href="#nomina" class="nav-item" data-tab="nomina">
-          <i class="fa-solid fa-users-gear"></i>
+          <i class="fa-solid fa-user-tie"></i>
           <span>Nómina</span>
           <span class="badge" id="badgeNomina">0</span>
+        </a>
+        <a href="#empleados" class="nav-item" data-tab="empleados">
+          <i class="fa-solid fa-address-book"></i>
+          <span>Empleados</span>
+          <span class="badge" id="badgeEmpleados">0</span>
         </a>
         <a href="#recibos" class="nav-item" data-tab="recibos">
           <i class="fa-solid fa-receipt"></i>
@@ -69,9 +119,12 @@
       </nav>
 
       <div class="sidebar-footer">
+        <button class="btn-welcome-trigger" id="btnReabrirBienvenida" title="Ver portada de bienvenida e información">
+          <i class="fa-solid fa-gem text-gold"></i> Portada de la Tienda
+        </button>
         <div class="sync-status">
           <span class="status-dot"></span>
-          <span>Base de datos lista</span>
+          <span>NOIRDA Cloud Online</span>
         </div>
         <button class="btn-quick-export" id="btnQuickBackup" title="Descargar respaldo de seguridad">
           <i class="fa-solid fa-shield-halved"></i> Respaldo Seguro
@@ -87,14 +140,13 @@
           <button class="menu-toggle-btn" id="menuToggle" aria-label="Menú">
             <i class="fa-solid fa-bars"></i>
           </button>
-          <div class="mobile-brand-wrapper">
+          <div class="mobile-brand-wrapper" id="btnMobileBrandInfo" title="Información de la Tienda">
             <div class="mobile-brand-logo-box" id="mobileLogoBox">
-              <div class="brand-logo-circle small" id="mobileLogoCircle"><span>N</span></div>
-              <img id="mobileLogoImg" class="brand-logo-img hidden" alt="Logo">
+              <img id="mobileLogoImg" src="logo.jpg" class="brand-logo-img" alt="NOIRDA Opulence">
             </div>
             <div class="mobile-brand-meta">
-              <span class="mobile-brand-title" id="displayMobileBrandName">NOIRDA</span>
-              <span class="mobile-brand-subtitle" id="displayMobileOwnerName">Santiago Varelas</span>
+              <span class="mobile-brand-title" id="displayMobileBrandName">NOIRDA OPULENCE</span>
+              <span class="mobile-brand-subtitle" id="displayMobileOwnerName">Liam Varelas • 3045345642</span>
             </div>
           </div>
           <div class="month-selector-wrapper">
@@ -249,17 +301,88 @@
       <section id="tab-compras" class="tab-panel">
         <div class="section-top-actions">
           <div class="section-title-wrap">
-            <h2 class="section-heading">Compras de Mercancía</h2>
-            <p class="section-subheading">Control de stock de ropa, telas, confección y proveedores de Noirda</p>
+            <h2 class="section-heading"><i class="fa-solid fa-shirt text-gold"></i> Compras de Mercancía</h2>
+            <p class="section-subheading">Control de stock de ropa, prendas, confección y proveedores de NOIRDA Opulence</p>
           </div>
           <div class="actions-group">
-            <div class="search-input-wrap">
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" id="searchCompras" placeholder="Buscar proveedor, factura o artículo...">
-            </div>
             <button class="btn-action-primary" id="btnAbrirModalCompra">
               <i class="fa-solid fa-plus"></i> Registrar Compra
             </button>
+          </div>
+        </div>
+
+        <!-- BARRA AVANZADA DE FILTROS Y ACCIONES DE COMPRA -->
+        <div class="purchases-filter-card">
+          <div class="pfilter-grid">
+            <div class="pfilter-item col-search">
+              <label class="pfilter-label"><i class="fa-solid fa-magnifying-glass"></i> Búsqueda Rápida</label>
+              <input type="text" id="searchCompras" class="form-control" placeholder="Proveedor, factura o lote de prendas...">
+            </div>
+
+            <div class="pfilter-item">
+              <label class="pfilter-label"><i class="fa-solid fa-tags"></i> Tipo de Producto / Categoría</label>
+              <select id="filtroCategoriaCompra" class="form-control">
+                <option value="todas">Todas las categorías de ropa</option>
+                <option value="Camisetas y Polos">Camisetas y Polos</option>
+                <option value="Jeans y Pantalones">Jeans y Pantalones</option>
+                <option value="Chaquetas y Buzos">Chaquetas y Buzos</option>
+                <option value="Vestidos y Conjuntos">Vestidos y Conjuntos</option>
+                <option value="Ropa Interior / Pijamas">Ropa Interior / Pijamas</option>
+                <option value="Calzado">Calzado</option>
+                <option value="Accesorios / Gorras">Accesorios / Gorras</option>
+                <option value="Telas y Confección">Telas y Confección</option>
+                <option value="Empaques y Marquillas">Empaques y Marquillas</option>
+                <option value="Otros Suministros">Otros Suministros</option>
+              </select>
+            </div>
+
+            <div class="pfilter-item">
+              <label class="pfilter-label"><i class="fa-solid fa-building"></i> Proveedor</label>
+              <select id="filtroProveedorCompra" class="form-control">
+                <option value="todos">Todos los distribuidores</option>
+              </select>
+            </div>
+
+            <div class="pfilter-item">
+              <label class="pfilter-label"><i class="fa-regular fa-calendar-days"></i> Rango: Desde</label>
+              <input type="date" id="filtroFechaDesdeCompra" class="form-control">
+            </div>
+
+            <div class="pfilter-item">
+              <label class="pfilter-label"><i class="fa-regular fa-calendar-days"></i> Hasta</label>
+              <input type="date" id="filtroFechaHastaCompra" class="form-control">
+            </div>
+
+            <div class="pfilter-item">
+              <label class="pfilter-label"><i class="fa-solid fa-credit-card"></i> Método de Pago</label>
+              <select id="filtroMetodoPagoCompra" class="form-control">
+                <option value="todos">Todos los métodos</option>
+                <option value="Transferencia / Bancolombia">Transferencia / Bancolombia</option>
+                <option value="Nequi / Daviplata">Nequi / Daviplata</option>
+                <option value="Efectivo Caja">Efectivo Caja</option>
+                <option value="Tarjeta Débito / Crédito">Tarjeta Débito / Crédito</option>
+                <option value="Crédito Proveedor (Pendiente)">Crédito Proveedor (Pendiente)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- BOTONES DE EXPORTACIÓN Y ENVÍO -->
+          <div class="pfilter-actions-bar">
+            <div class="pfilter-summary-inline">
+              <span>Compras mostradas: <strong id="sumatoriaComprasFiltradas" class="text-gold">$0</strong></span>
+              <span class="pfilter-count" id="conteoComprasFiltradas">(0 compras)</span>
+            </div>
+            <div class="pfilter-btn-group">
+              <button class="btn-secondary" id="btnLimpiarFiltrosCompras" title="Restablecer filtros">
+                <i class="fa-solid fa-rotate-left"></i> Limpiar
+              </button>
+              <button class="btn-secondary btn-gold-accent" id="btnExportarComprasPDF" title="Descargar o imprimir informe oficial en PDF">
+                <i class="fa-solid fa-file-pdf"></i> Consolidado PDF
+              </button>
+              <button class="btn-secondary" id="btnEnviarComprasCorreo" title="Enviar resumen consolidado por correo">
+                <i class="fa-solid fa-envelope"></i> Enviar por Email
+              </button>
+            </div>
           </div>
         </div>
 
@@ -284,10 +407,6 @@
               </tbody>
             </table>
           </div>
-          <div class="table-footer-summary">
-            <span>Total compras filtradas: <strong id="sumatoriaComprasFiltradas">$0</strong></span>
-            <span id="conteoComprasFiltradas">0 registros</span>
-          </div>
         </div>
       </section>
 
@@ -295,16 +414,19 @@
       <section id="tab-nomina" class="tab-panel">
         <div class="section-top-actions">
           <div class="section-title-wrap">
-            <h2 class="section-heading">Nómina y Pagos a Personal</h2>
-            <p class="section-subheading">Gestión de salarios, comisiones por ventas, costura y comprobantes</p>
+            <h2 class="section-heading"><i class="fa-solid fa-user-tie text-gold"></i> Nómina y Pagos a Personal</h2>
+            <p class="section-subheading">Control de salarios, horas laboradas, comisiones por ventas y comprobantes para WhatsApp y PDF</p>
           </div>
           <div class="actions-group">
             <div class="search-input-wrap">
               <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" id="searchNomina" placeholder="Buscar empleado o cargo...">
+              <input type="text" id="searchNomina" placeholder="Buscar trabajador, cargo o periodo...">
             </div>
+            <button class="btn-secondary" id="btnIrADirectorioPersonal" title="Ver base de datos de empleados">
+              <i class="fa-solid fa-address-book"></i> Directorio Empleados
+            </button>
             <button class="btn-action-primary" id="btnAbrirModalNomina">
-              <i class="fa-solid fa-user-plus"></i> Registrar Nómina
+              <i class="fa-solid fa-hand-holding-dollar"></i> Registrar Nómina
             </button>
           </div>
         </div>
@@ -318,12 +440,12 @@
                   <th>Trabajador</th>
                   <th>Cargo / Área</th>
                   <th>Periodo</th>
-                  <th>Básico</th>
+                  <th>Tiempo / Base</th>
                   <th>Bonos / Comisión</th>
                   <th>Deducciones</th>
                   <th>Neto Pagado</th>
                   <th>Comprobante</th>
-                  <th>Acciones</th>
+                  <th>WhatsApp / Acciones</th>
                 </tr>
               </thead>
               <tbody id="tbodyNomina">
@@ -335,6 +457,29 @@
             <span>Total nómina filtrada: <strong id="sumatoriaNominaFiltrada">$0</strong></span>
             <span id="conteoNominaFiltrada">0 trabajadores pagados</span>
           </div>
+        </div>
+      </section>
+
+      <!-- TAB: BASE DE DATOS DE EMPLEADOS / EQUIPO -->
+      <section id="tab-empleados" class="tab-panel">
+        <div class="section-top-actions">
+          <div class="section-title-wrap">
+            <h2 class="section-heading"><i class="fa-solid fa-address-book text-gold"></i> Directorio de Personal</h2>
+            <p class="section-subheading">Base de datos de trabajadores de NOIRDA Opulence, números de WhatsApp para comprobantes y tarifas salariales</p>
+          </div>
+          <div class="actions-group">
+            <div class="search-input-wrap">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="searchEmpleados" placeholder="Buscar por nombre, cargo, teléfono o documento...">
+            </div>
+            <button class="btn-action-primary" id="btnAbrirModalEmpleado">
+              <i class="fa-solid fa-user-plus"></i> Registrar Empleado
+            </button>
+          </div>
+        </div>
+
+        <div class="employees-card-grid" id="empleadosGrid">
+          <!-- Inyectado vía JS con tarjetas de empleados -->
         </div>
       </section>
 
@@ -390,18 +535,35 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <label>Nombre del Almacén</label>
-                <input type="text" id="inputBrandName" class="form-control" value="NOIRDA">
+              <div class="fixed-brand-badge-card">
+                <div class="fixed-badge-header">
+                  <i class="fa-solid fa-certificate text-gold"></i>
+                  <span>Identidad Oficial Registrada (Inmutable)</span>
+                </div>
+                <div class="fixed-badge-body">
+                  <div class="fixed-item">
+                    <span class="fixed-label">Marca / Almacén:</span>
+                    <strong class="fixed-val brand-val"><i class="fa-solid fa-lock text-gold"></i> NOIRDA OPULENCE</strong>
+                  </div>
+                  <div class="fixed-item">
+                    <span class="fixed-label">Propietario Legal:</span>
+                    <strong class="fixed-val"><i class="fa-solid fa-crown text-gold"></i> Liam Varelas</strong>
+                  </div>
+                  <div class="fixed-item">
+                    <span class="fixed-label">Contacto / WhatsApp:</span>
+                    <a href="https://wa.me/573045345642" target="_blank" class="fixed-val phone-val"><i class="fa-brands fa-whatsapp text-emerald"></i> 3045345642</a>
+                  </div>
+                </div>
+                <p class="fixed-badge-note">
+                  <i class="fa-solid fa-shield-check text-gold"></i> Esta información oficial identifica todos los comprobantes de pago de nómina y facturas de la tienda.
+                </p>
+                <input type="hidden" id="inputBrandName" value="NOIRDA Opulence">
+                <input type="hidden" id="inputOwnerName" value="Liam Varelas">
+                <input type="hidden" id="inputOwnerPhone" value="3045345642">
               </div>
 
-              <div class="form-group">
-                <label>Propietario</label>
-                <input type="text" id="inputOwnerName" class="form-control" value="Santiago Varelas">
-              </div>
-
-              <div class="form-group">
-                <label>Símbolo de Moneda</label>
+              <div class="form-group" style="margin-top: 14px;">
+                <label>Símbolo de Moneda Contable</label>
                 <select id="inputMoneda" class="form-control">
                   <option value="COP">Pesos Colombianos ($ COP)</option>
                   <option value="USD">Dólares ($ USD)</option>
@@ -411,7 +573,7 @@
               </div>
 
               <button class="btn-action-primary" id="btnGuardarAjustesMarca">
-                <i class="fa-solid fa-floppy-disk"></i> Guardar Identidad
+                <i class="fa-solid fa-floppy-disk"></i> Guardar Preferencias de Marca
               </button>
             </div>
           </div>
@@ -596,23 +758,23 @@
     <!-- BOTTOM MOBILE NAVIGATION (Smartphones) -->
     <nav class="bottom-nav">
       <a href="#dashboard" class="bnav-item active" data-tab="dashboard">
-        <i class="fa-solid fa-chart-pie"></i>
+        <i class="fa-solid fa-chart-line"></i>
         <span>Resumen</span>
       </a>
       <a href="#compras" class="bnav-item" data-tab="compras">
-        <i class="fa-solid fa-boxes-packing"></i>
+        <i class="fa-solid fa-shirt"></i>
         <span>Mercancía</span>
       </a>
       <button class="bnav-center-action" id="btnMobileQuickAdd" aria-label="Nuevo Registro">
         <i class="fa-solid fa-plus"></i>
       </button>
       <a href="#nomina" class="bnav-item" data-tab="nomina">
-        <i class="fa-solid fa-users"></i>
+        <i class="fa-solid fa-user-tie"></i>
         <span>Nómina</span>
       </a>
-      <a href="#recibos" class="bnav-item" data-tab="recibos">
-        <i class="fa-solid fa-receipt"></i>
-        <span>Recibos</span>
+      <a href="#empleados" class="bnav-item" data-tab="empleados">
+        <i class="fa-solid fa-address-book"></i>
+        <span>Equipo</span>
       </a>
       <a href="#ajustes" class="bnav-item" data-tab="ajustes">
         <i class="fa-solid fa-sliders"></i>
@@ -748,7 +910,7 @@
     <div class="modal-container">
       <div class="modal-header">
         <div class="modal-title-wrap">
-          <i class="fa-solid fa-users-gear modal-icon purple"></i>
+          <i class="fa-solid fa-user-tie modal-icon gold"></i>
           <h3 id="modalNominaTitulo">Registrar Pago de Nómina</h3>
         </div>
         <button class="modal-close-btn" data-close="modalNomina">&times;</button>
@@ -756,6 +918,15 @@
       <form id="formNomina">
         <input type="hidden" id="nominaId">
         <div class="modal-body">
+          
+          <!-- SELECCIONAR EMPLEADO REGISTRADO -->
+          <div class="form-group mb-3">
+            <label for="nominaEmpleadoSelect"><i class="fa-solid fa-address-book text-gold"></i> Cargar de Base de Datos de Empleados</label>
+            <select id="nominaEmpleadoSelect" class="form-control select-highlight">
+              <option value="">-- Seleccionar Trabajador (o escribir nuevo abajo) --</option>
+            </select>
+          </div>
+
           <div class="form-row">
             <div class="form-group col-6">
               <label for="nominaFecha">Fecha de Pago *</label>
@@ -773,6 +944,25 @@
               <input type="text" id="nominaTrabajador" class="form-control" placeholder="Nombre completo" required>
             </div>
             <div class="form-group col-6">
+              <label for="nominaDocumento">Cédula / Documento</label>
+              <input type="text" id="nominaDocumento" class="form-control" placeholder="Ej: 1037648921">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="nominaWhatsapp"><i class="fa-brands fa-whatsapp text-emerald"></i> Teléfono / WhatsApp *</label>
+              <input type="tel" id="nominaWhatsapp" class="form-control" placeholder="Ej: 3045345642" required>
+              <span class="file-hint">Para enviarle el comprobante en 1 clic</span>
+            </div>
+            <div class="form-group col-6">
+              <label for="nominaEmail"><i class="fa-regular fa-envelope"></i> Correo Electrónico</label>
+              <input type="email" id="nominaEmail" class="form-control" placeholder="empleado@correo.com">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
               <label for="nominaCargo">Cargo / Función *</label>
               <select id="nominaCargo" class="form-control" required>
                 <option value="Vendedor / Atención Almacén">Vendedor / Atención Almacén</option>
@@ -785,14 +975,40 @@
                 <option value="Auxiliar Temporal">Auxiliar Temporal</option>
               </select>
             </div>
+            <div class="form-group col-6">
+              <label for="nominaModoTiempo">Modalidad de Tiempo Laborado</label>
+              <select id="nominaModoTiempo" class="form-control">
+                <option value="fijo">Sueldo Fijo (Mensual / Quincenal)</option>
+                <option value="horas">Por Horas Laboradas</option>
+                <option value="dias">Por Días Laborados</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- REGISTRO DINÁMICO DE HORAS O DÍAS LABORADOS -->
+          <div class="salary-calc-box hidden" id="boxCalculoTiempo">
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label id="lblCantidadTiempo">Horas Laboradas</label>
+                <input type="number" id="nominaCantidadTiempo" class="form-control text-right" placeholder="0" min="0" step="any">
+              </div>
+              <div class="form-group col-6">
+                <label id="lblTarifaTiempo">Tarifa por Hora ($)</label>
+                <input type="number" id="nominaTarifaTiempo" class="form-control text-right" placeholder="0" min="0" step="any">
+              </div>
+            </div>
+            <div class="calc-subtotal-row">
+              <span>Subtotal por tiempo trabajado:</span>
+              <strong id="displaySubtotalTiempo">$0</strong>
+            </div>
           </div>
 
           <!-- CÁLCULO SALARIAL -->
           <div class="salary-breakdown-box">
-            <h4 class="box-title"><i class="fa-solid fa-calculator"></i> Desglose Salarial</h4>
+            <h4 class="box-title"><i class="fa-solid fa-calculator"></i> Liquidación Salarial</h4>
             <div class="form-row">
               <div class="form-group col-4">
-                <label for="nominaSueldoBase">Sueldo / Base ($) *</label>
+                <label for="nominaSueldoBase">Sueldo Base ($) *</label>
                 <input type="number" id="nominaSueldoBase" class="form-control text-right" placeholder="0" min="0" step="any" required>
               </div>
               <div class="form-group col-4">
@@ -800,7 +1016,7 @@
                 <input type="number" id="nominaBonos" class="form-control text-right" placeholder="0" min="0" step="any" value="0">
               </div>
               <div class="form-group col-4">
-                <label for="nominaDeducciones">Deducciones / Anticipos ($)</label>
+                <label for="nominaDeducciones">Deducciones ($)</label>
                 <input type="number" id="nominaDeducciones" class="form-control text-right" placeholder="0" min="0" step="any" value="0">
               </div>
             </div>
@@ -874,6 +1090,211 @@
     </div>
   </div>
 
+  <!-- MODAL: COMPROBANTE OFICIAL DE PAGO DE NÓMINA (PDF, PRINT, WHATSAPP, EMAIL) -->
+  <div class="modal-overlay" id="modalComprobanteNomina">
+    <div class="modal-container modal-voucher">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-file-invoice-dollar modal-icon gold"></i>
+          <h3>Comprobante Oficial de Nómina</h3>
+        </div>
+        <div class="modal-header-actions">
+          <button class="btn-icon" id="btnPrintComprobanteNomina" title="Imprimir o Guardar PDF">
+            <i class="fa-solid fa-print"></i>
+          </button>
+          <button class="modal-close-btn" data-close="modalComprobanteNomina">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-body voucher-modal-body">
+        <!-- VOUCHER RENDERIZADO PARA PANTALLA E IMPRESIÓN -->
+        <div class="luxury-voucher-sheet" id="luxuryVoucherSheet">
+          <div class="voucher-header">
+            <div class="voucher-brand-box">
+              <img src="logo.jpg" alt="NOIRDA Opulence" class="voucher-logo">
+              <div>
+                <h2 class="voucher-brand-name">NOIRDA OPULENCE</h2>
+                <p class="voucher-tagline">Atelier & Fashion Store • Control Contable</p>
+                <p class="voucher-owner-info"><strong>Propietario:</strong> Liam Varelas | <strong>Contacto:</strong> 3045345642</p>
+              </div>
+            </div>
+            <div class="voucher-doc-meta">
+              <span class="voucher-badge">COMPROBANTE OFICIAL</span>
+              <div class="voucher-id" id="voucherNumero">REC-NOM-000</div>
+              <div class="voucher-date" id="voucherFechaEmision">Fecha: --/--/----</div>
+            </div>
+          </div>
+
+          <div class="voucher-divider"></div>
+
+          <!-- DATOS DEL TRABAJADOR -->
+          <div class="voucher-grid-info">
+            <div class="vinfo-item">
+              <span class="vinfo-lbl">Colaborador / Empleado:</span>
+              <strong class="vinfo-val" id="voucherNombreTrabajador">--</strong>
+            </div>
+            <div class="vinfo-item">
+              <span class="vinfo-lbl">Cédula / Documento:</span>
+              <strong class="vinfo-val" id="voucherDocTrabajador">--</strong>
+            </div>
+            <div class="vinfo-item">
+              <span class="vinfo-lbl">Cargo / Función:</span>
+              <strong class="vinfo-val" id="voucherCargoTrabajador">--</strong>
+            </div>
+            <div class="vinfo-item">
+              <span class="vinfo-lbl">Periodo Laborado:</span>
+              <strong class="vinfo-val" id="voucherPeriodoTrabajador">--</strong>
+            </div>
+            <div class="vinfo-item">
+              <span class="vinfo-lbl">Teléfono WhatsApp:</span>
+              <strong class="vinfo-val" id="voucherTelefonoTrabajador">--</strong>
+            </div>
+            <div class="vinfo-item">
+              <span class="vinfo-lbl">Medio de Pago:</span>
+              <strong class="vinfo-val" id="voucherMedioPago">--</strong>
+            </div>
+          </div>
+
+          <!-- TABLA DE LIQUIDACIÓN SALARIAL -->
+          <table class="voucher-table">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Detalle / Tiempo Laborado</th>
+                <th class="text-right">Valor</th>
+              </tr>
+            </thead>
+            <tbody id="voucherTableBody">
+              <!-- Inyectado vía JS -->
+            </tbody>
+            <tfoot>
+              <tr class="voucher-total-row">
+                <td colspan="2">TOTAL NETO PAGADO</td>
+                <td class="text-right" id="voucherTotalNeto">$0</td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <div class="voucher-notes" id="voucherNotasBox">
+            <p><strong>Observaciones:</strong> <span id="voucherNotas">--</span></p>
+          </div>
+
+          <!-- FIRMAS -->
+          <div class="voucher-signatures">
+            <div class="sign-box">
+              <div class="sign-line"></div>
+              <strong>Liam Varelas</strong>
+              <span>Propietario / NOIRDA Opulence</span>
+              <span class="sign-doc">Cel: 3045345642</span>
+            </div>
+            <div class="sign-box">
+              <div class="sign-line"></div>
+              <strong id="voucherFirmaNombre">Firma del Colaborador</strong>
+              <span>Recibí Conforme</span>
+              <span class="sign-doc" id="voucherFirmaDoc">C.C. --</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTONES DE ENVÍO DIRECTO: WHATSAPP, EMAIL, PRINT -->
+      <div class="modal-footer voucher-footer">
+        <button type="button" class="btn-whatsapp-action" id="btnEnviarWhatsappVoucher">
+          <i class="fa-brands fa-whatsapp"></i> Enviar por WhatsApp
+        </button>
+        <button type="button" class="btn-secondary" id="btnEnviarEmailVoucher">
+          <i class="fa-solid fa-envelope"></i> Enviar por Email
+        </button>
+        <button type="button" class="btn-action-primary" id="btnImprimirVoucherFinal">
+          <i class="fa-solid fa-print"></i> Imprimir / Guardar PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRAR / EDITAR EMPLEADO -->
+  <div class="modal-overlay" id="modalEmpleado">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-id-card-clip modal-icon gold"></i>
+          <h3 id="modalEmpleadoTitulo">Registrar Nuevo Empleado</h3>
+        </div>
+        <button class="modal-close-btn" data-close="modalEmpleado">&times;</button>
+      </div>
+      <form id="formEmpleado">
+        <input type="hidden" id="empleadoId">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="empleadoNombre">Nombre Completo *</label>
+              <input type="text" id="empleadoNombre" class="form-control" placeholder="Ej: Valentina Gómez" required>
+            </div>
+            <div class="form-group col-6">
+              <label for="empleadoDocumento">Cédula / Documento</label>
+              <input type="text" id="empleadoDocumento" class="form-control" placeholder="Ej: 1037648921">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="empleadoTelefono"><i class="fa-brands fa-whatsapp text-emerald"></i> Teléfono / WhatsApp *</label>
+              <input type="tel" id="empleadoTelefono" class="form-control" placeholder="Ej: 3045345642" required>
+              <span class="file-hint">Sin espacios ni guiones para envíos directos</span>
+            </div>
+            <div class="form-group col-6">
+              <label for="empleadoEmail"><i class="fa-regular fa-envelope"></i> Correo Electrónico</label>
+              <input type="email" id="empleadoEmail" class="form-control" placeholder="empleado@correo.com">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="empleadoCargo">Cargo en la Tienda *</label>
+              <select id="empleadoCargo" class="form-control" required>
+                <option value="Vendedor / Atención Almacén">Vendedor / Atención Almacén</option>
+                <option value="Administrador Tienda">Administrador Tienda</option>
+                <option value="Costurero / Modista">Costurero / Modista</option>
+                <option value="Cajero / Facturación">Cajero / Facturación</option>
+                <option value="Bodega / Inventario">Bodega / Inventario</option>
+                <option value="Community Manager / Redes">Community Manager / Redes</option>
+                <option value="Seguridad / Servicios Generales">Seguridad / Servicios Generales</option>
+                <option value="Auxiliar Temporal">Auxiliar Temporal</option>
+              </select>
+            </div>
+            <div class="form-group col-6">
+              <label for="empleadoTipoPago">Modalidad de Cobro *</label>
+              <select id="empleadoTipoPago" class="form-control">
+                <option value="horas">Por Horas Laboradas</option>
+                <option value="dias">Por Días Laborados</option>
+                <option value="quincenal">Sueldo Quincenal</option>
+                <option value="mensual">Sueldo Mensual</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="empleadoTarifa">Tarifa o Sueldo Base Habitual ($) *</label>
+            <input type="number" id="empleadoTarifa" class="form-control text-right" placeholder="0" min="0" step="any" required>
+            <span class="file-hint">Ej: Si cobra por horas pon 15000. Si cobra sueldo mensual pon 1300000.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="empleadoNotas">Notas Adicionales</label>
+            <textarea id="empleadoNotas" class="form-control" rows="2" placeholder="Horarios habituales, condiciones, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modalEmpleado">Cancelar</button>
+          <button type="submit" class="btn-action-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Empleado
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: VISOR DE RECIBO / DOCUMENTO (ZOOM & PRINT) -->
   <div class="modal-overlay" id="modalVisorRecibo">
     <div class="modal-container modal-viewer">
@@ -939,6 +1360,9 @@
       </div>
     </div>
   </div>
+
+  <!-- CONTENEDOR OCULTO PARA IMPRESIÓN OFICIAL DEL CONSOLIDADO DE COMPRAS (PDF / PRINT) -->
+  <div id="comprasPrintSheet" class="printable-report-sheet hidden"></div>
 
   <!-- NOTIFICACIÓN TOAST FLOTANTE -->
   <div id="toastContainer" class="toast-container"></div>

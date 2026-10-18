@@ -1,6 +1,7 @@
-# NOIRDA - Control de Gastos y Contabilidad
-**Propietario:** Santiago Varelas  
-**Marca:** NOIRDA  
+# NOIRDA Opulence - Atelier & Fashion Store
+**Propietario:** Liam Varelas  
+**Celular:** 3045345642  
+**Marca:** NOIRDA Opulence  
 
 Sistema integral diseñado para la gestión organizada de compras de mercancía (ropa, telas, confección, insumos), pagos de nómina de colaboradores y archivo digital de recibos con soporte fotográfico.
 
@@ -121,4 +122,4 @@ Para que cada vez que registres un gasto desde la URL en tu celular o PC la info
 5. ¡Listo! A partir de ese momento, cada compra o nómina que guardes creará automáticamente una actualización directa en el archivo `data/gastos.json` de tu repositorio en GitHub.
 
 ---
-*NOIRDA © 2026 - Diseñado exclusivamente para Santiago Varelas.*
+*NOIRDA Opulence © 2026 - Diseñado exclusivamente para Liam Varelas (Cel: 3045345642).*
