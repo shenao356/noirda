@@ -1201,6 +1201,15 @@ input:checked + .slider:before {
   overflow: hidden;
 }
 
+.modal-container form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
 .modal-container.modal-sm {
   max-width: 440px;
 }
@@ -1220,6 +1229,7 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .modal-title-wrap {
@@ -1252,6 +1262,10 @@ input:checked + .slider:before {
 .modal-body {
   padding: 24px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -1264,6 +1278,7 @@ input:checked + .slider:before {
   justify-content: flex-end;
   gap: 12px;
   background-color: var(--bg-secondary);
+  flex-shrink: 0;
 }
 
 .form-group {
@@ -1929,31 +1944,106 @@ textarea.form-control {
     font-size: 18px;
   }
 
-  /* Modales en Móviles tipo Bottom-Sheet */
+  /* Modales en Móviles tipo Bottom-Sheet de altura completa y scroll táctil */
   .modal-overlay {
     align-items: flex-end;
     padding: 0;
+    overflow: hidden;
   }
 
   .modal-container {
-    max-height: 92vh;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 94vh;
+    max-height: 94vh;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
+    border-top-left-radius: 22px;
+    border-top-right-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0;
   }
 
-  .modal-body {
-    padding: 18px 16px;
-    gap: 14px;
+  .modal-container form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
   }
 
   .modal-header {
-    padding: 16px 20px;
+    padding: 14px 18px;
+    flex-shrink: 0;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .modal-body {
+    padding: 18px 16px 28px 16px;
+    gap: 14px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   .modal-footer {
-    padding: 14px 20px;
+    padding: 12px 16px;
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+    flex-shrink: 0;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.45);
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+  }
+
+  .modal-footer button {
+    flex: 1;
+    padding: 12px 14px;
+    font-size: 14px;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  /* Formulario móvil: campos apilados cómodos para un dedo */
+  .form-row {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .form-group.col-6 {
+    width: 100% !important;
+  }
+
+  .form-control {
+    font-size: 16px !important; /* Previene zoom involuntario en iPhone Safari */
+    padding: 11px 13px;
+    min-height: 44px;
+  }
+
+  /* Dropzone táctil en celular */
+  .upload-dropzone {
+    padding: 14px 12px;
+  }
+
+  .upload-btn-choices {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .btn-choice, .btn-choice-subtle {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 13px;
   }
 
   .section-top-actions {
