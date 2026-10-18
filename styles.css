@@ -2093,10 +2093,12 @@ textarea.form-control {
   transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
-.welcome-screen-overlay.fade-out {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+.welcome-screen-overlay.fade-out,
+.welcome-screen-overlay.hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  display: none !important;
 }
 
 .welcome-card {

@@ -58,7 +58,7 @@
       </div>
 
       <div class="welcome-actions">
-        <button class="btn-welcome-enter" id="btnEntrarApp">
+        <button class="btn-welcome-enter" id="btnEntrarApp" onclick="App.cerrarBienvenida()">
           <span>Ingresar al Sistema</span>
           <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -119,7 +119,7 @@
       </nav>
 
       <div class="sidebar-footer">
-        <button class="btn-welcome-trigger" id="btnReabrirBienvenida" title="Ver portada de bienvenida e información">
+        <button class="btn-welcome-trigger" id="btnReabrirBienvenida" onclick="App.abrirBienvenida()" title="Ver portada de bienvenida e información">
           <i class="fa-solid fa-gem text-gold"></i> Portada de la Tienda
         </button>
         <div class="sync-status">
@@ -140,7 +140,7 @@
           <button class="menu-toggle-btn" id="menuToggle" aria-label="Menú">
             <i class="fa-solid fa-bars"></i>
           </button>
-          <div class="mobile-brand-wrapper" id="btnMobileBrandInfo" title="Información de la Tienda">
+          <div class="mobile-brand-wrapper" id="btnMobileBrandInfo" onclick="App.abrirBienvenida()" title="Información de la Tienda">
             <div class="mobile-brand-logo-box" id="mobileLogoBox">
               <img id="mobileLogoImg" src="logo.jpg" class="brand-logo-img" alt="NOIRDA Opulence">
             </div>

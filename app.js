@@ -160,27 +160,34 @@ const App = {
       await this.guardarConfiguracion();
 
       // Limpiar URL para que no quede expuesto el token en la barra de direcciones
-      const cleanUrl = window.location.origin + window.location.pathname;
-      window.history.replaceState({}, document.title, cleanUrl);
+      try {
+        const cleanUrl = window.location.origin + window.location.pathname;
+        if (cleanUrl.startsWith('http')) {
+          window.history.replaceState({}, document.title, cleanUrl);
+        }
+      } catch (err) {
+        console.warn('URL clean info:', err);
+      }
       this.mostrarToast('¡Dispositivo conectado exitosamente a la nube de Noirda!', 'success');
     }
 
     await this.cargarDatos();
 
-    // Si tiene sincronización activa con GitHub, descargar datos más recientes en segundo plano
-    if (this.config.githubAutoSync && this.config.githubToken) {
-      await this.descargarDesdeGithub(true);
-    } else if (this.compras.length === 0 && this.nomina.length === 0) {
-      // Si está totalmente vacío y no hay sync, sembrar datos de ejemplo de alta moda
-      await this.sembrarDatosIniciales();
-      await this.cargarDatos();
-    }
-
+    // 2. ACTIVAR INTERFAZ Y EVENTOS DE INMEDIATO (Cero bloqueos)
     this.iniciarPeriodosSelector();
     this.aplicarConfiguracionVisual();
     this.iniciarPantallaBienvenida();
     this.configurarEventos();
     this.renderTodo();
+
+    // 3. Sincronización en segundo plano con GitHub (sin congelar la pantalla de bienvenida)
+    if (this.config.githubAutoSync && this.config.githubToken) {
+      this.descargarDesdeGithub(true).catch(e => console.warn('Sync background check:', e));
+    } else if (this.compras.length === 0 && this.nomina.length === 0) {
+      this.sembrarDatosIniciales().then(() => {
+        this.cargarDatos().then(() => this.renderTodo());
+      });
+    }
   },
 
   // Cargar configuración guardada (Persistencia dual: localStorage + IndexedDB)
@@ -514,8 +521,42 @@ const App = {
     const omitir = localStorage.getItem('noirda_omitir_bienvenida') === 'true';
     if (omitir) {
       welcome.classList.add('fade-out');
+      welcome.classList.add('hidden');
+      welcome.style.display = 'none';
+      welcome.style.pointerEvents = 'none';
     } else {
       welcome.classList.remove('fade-out');
+      welcome.classList.remove('hidden');
+      welcome.style.display = 'flex';
+      welcome.style.pointerEvents = 'all';
+    }
+  },
+
+  cerrarBienvenida() {
+    const welcome = document.getElementById('welcomeScreen');
+    const chkOmitir = document.getElementById('chkNoMostrarBienvenida');
+    if (chkOmitir && chkOmitir.checked) {
+      localStorage.setItem('noirda_omitir_bienvenida', 'true');
+    }
+    if (welcome) {
+      welcome.classList.add('fade-out');
+      welcome.style.opacity = '0';
+      welcome.style.pointerEvents = 'none';
+      setTimeout(() => {
+        welcome.classList.add('hidden');
+        welcome.style.display = 'none';
+      }, 250);
+    }
+  },
+
+  abrirBienvenida() {
+    const welcome = document.getElementById('welcomeScreen');
+    if (welcome) {
+      welcome.classList.remove('fade-out');
+      welcome.classList.remove('hidden');
+      welcome.style.display = 'flex';
+      welcome.style.opacity = '1';
+      welcome.style.pointerEvents = 'all';
     }
   },
 
@@ -2574,20 +2615,9 @@ const App = {
     document.getElementById('btnEnviarEmailVoucher')?.addEventListener('click', () => this.enviarEmailVoucher());
 
     // Pantalla de Bienvenida (Ingreso y Reingreso)
-    const welcome = document.getElementById('welcomeScreen');
-    document.getElementById('btnEntrarApp')?.addEventListener('click', () => {
-      const chkOmitir = document.getElementById('chkNoMostrarBienvenida');
-      if (chkOmitir && chkOmitir.checked) {
-        localStorage.setItem('noirda_omitir_bienvenida', 'true');
-      }
-      welcome?.classList.add('fade-out');
-    });
-
-    const abrirBienvenida = () => {
-      welcome?.classList.remove('fade-out');
-    };
-    document.getElementById('btnReabrirBienvenida')?.addEventListener('click', abrirBienvenida);
-    document.getElementById('btnMobileBrandInfo')?.addEventListener('click', abrirBienvenida);
+    document.getElementById('btnEntrarApp')?.addEventListener('click', () => this.cerrarBienvenida());
+    document.getElementById('btnReabrirBienvenida')?.addEventListener('click', () => this.abrirBienvenida());
+    document.getElementById('btnMobileBrandInfo')?.addEventListener('click', () => this.abrirBienvenida());
 
     // 7. Cierre de modales
     document.querySelectorAll('[data-close]').forEach(btn => {
