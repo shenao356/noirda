@@ -2,7 +2,7 @@
   "marca": "NOIRDA",
   "propietario": "Santiago Varelas",
   "moneda": "COP",
-  "ultimaActualizacion": "2026-10-18T04:13:06.751Z",
+  "ultimaActualizacion": "2026-10-18T04:13:29.685Z",
   "compras": [
     {
       "fecha": "2026-10-18",
@@ -94,6 +94,25 @@
       "reciboTipo": "",
       "notas": "",
       "id": 5
+    },
+    {
+      "fecha": "2026-10-18",
+      "anio": 2026,
+      "mes": "10",
+      "periodo": "Mes Octubre 2026",
+      "trabajador": "LUNA GIL",
+      "cargo": "Vendedor / Atención Almacén",
+      "sueldoBase": 10000,
+      "bonos": 10000,
+      "deducciones": 0,
+      "neto": 20000,
+      "metodoPago": "Transferencia Bancaria",
+      "referencia": "DAVIPLATA",
+      "reciboData": null,
+      "reciboNombre": "",
+      "reciboTipo": "",
+      "notas": "",
+      "id": 6
     }
   ]
 }
