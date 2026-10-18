@@ -132,10 +132,38 @@ const App = {
   async init() {
     await this.db.init();
     await this.cargarConfiguracion();
+
+    // 1. Detección automática de Token por URL para vincular dispositivos con 1 solo clic
+    const urlParams = new URLSearchParams(window.location.search);
+    const hash = window.location.hash || '';
+    let tokenDetectado = urlParams.get('token') || urlParams.get('key') || urlParams.get('sync');
+
+    if (!tokenDetectado && hash.includes('token=')) {
+      tokenDetectado = hash.split('token=')[1].split('&')[0];
+    } else if (!tokenDetectado && hash.includes('sync=')) {
+      tokenDetectado = hash.split('sync=')[1].split('&')[0];
+    }
+
+    if (tokenDetectado) {
+      this.config.githubUser = 'shenao356';
+      this.config.githubRepo = 'noirda';
+      this.config.githubToken = tokenDetectado.trim();
+      this.config.githubAutoSync = true;
+      await this.guardarConfiguracion();
+
+      // Limpiar URL para que no quede expuesto el token en la barra de direcciones
+      const cleanUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+      this.mostrarToast('¡Dispositivo conectado exitosamente a la nube de Noirda!', 'success');
+    }
+
     await this.cargarDatos();
 
-    // Si está vacío, sembrar datos de ejemplo de alta moda para Noirda
-    if (this.compras.length === 0 && this.nomina.length === 0) {
+    // Si tiene sincronización activa con GitHub, descargar datos más recientes en segundo plano
+    if (this.config.githubAutoSync && this.config.githubToken) {
+      await this.descargarDesdeGithub(true);
+    } else if (this.compras.length === 0 && this.nomina.length === 0) {
+      // Si está totalmente vacío y no hay sync, sembrar datos de ejemplo de alta moda
       await this.sembrarDatosIniciales();
       await this.cargarDatos();
     }
@@ -1492,25 +1520,26 @@ const App = {
     }
   },
 
-  async descargarDesdeGithub() {
+  async descargarDesdeGithub(silencioso = false) {
     const user = (this.config.githubUser || '').trim();
     const repo = (this.config.githubRepo || '').trim();
     const token = (this.config.githubToken || '').trim();
 
     if (!user || !repo) {
-      this.mostrarToast('Configura tu usuario y repositorio de GitHub en Ajustes', 'error');
+      if (!silencioso) this.mostrarToast('Configura tu usuario y repositorio de GitHub en Ajustes', 'error');
       return;
     }
 
     try {
-      this.mostrarToast('Descargando datos desde GitHub...', 'info');
+      if (!silencioso) this.mostrarToast('Descargando datos desde GitHub...', 'info');
       const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/data/gastos.json`;
       const headers = { 'Accept': 'application/vnd.github.v3+json' };
       if (token) headers['Authorization'] = `token ${token}`;
 
       const res = await fetch(apiUrl, { headers });
       if (!res.ok) {
-        throw new Error(`No se encontró el archivo data/gastos.json en ${user}/${repo}`);
+        if (!silencioso) throw new Error(`No se encontró el archivo data/gastos.json en ${user}/${repo}`);
+        return;
       }
 
       const fileData = await res.json();
@@ -1523,10 +1552,13 @@ const App = {
       const data = JSON.parse(jsonStr);
 
       if (!data.compras || !data.nomina) {
-        throw new Error('Estructura de datos incompleta en el archivo de GitHub');
+        if (!silencioso) throw new Error('Estructura de datos incompleta en el archivo de GitHub');
+        return;
       }
 
-      if (!confirm(`Se descargaron ${data.compras.length} compras y ${data.nomina.length} pagos de nómina desde GitHub. ¿Deseas actualizar tu sistema local con estos datos?`)) return;
+      if (!silencioso) {
+        if (!confirm(`Se descargaron ${data.compras.length} compras y ${data.nomina.length} pagos de nómina desde GitHub. ¿Deseas actualizar tu sistema local con estos datos?`)) return;
+      }
 
       await this.db.clear('compras');
       await this.db.clear('nomina');
@@ -1536,10 +1568,12 @@ const App = {
 
       await this.cargarDatos();
       this.renderTodo();
-      this.mostrarToast('Sistema actualizado con los datos de GitHub', 'success');
+      if (!silencioso) {
+        this.mostrarToast('Sistema actualizado con los datos de GitHub', 'success');
+      }
     } catch (err) {
       console.error('Error al descargar de GitHub:', err);
-      this.mostrarToast('Error al descargar: ' + err.message, 'error');
+      if (!silencioso) this.mostrarToast('Error al descargar: ' + err.message, 'error');
     }
   },
 
@@ -1800,6 +1834,20 @@ const App = {
     });
 
     document.getElementById('btnDescargarDeGithub')?.addEventListener('click', () => this.descargarDesdeGithub());
+
+    document.getElementById('btnCopiarEnlaceCompartir')?.addEventListener('click', () => {
+      const token = (this.config.githubToken || '').trim();
+      if (!token) {
+        this.mostrarToast('Primero ingresa tu token de GitHub y guárdalo', 'error');
+        return;
+      }
+      const enlace = `https://shenao356.github.io/noirda/#token=${token}`;
+      navigator.clipboard.writeText(enlace).then(() => {
+        this.mostrarToast('¡Enlace de sincronización copiado al portapapeles!', 'success');
+      }).catch(() => {
+        prompt('Copia este enlace para abrir en tu celular o tablet:', enlace);
+      });
+    });
 
     // 11. Respaldos y Exportación
     document.getElementById('btnExportarExcelPeriodo')?.addEventListener('click', () => this.exportarExcel(true));
