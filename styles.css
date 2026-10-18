@@ -108,16 +108,16 @@ body {
 }
 
 .brand-header {
-  padding: 24px 20px;
+  padding: 20px 18px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   border-bottom: 1px solid var(--border-color);
 }
 
 .brand-logo-container {
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   position: relative;
   flex-shrink: 0;
 }
@@ -126,7 +126,7 @@ body {
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, #1c222e 0%, #0d0f14 100%);
-  border: 1.5px solid var(--gold-primary);
+  border: 1px solid var(--gold-primary);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -135,14 +135,14 @@ body {
 }
 
 .brand-logo-circle.large {
-  width: 72px;
-  height: 72px;
+  width: 60px;
+  height: 60px;
 }
 
 .logo-letter {
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: 26px;
+  font-size: 22px;
   color: var(--gold-primary);
   letter-spacing: -0.5px;
 }
@@ -152,7 +152,8 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: var(--radius-md);
-  border: 1.5px solid var(--gold-primary);
+  border: 1px solid var(--gold-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 .brand-info {
@@ -163,17 +164,19 @@ body {
 
 .brand-title {
   font-family: var(--font-heading);
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 800;
-  letter-spacing: 2.5px;
+  letter-spacing: 1.8px;
   color: var(--text-main);
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .brand-owner {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--gold-primary);
   font-weight: 600;
+  margin-top: 2px;
 }
 
 .brand-tag {
@@ -330,9 +333,11 @@ body {
   cursor: pointer;
 }
 
-.mobile-brand {
+.mobile-brand,
+.mobile-brand-wrapper {
   display: none;
-  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .mobile-brand-title {
@@ -2118,23 +2123,17 @@ textarea.form-control {
   100% { transform: scale(1); opacity: 1; }
 }
 
-.welcome-logo-badge {
-  width: 110px;
-  height: 110px;
-  margin: 0 auto 18px auto;
+.welcome-top-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px auto;
   border-radius: 50%;
-  padding: 4px;
-  background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #996515 100%);
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
-}
-
-.welcome-logo-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #0a0c10;
-  border: 2px solid #0a0c10;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
 }
 
 .welcome-title {
