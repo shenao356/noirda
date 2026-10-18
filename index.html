@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NOIRDA | Control de Gastos y Contabilidad</title>
+  <meta name="description" content="Sistema de control de compras de mercancía, nómina y recibos para Noirda - Santiago Varelas">
+  
+  <!-- Favicon & PWA Theme -->
+  <meta name="theme-color" content="#0d0f12">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2311141a'/><text x='50%' y='62%' font-size='52' font-family='sans-serif' font-weight='900' fill='%23e0a96d' text-anchor='middle'>N</text></svg>">
+  
+  <!-- Google Fonts: Syne & Plus Jakarta Sans for fashion brand luxury feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome / Feather-like icons via CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Chart.js for interactive analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-noir">
+  <div id="app" class="app-container">
+
+    <!-- SIDEBAR (Desktop & Tablet) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-header">
+        <div class="brand-logo-container" id="sidebarLogoContainer">
+          <div class="brand-logo-circle" id="sidebarLogoCircle">
+            <span class="logo-letter">N</span>
+          </div>
+          <img id="sidebarLogoImg" class="brand-logo-img hidden" alt="Noirda Logo">
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title" id="displayBrandName">NOIRDA</h1>
+          <p class="brand-owner" id="displayOwnerName">Santiago Varelas</p>
+          <span class="brand-tag">Gestión & Gastos</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Consolidado</span>
+        </a>
+        <a href="#compras" class="nav-item" data-tab="compras">
+          <i class="fa-solid fa-boxes-packing"></i>
+          <span>Mercancía</span>
+          <span class="badge" id="badgeCompras">0</span>
+        </a>
+        <a href="#nomina" class="nav-item" data-tab="nomina">
+          <i class="fa-solid fa-users-gear"></i>
+          <span>Nómina</span>
+          <span class="badge" id="badgeNomina">0</span>
+        </a>
+        <a href="#recibos" class="nav-item" data-tab="recibos">
+          <i class="fa-solid fa-receipt"></i>
+          <span>Archivo Recibos</span>
+        </a>
+        <a href="#ajustes" class="nav-item" data-tab="ajustes">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Personalizar</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sync-status">
+          <span class="status-dot"></span>
+          <span>Base de datos lista</span>
+        </div>
+        <button class="btn-quick-export" id="btnQuickBackup" title="Descargar respaldo de seguridad">
+          <i class="fa-solid fa-shield-halved"></i> Respaldo Seguro
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+      <!-- TOP NAVIGATION BAR (Header mobile/desktop) -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle-btn" id="menuToggle" aria-label="Menú">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="mobile-brand">
+            <span class="mobile-brand-title">NOIRDA</span>
+            <span class="mobile-brand-subtitle">Control de Gastos</span>
+          </div>
+          <div class="month-selector-wrapper">
+            <i class="fa-regular fa-calendar topbar-cal-icon"></i>
+            <select id="filtroMesGlobal" class="select-periodo" title="Filtrar por Mes">
+              <option value="todos">Todos los meses</option>
+              <!-- Dinámicamente llenado -->
+            </select>
+            <select id="filtroAnioGlobal" class="select-periodo" title="Filtrar por Año">
+              <!-- Dinámicamente llenado -->
+            </select>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="btn-action-primary" id="btnNuevoGastoGlobal">
+            <i class="fa-solid fa-plus"></i>
+            <span class="btn-text">Nuevo Registro</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- TAB 1: DASHBOARD / CONSOLIDADO MENSUAL -->
+      <section id="tab-dashboard" class="tab-panel active">
+        <!-- KPI METRICS ROW -->
+        <div class="kpi-grid">
+          <div class="kpi-card total-gastos" id="kpiCardTotal">
+            <div class="kpi-header">
+              <span class="kpi-title">Gasto Total Consolidado</span>
+              <div class="kpi-icon-box gold">
+                <i class="fa-solid fa-wallet"></i>
+              </div>
+            </div>
+            <div class="kpi-amount" id="kpiTotalConsolidado">$0</div>
+            <div class="kpi-footer">
+              <span class="kpi-period" id="kpiPeriodoTexto">Mes en curso</span>
+              <span class="kpi-badge" id="kpiCountTotal">0 registros</span>
+            </div>
+          </div>
+
+          <div class="kpi-card compras-mercancia" id="kpiCardCompras">
+            <div class="kpi-header">
+              <span class="kpi-title">Compras de Mercancía</span>
+              <div class="kpi-icon-box blue">
+                <i class="fa-solid fa-shirt"></i>
+              </div>
+            </div>
+            <div class="kpi-amount" id="kpiTotalCompras">$0</div>
+            <div class="kpi-footer">
+              <span class="kpi-percent" id="kpiPercentCompras">0% del total</span>
+              <span class="kpi-badge" id="kpiCountCompras">0 facturas</span>
+            </div>
+          </div>
+
+          <div class="kpi-card nomina-personal" id="kpiCardNomina">
+            <div class="kpi-header">
+              <span class="kpi-title">Gastos de Nómina</span>
+              <div class="kpi-icon-box purple">
+                <i class="fa-solid fa-users"></i>
+              </div>
+            </div>
+            <div class="kpi-amount" id="kpiTotalNomina">$0</div>
+            <div class="kpi-footer">
+              <span class="kpi-percent" id="kpiPercentNomina">0% del total</span>
+              <span class="kpi-badge" id="kpiCountNomina">0 pagos</span>
+            </div>
+          </div>
+
+          <div class="kpi-card recibos-adjuntos" id="kpiCardRecibos">
+            <div class="kpi-header">
+              <span class="kpi-title">Recibos Adjuntados</span>
+              <div class="kpi-icon-box emerald">
+                <i class="fa-solid fa-paperclip"></i>
+              </div>
+            </div>
+            <div class="kpi-amount" id="kpiTotalRecibos">0</div>
+            <div class="kpi-footer">
+              <span class="kpi-sub" id="kpiRecibosSub">Comprobantes respaldados</span>
+              <span class="kpi-badge verified"><i class="fa-solid fa-check-double"></i> Al día</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS & SUMMARY GRAPHS -->
+        <div class="dashboard-analytics-grid">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">Evolución de Gastos Mensuales</h3>
+                <p class="chart-subtitle">Histórico comparativo de compras vs nómina</p>
+              </div>
+              <span class="chart-tag">NOIRDA Balance</span>
+            </div>
+            <div class="chart-canvas-container">
+              <canvas id="chartEvolucionMensual"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">Distribución por Categorías</h3>
+                <p class="chart-subtitle">En qué se invierten los recursos</p>
+              </div>
+            </div>
+            <div class="chart-canvas-container doughnut-wrapper">
+              <canvas id="chartCategorias"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT ACTIVITY & QUICK ACTIONS TABLE -->
+        <div class="table-card">
+          <div class="table-card-header">
+            <div>
+              <h3 class="card-title">Últimos Registros del Periodo</h3>
+              <p class="card-subtitle">Movimientos más recientes de compra y personal</p>
+            </div>
+            <div class="table-header-actions">
+              <button class="btn-secondary" id="btnExportarExcelPeriodo">
+                <i class="fa-solid fa-file-excel"></i> Exportar Excel
+              </button>
+              <button class="btn-secondary" id="btnPrintReporteMensual">
+                <i class="fa-solid fa-print"></i> Imprimir Informe
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th>Concepto / Proveedor</th>
+                  <th>Categoría</th>
+                  <th>Método Pago</th>
+                  <th>Monto</th>
+                  <th>Comprobante</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyUltimosRegistros">
+                <!-- Inyectado vía JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: COMPRAS DE MERCANCÍA -->
+      <section id="tab-compras" class="tab-panel">
+        <div class="section-top-actions">
+          <div class="section-title-wrap">
+            <h2 class="section-heading">Compras de Mercancía</h2>
+            <p class="section-subheading">Control de stock de ropa, telas, confección y proveedores de Noirda</p>
+          </div>
+          <div class="actions-group">
+            <div class="search-input-wrap">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="searchCompras" placeholder="Buscar proveedor, factura o artículo...">
+            </div>
+            <button class="btn-action-primary" id="btnAbrirModalCompra">
+              <i class="fa-solid fa-plus"></i> Registrar Compra
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-responsive">
+            <table class="data-table" id="tableCompras">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Factura / N°</th>
+                  <th>Proveedor</th>
+                  <th>Descripción / Prendas</th>
+                  <th>Categoría</th>
+                  <th>Pago</th>
+                  <th>Monto</th>
+                  <th>Recibo Adjunto</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyCompras">
+                <!-- Se llena dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer-summary">
+            <span>Total compras filtradas: <strong id="sumatoriaComprasFiltradas">$0</strong></span>
+            <span id="conteoComprasFiltradas">0 registros</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: NÓMINA DE TRABAJADORES -->
+      <section id="tab-nomina" class="tab-panel">
+        <div class="section-top-actions">
+          <div class="section-title-wrap">
+            <h2 class="section-heading">Nómina y Pagos a Personal</h2>
+            <p class="section-subheading">Gestión de salarios, comisiones por ventas, costura y comprobantes</p>
+          </div>
+          <div class="actions-group">
+            <div class="search-input-wrap">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="searchNomina" placeholder="Buscar empleado o cargo...">
+            </div>
+            <button class="btn-action-primary" id="btnAbrirModalNomina">
+              <i class="fa-solid fa-user-plus"></i> Registrar Nómina
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-responsive">
+            <table class="data-table" id="tableNomina">
+              <thead>
+                <tr>
+                  <th>Fecha Pago</th>
+                  <th>Trabajador</th>
+                  <th>Cargo / Área</th>
+                  <th>Periodo</th>
+                  <th>Básico</th>
+                  <th>Bonos / Comisión</th>
+                  <th>Deducciones</th>
+                  <th>Neto Pagado</th>
+                  <th>Comprobante</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyNomina">
+                <!-- Inyectado vía JS -->
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer-summary">
+            <span>Total nómina filtrada: <strong id="sumatoriaNominaFiltrada">$0</strong></span>
+            <span id="conteoNominaFiltrada">0 trabajadores pagados</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: ARCHIVO DE RECIBOS Y COMPROBANTES -->
+      <section id="tab-recibos" class="tab-panel">
+        <div class="section-top-actions">
+          <div class="section-title-wrap">
+            <h2 class="section-heading">Archivo Digital de Recibos</h2>
+            <p class="section-subheading">Comprobantes, facturas de compra y soportes de nómina organizados</p>
+          </div>
+          <div class="actions-group">
+            <div class="filter-pills" id="filtroTipoRecibo">
+              <button class="pill active" data-type="all">Todos</button>
+              <button class="pill" data-type="compra">Compras</button>
+              <button class="pill" data-type="nomina">Nómina</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="receipts-gallery-grid" id="recibosGrid">
+          <!-- Tarjetas de recibos con vista previa -->
+        </div>
+      </section>
+
+      <!-- TAB 5: PERSONALIZACIÓN Y AJUSTES -->
+      <section id="tab-ajustes" class="tab-panel">
+        <div class="section-top-actions">
+          <div class="section-title-wrap">
+            <h2 class="section-heading">Personalización de Marca e Interfaz</h2>
+            <p class="section-subheading">Ajusta la apariencia de Noirda, qué elementos deseas visualizar y respaldos</p>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <!-- CARD 1: IDENTIDAD DE MARCA Y LOGO -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <i class="fa-solid fa-palette icon-accent"></i>
+              <h3>Identidad y Logotipo</h3>
+            </div>
+            <div class="settings-card-body">
+              <div class="logo-preview-box">
+                <div class="logo-display-wrapper" id="settingsLogoPreview">
+                  <div class="brand-logo-circle large"><span>N</span></div>
+                </div>
+                <div class="logo-upload-controls">
+                  <label class="btn-secondary file-upload-label" for="inputLogoUpload">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Adjuntar Logo de Noirda
+                  </label>
+                  <input type="file" id="inputLogoUpload" accept="image/png, image/jpeg, image/webp, image/svg+xml" style="display:none;">
+                  <button class="btn-text-only" id="btnRestablecerLogo">Restablecer Logo</button>
+                  <p class="help-text">Formatos recomendados: PNG o JPG con fondo transparente o negro.</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Nombre del Almacén</label>
+                <input type="text" id="inputBrandName" class="form-control" value="NOIRDA">
+              </div>
+
+              <div class="form-group">
+                <label>Propietario</label>
+                <input type="text" id="inputOwnerName" class="form-control" value="Santiago Varelas">
+              </div>
+
+              <div class="form-group">
+                <label>Símbolo de Moneda</label>
+                <select id="inputMoneda" class="form-control">
+                  <option value="COP">Pesos Colombianos ($ COP)</option>
+                  <option value="USD">Dólares ($ USD)</option>
+                  <option value="EUR">Euros (€ EUR)</option>
+                  <option value="MXN">Pesos Mexicanos ($ MXN)</option>
+                </select>
+              </div>
+
+              <button class="btn-action-primary" id="btnGuardarAjustesMarca">
+                <i class="fa-solid fa-floppy-disk"></i> Guardar Identidad
+              </button>
+            </div>
+          </div>
+
+          <!-- CARD 2: QUÉ DESEAS VISUALIZAR EN LA INTERFAZ -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <i class="fa-solid fa-sliders icon-accent"></i>
+              <h3>Elementos Visibles en Pantalla</h3>
+            </div>
+            <div class="settings-card-body">
+              <p class="help-text mb-3">Activa o desactiva qué tarjetas y módulos deseas ver en tu panel:</p>
+              
+              <div class="toggle-option">
+                <div class="toggle-info">
+                  <span class="toggle-label">Tarjeta: Gasto Total Consolidado</span>
+                  <span class="toggle-desc">Muestra la sumatoria general del mes</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleKpiTotal" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-option">
+                <div class="toggle-info">
+                  <span class="toggle-label">Tarjeta: Compras de Mercancía</span>
+                  <span class="toggle-desc">Total invertido en prendas y proveedores</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleKpiCompras" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-option">
+                <div class="toggle-info">
+                  <span class="toggle-label">Tarjeta: Gastos de Nómina</span>
+                  <span class="toggle-desc">Total pagado en salarios del equipo</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleKpiNomina" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-option">
+                <div class="toggle-info">
+                  <span class="toggle-label">Tarjeta: Recibos Respaldados</span>
+                  <span class="toggle-desc">Conteo de documentos y facturas</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleKpiRecibos" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-option">
+                <div class="toggle-info">
+                  <span class="toggle-label">Gráficos de Análisis</span>
+                  <span class="toggle-desc">Visualizar barras mensuales y categorías</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleGraficos" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-option">
+                <div class="toggle-info">
+                  <span class="toggle-label">Modo Visual Oscuro "Noir Luxury"</span>
+                  <span class="toggle-desc">Alternar entre tema oscuro elegante y tema claro</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleTemaOscuro" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 3: RESPALDOS Y SEGURIDAD CONTABLE -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <i class="fa-solid fa-database icon-accent"></i>
+              <h3>Contabilidad y Respaldos</h3>
+            </div>
+            <div class="settings-card-body">
+              <p class="help-text">Guarda copia de toda tu información contable con un solo clic para transferirla entre tu celular, PC o tablet.</p>
+              
+              <div class="backup-actions">
+                <button class="btn-secondary w-100 mb-2" id="btnDescargarCopiaCompleta">
+                  <i class="fa-solid fa-download"></i> Descargar Copia Completa (JSON + Fotos)
+                </button>
+
+                <label class="btn-secondary w-100 mb-2 file-upload-label" for="inputRestaurarCopia">
+                  <i class="fa-solid fa-upload"></i> Restaurar Copia de Seguridad
+                </label>
+                <input type="file" id="inputRestaurarCopia" accept=".json" style="display:none;">
+
+                <button class="btn-secondary w-100 mb-2" id="btnExportarTodoExcel">
+                  <i class="fa-solid fa-file-excel"></i> Exportar Libro Contable a Excel (.CSV)
+                </button>
+
+                <button class="btn-danger w-100" id="btnBorrarDatosPrueba">
+                  <i class="fa-solid fa-trash-can"></i> Limpiar Datos de Prueba
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 4: ACCESO MÓVIL Y RED LOCAL -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <i class="fa-solid fa-mobile-screen-button icon-accent"></i>
+              <h3>Uso en Celular, Tablet y PC</h3>
+            </div>
+            <div class="settings-card-body">
+              <p class="help-text">Este sistema está optimizado para funcionar como una aplicación en cualquier dispositivo:</p>
+              <ul class="device-tips">
+                <li><i class="fa-solid fa-check text-gold"></i> <strong>Desde el celular o tablet:</strong> Abre el menú de tu navegador (Chrome / Safari) y presiona <em>"Agregar a la pantalla principal"</em> o <em>"Instalar aplicación"</em> para abrirla como una App nativa.</li>
+                <li><i class="fa-solid fa-check text-gold"></i> <strong>Conectar celular y PC por Wi-Fi:</strong> Ejecuta el archivo <code>iniciar_servidor.bat</code> en tu PC para abrir el sistema desde la dirección IP de tu red local en cualquier teléfono.</li>
+                <li><i class="fa-solid fa-check text-gold"></i> <strong>Fotos directas:</strong> En el celular puedes tomar la foto del recibo directamente con la cámara al momento de registrar.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- CARD 5: SINCRONIZACIÓN AUTOMÁTICA CON GITHUB -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <i class="fa-brands fa-github icon-accent"></i>
+              <h3>Sincronización con GitHub</h3>
+            </div>
+            <div class="settings-card-body">
+              <p class="help-text">Conecta tu repositorio de GitHub para que cada gasto registrado en tu celular, tablet o PC se guarde y actualice automáticamente en GitHub.</p>
+              
+              <div class="form-group mb-2">
+                <label>Usuario de GitHub</label>
+                <input type="text" id="inputGithubUser" class="form-control" placeholder="Ej: santiago-varelas">
+              </div>
+
+              <div class="form-group mb-2">
+                <label>Nombre del Repositorio</label>
+                <input type="text" id="inputGithubRepo" class="form-control" placeholder="Ej: NOIRDA" value="NOIRDA">
+              </div>
+
+              <div class="form-group mb-2">
+                <label>Token de Acceso Personal (GitHub Token)</label>
+                <input type="password" id="inputGithubToken" class="form-control" placeholder="ghp_xxxxxxxxxxxx...">
+                <span class="file-hint">Token con permisos 'repo' generado en github.com/settings/tokens</span>
+              </div>
+
+              <div class="toggle-option mb-2">
+                <div class="toggle-info">
+                  <span class="toggle-label">Auto-sincronizar en la nube</span>
+                  <span class="toggle-desc">Guardar en GitHub al registrar compras o nómina</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleGithubAutoSync">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="backup-actions" style="margin-top: 14px;">
+                <button class="btn-action-primary w-100 mb-2" id="btnGuardarAjustesGithub">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> Conectar y Subir Datos a GitHub
+                </button>
+                <button class="btn-secondary w-100" id="btnDescargarDeGithub">
+                  <i class="fa-solid fa-cloud-arrow-down"></i> Descargar Datos desde GitHub
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- BOTTOM MOBILE NAVIGATION (Smartphones) -->
+    <nav class="bottom-nav">
+      <a href="#dashboard" class="bnav-item active" data-tab="dashboard">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>Resumen</span>
+      </a>
+      <a href="#compras" class="bnav-item" data-tab="compras">
+        <i class="fa-solid fa-boxes-packing"></i>
+        <span>Mercancía</span>
+      </a>
+      <button class="bnav-center-action" id="btnMobileQuickAdd" aria-label="Nuevo Registro">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+      <a href="#nomina" class="bnav-item" data-tab="nomina">
+        <i class="fa-solid fa-users"></i>
+        <span>Nómina</span>
+      </a>
+      <a href="#recibos" class="bnav-item" data-tab="recibos">
+        <i class="fa-solid fa-receipt"></i>
+        <span>Recibos</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- MODAL: REGISTRAR / EDITAR COMPRA DE MERCANCÍA -->
+  <div class="modal-overlay" id="modalCompra">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-bag-shopping modal-icon gold"></i>
+          <h3 id="modalCompraTitulo">Registrar Compra de Mercancía</h3>
+        </div>
+        <button class="modal-close-btn" data-close="modalCompra">&times;</button>
+      </div>
+      <form id="formCompra">
+        <input type="hidden" id="compraId">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="compraFecha">Fecha de Compra *</label>
+              <input type="date" id="compraFecha" class="form-control" required>
+            </div>
+            <div class="form-group col-6">
+              <label for="compraNumeroFactura">N° Factura / Recibo</label>
+              <input type="text" id="compraNumeroFactura" class="form-control" placeholder="Ej: FAC-1042">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="compraProveedor">Proveedor / Distribuidor *</label>
+              <input type="text" id="compraProveedor" class="form-control" placeholder="Ej: Confecciones Medellín, Telas Bogotá" required>
+            </div>
+            <div class="form-group col-6">
+              <label for="compraCategoria">Categoría *</label>
+              <select id="compraCategoria" class="form-control" required>
+                <option value="Camisetas y Polos">Camisetas y Polos</option>
+                <option value="Jeans y Pantalones">Jeans y Pantalones</option>
+                <option value="Chaquetas y Buzos">Chaquetas y Buzos</option>
+                <option value="Vestidos y Conjuntos">Vestidos y Conjuntos</option>
+                <option value="Ropa Interior / Pijamas">Ropa Interior / Pijamas</option>
+                <option value="Calzado">Calzado</option>
+                <option value="Accesorios / Gorras">Accesorios / Gorras</option>
+                <option value="Telas y Confección">Telas y Confección</option>
+                <option value="Empaques y Marquillas">Empaques y Marquillas</option>
+                <option value="Otros Suministros">Otros Suministros</option>
+                <option value="__custom__">➕ Otra categoría (Escribir personalizada)...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group hidden" id="grupoCategoriaPersonalizada">
+            <label for="compraCategoriaPersonalizada">Escribe la Categoría Personalizada *</label>
+            <input type="text" id="compraCategoriaPersonalizada" class="form-control" placeholder="Ej: Botones dorados, Estampado serigrafía, Marquillas de cuero...">
+          </div>
+
+          <div class="form-group">
+            <label for="compraDescripcion">Detalle de Prendas o Lote *</label>
+            <input type="text" id="compraDescripcion" class="form-control" placeholder="Ej: Lote 50 camisetas oversize cuello redondo colección Noir" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="compraMonto">Monto Total Pagado ($) *</label>
+              <input type="number" id="compraMonto" class="form-control text-right" placeholder="0" min="0" step="any" required>
+            </div>
+            <div class="form-group col-6">
+              <label for="compraMetodoPago">Método de Pago</label>
+              <select id="compraMetodoPago" class="form-control">
+                <option value="Transferencia / Bancolombia">Transferencia / Bancolombia</option>
+                <option value="Nequi / Daviplata">Nequi / Daviplata</option>
+                <option value="Efectivo Caja">Efectivo Caja</option>
+                <option value="Tarjeta Débito / Crédito">Tarjeta Débito / Crédito</option>
+                <option value="Crédito Proveedor (Pendiente)">Crédito Proveedor (Pendiente)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- SECCIÓN DE RECIBO / COMPROBANTE ADJUNTO -->
+          <div class="form-group">
+            <label>Recibo / Factura Adjunta</label>
+            <div class="upload-dropzone" id="dropzoneCompra">
+              <input type="file" id="compraArchivoRecibo" accept="image/*, application/pdf" capture="environment" style="display:none;">
+              <div class="dropzone-content" id="dropzoneCompraPrompt">
+                <i class="fa-solid fa-camera drop-icon"></i>
+                <p>Haz clic o toma foto del recibo con la cámara</p>
+                <span class="file-hint">Imágenes (JPG, PNG) o PDF</span>
+              </div>
+              <div class="preview-container hidden" id="previewCompraContainer">
+                <img id="imgPreviewCompra" class="preview-thumbnail" alt="Recibo">
+                <div class="preview-actions">
+                  <span id="previewCompraNombre" class="preview-name">recibo.jpg</span>
+                  <button type="button" class="btn-remove-attachment" id="btnQuitarReciboCompra" title="Eliminar recibo">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="compraNotas">Notas Adicionales</label>
+            <textarea id="compraNotas" class="form-control" rows="2" placeholder="Observaciones, estado de entrega, garantías..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modalCompra">Cancelar</button>
+          <button type="submit" class="btn-action-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Compra
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRAR / EDITAR NÓMINA -->
+  <div class="modal-overlay" id="modalNomina">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-users-gear modal-icon purple"></i>
+          <h3 id="modalNominaTitulo">Registrar Pago de Nómina</h3>
+        </div>
+        <button class="modal-close-btn" data-close="modalNomina">&times;</button>
+      </div>
+      <form id="formNomina">
+        <input type="hidden" id="nominaId">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="nominaFecha">Fecha de Pago *</label>
+              <input type="date" id="nominaFecha" class="form-control" required>
+            </div>
+            <div class="form-group col-6">
+              <label for="nominaPeriodo">Periodo Correspondiente *</label>
+              <input type="text" id="nominaPeriodo" class="form-control" placeholder="Ej: 1ra Quincena Octubre 2026" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="nominaTrabajador">Nombre del Trabajador *</label>
+              <input type="text" id="nominaTrabajador" class="form-control" placeholder="Nombre completo" required>
+            </div>
+            <div class="form-group col-6">
+              <label for="nominaCargo">Cargo / Función *</label>
+              <select id="nominaCargo" class="form-control" required>
+                <option value="Vendedor / Atención Almacén">Vendedor / Atención Almacén</option>
+                <option value="Administrador Tienda">Administrador Tienda</option>
+                <option value="Costurero / Modista">Costurero / Modista</option>
+                <option value="Cajero / Facturación">Cajero / Facturación</option>
+                <option value="Bodega / Inventario">Bodega / Inventario</option>
+                <option value="Community Manager / Redes">Community Manager / Redes</option>
+                <option value="Seguridad / Servicios Generales">Seguridad / Servicios Generales</option>
+                <option value="Auxiliar Temporal">Auxiliar Temporal</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- CÁLCULO SALARIAL -->
+          <div class="salary-breakdown-box">
+            <h4 class="box-title"><i class="fa-solid fa-calculator"></i> Desglose Salarial</h4>
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label for="nominaSueldoBase">Sueldo / Base ($) *</label>
+                <input type="number" id="nominaSueldoBase" class="form-control text-right" placeholder="0" min="0" step="any" required>
+              </div>
+              <div class="form-group col-4">
+                <label for="nominaBonos">Bonos / Comisiones ($)</label>
+                <input type="number" id="nominaBonos" class="form-control text-right" placeholder="0" min="0" step="any" value="0">
+              </div>
+              <div class="form-group col-4">
+                <label for="nominaDeducciones">Deducciones / Anticipos ($)</label>
+                <input type="number" id="nominaDeducciones" class="form-control text-right" placeholder="0" min="0" step="any" value="0">
+              </div>
+            </div>
+
+            <div class="neto-display-box">
+              <span>Total Neto a Pagar:</span>
+              <strong id="displayNetoCalculado">$0</strong>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="nominaMetodoPago">Medio de Pago</label>
+              <select id="nominaMetodoPago" class="form-control">
+                <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+                <option value="Nequi / Daviplata">Nequi / Daviplata</option>
+                <option value="Efectivo en Sobre">Efectivo en Sobre</option>
+                <option value="Cheque">Cheque</option>
+              </select>
+            </div>
+            <div class="form-group col-6">
+              <label for="nominaReferencia">N° Comprobante / Transacción</label>
+              <input type="text" id="nominaReferencia" class="form-control" placeholder="Ej: Transacción #89123">
+            </div>
+          </div>
+
+          <!-- COMPROBANTE ADJUNTO -->
+          <div class="form-group">
+            <label>Comprobante de Pago / Firma Adjunta</label>
+            <div class="upload-dropzone" id="dropzoneNomina">
+              <input type="file" id="nominaArchivoRecibo" accept="image/*, application/pdf" capture="environment" style="display:none;">
+              <div class="dropzone-content" id="dropzoneNominaPrompt">
+                <i class="fa-solid fa-file-invoice-dollar drop-icon"></i>
+                <p>Adjuntar comprobante de pago o planilla firmada</p>
+                <span class="file-hint">Foto o PDF de transferencia</span>
+              </div>
+              <div class="preview-container hidden" id="previewNominaContainer">
+                <img id="imgPreviewNomina" class="preview-thumbnail" alt="Comprobante">
+                <div class="preview-actions">
+                  <span id="previewNominaNombre" class="preview-name">recibo.jpg</span>
+                  <button type="button" class="btn-remove-attachment" id="btnQuitarReciboNomina" title="Eliminar recibo">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nominaNotas">Observaciones</label>
+            <textarea id="nominaNotas" class="form-control" rows="2" placeholder="Detalle de comisión por ventas logradas, días laborados..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modalNomina">Cancelar</button>
+          <button type="submit" class="btn-action-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Nómina
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: VISOR DE RECIBO / DOCUMENTO (ZOOM & PRINT) -->
+  <div class="modal-overlay" id="modalVisorRecibo">
+    <div class="modal-container modal-viewer">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-receipt modal-icon gold"></i>
+          <h3 id="visorTitulo">Comprobante Digital</h3>
+        </div>
+        <div class="modal-header-actions">
+          <button class="btn-icon" id="btnImprimirRecibo" title="Imprimir Comprobante">
+            <i class="fa-solid fa-print"></i>
+          </button>
+          <a class="btn-icon" id="btnDescargarRecibo" download="recibo-noirda.jpg" title="Descargar">
+            <i class="fa-solid fa-download"></i>
+          </a>
+          <button class="modal-close-btn" data-close="modalVisorRecibo">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body viewer-body">
+        <div class="receipt-meta-info" id="visorMeta">
+          <!-- Detalles del gasto -->
+        </div>
+        <div class="receipt-media-wrapper">
+          <img id="visorImagen" class="receipt-full-img hidden" alt="Comprobante completo">
+          <div id="visorPdfFallback" class="pdf-fallback-box hidden">
+            <i class="fa-solid fa-file-pdf pdf-large-icon"></i>
+            <p>Documento PDF Adjunto</p>
+            <a id="visorPdfLink" target="_blank" class="btn-action-primary">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir PDF Completo
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ACCIÓN RÁPIDA GLOBAL (Móvil & PC) -->
+  <div class="modal-overlay" id="modalSelectorRapido">
+    <div class="modal-container modal-sm">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-bolt modal-icon gold"></i>
+          <h3>¿Qué deseas registrar?</h3>
+        </div>
+        <button class="modal-close-btn" data-close="modalSelectorRapido">&times;</button>
+      </div>
+      <div class="modal-body quick-select-grid">
+        <button class="quick-btn" id="btnRapidoCompra">
+          <div class="quick-btn-icon blue">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <h4>Compra de Mercancía</h4>
+          <p>Factura de ropa, prendas, telas y proveedores</p>
+        </button>
+
+        <button class="quick-btn" id="btnRapidoNomina">
+          <div class="quick-btn-icon purple">
+            <i class="fa-solid fa-user-gear"></i>
+          </div>
+          <h4>Pago de Nómina</h4>
+          <p>Sueldo a vendedores, modistas y personal</p>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICACIÓN TOAST FLOTANTE -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- SCRIPT PRINCIPAL -->
+  <script src="app.js"></script>
+</body>
+</html>
