@@ -5,28 +5,36 @@
    =================================================================== */
 
 :root {
-  /* Paleta Noirda Luxury Dark */
-  --bg-primary: #0a0c10;
-  --bg-secondary: #12151c;
-  --bg-card: #181d26;
-  --bg-card-hover: #1f2532;
-  --bg-glass: rgba(24, 29, 38, 0.75);
+  /* Paleta NOIRDA Opulence - Armonizada con el Logotipo Oficial (Obsidiana, Esmeralda y Oro Champagne) */
+  --bg-primary: #080a0d;
+  --bg-secondary: #0f1318;
+  --bg-card: #141820;
+  --bg-card-hover: #1b212b;
+  --bg-glass: rgba(20, 24, 32, 0.88);
   --border-color: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.14);
+  --border-light: rgba(212, 175, 55, 0.22);
   
-  /* Acentos de Marca */
+  /* Acentos de Marca extraídos del logo */
   --gold-primary: #d4af37;
-  --gold-light: #f3e5ab;
+  --gold-light: #f5e6b3;
+  --gold-dark: #9e7d23;
   --gold-glow: rgba(212, 175, 55, 0.25);
   
-  --blue-primary: #3b82f6;
-  --blue-soft: rgba(59, 130, 246, 0.15);
+  --emerald-primary: #0f9f75;
+  --emerald-light: #2dd4bf;
+  --emerald-dark: #064e3b;
+  --emerald-soft: rgba(15, 159, 117, 0.16);
+  --emerald-glow: rgba(15, 159, 117, 0.3);
+
+  /* Gradiente Oficial de la Cinta del Logo (Esmeralda hacia Oro Champagne) */
+  --brand-gradient: linear-gradient(135deg, #0f9f75 0%, #d4af37 100%);
+  --brand-gradient-hover: linear-gradient(135deg, #10b981 0%, #e2be4a 100%);
   
-  --purple-primary: #a855f7;
-  --purple-soft: rgba(168, 85, 247, 0.15);
+  --blue-primary: #0f9f75;
+  --blue-soft: rgba(15, 159, 117, 0.15);
   
-  --emerald-primary: #10b981;
-  --emerald-soft: rgba(16, 185, 129, 0.15);
+  --purple-primary: #d4af37;
+  --purple-soft: rgba(212, 175, 55, 0.15);
 
   --danger-primary: #ef4444;
   --danger-soft: rgba(239, 68, 68, 0.15);
@@ -42,13 +50,14 @@
   /* Layout & Sombras */
   --sidebar-width: 270px;
   --topbar-height: 72px;
-  --bottom-nav-height: 64px;
+  --bottom-nav-height: 62px;
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
   --radius-full: 9999px;
-  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
   --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.2);
+  --shadow-emerald: 0 0 20px rgba(15, 159, 117, 0.2);
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -386,9 +395,10 @@ body {
 }
 
 /* Botón de acción principal */
+/* Botón de acción principal con gradiente oficial de la marca (Esmeralda & Oro) */
 .btn-action-primary {
-  background: linear-gradient(135deg, var(--gold-primary) 0%, #b8860b 100%);
-  color: #0b0d11;
+  background: var(--brand-gradient);
+  color: #05080c;
   border: none;
   padding: 10px 20px;
   border-radius: var(--radius-full);
@@ -400,13 +410,14 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  box-shadow: var(--shadow-gold);
+  box-shadow: 0 4px 15px rgba(15, 159, 117, 0.28);
   transition: var(--transition);
 }
 
 .btn-action-primary:hover {
+  background: var(--brand-gradient-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 6px 22px rgba(212, 175, 55, 0.4);
 }
 
 /* ===================================================================
@@ -527,11 +538,11 @@ body {
 }
 
 .kpi-card.compras-mercancia::before {
-  background: linear-gradient(90deg, var(--blue-primary), #60a5fa);
+  background: linear-gradient(90deg, var(--emerald-primary), #2dd4bf);
 }
 
 .kpi-card.nomina-personal::before {
-  background: linear-gradient(90deg, var(--purple-primary), #c084fc);
+  background: linear-gradient(90deg, var(--gold-primary), #f5e6b3);
 }
 
 .kpi-card.recibos-adjuntos::before {
@@ -773,14 +784,16 @@ body {
   font-weight: 600;
 }
 
-.badge-tag.blue {
-  background-color: var(--blue-soft);
-  color: #60a5fa;
+.badge-tag.blue, .badge-tag.emerald {
+  background-color: var(--emerald-soft);
+  color: #34d399;
+  border: 1px solid rgba(15, 159, 117, 0.3);
 }
 
-.badge-tag.purple {
-  background-color: var(--purple-soft);
-  color: #c084fc;
+.badge-tag.purple, .badge-tag.gold {
+  background-color: var(--gold-glow);
+  color: var(--gold-light);
+  border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .badge-tag.gold {
@@ -939,8 +952,15 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #f87171;
+  color: var(--emerald-primary);
+  background: linear-gradient(135deg, rgba(15, 159, 117, 0.08) 0%, rgba(212, 175, 55, 0.05) 100%);
   gap: 8px;
+  transition: var(--transition);
+}
+
+.receipt-card-preview:hover .receipt-pdf-placeholder {
+  color: var(--emerald-light);
+  transform: scale(1.04);
 }
 
 .receipt-card-body {
@@ -1505,12 +1525,13 @@ textarea.form-control {
 .receipt-media-wrapper {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #000;
+  background-color: #080a0d;
   border-radius: var(--radius-md);
   overflow: hidden;
-  max-height: 520px;
+  width: 100%;
 }
 
 .receipt-full-img {
@@ -1530,7 +1551,77 @@ textarea.form-control {
 
 .pdf-large-icon {
   font-size: 48px;
-  color: #ef4444;
+  color: var(--emerald-primary);
+}
+
+/* ===================================================================
+   VISOR INTERACTIVO DE PDF (COMPROBANTES Y FACTURAS)
+   =================================================================== */
+.pdf-viewer-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #0f1318;
+}
+
+.pdf-viewer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(15, 159, 117, 0.15), rgba(212, 175, 55, 0.1));
+  border-bottom: 1px solid var(--border-color);
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pdf-badge-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-emerald {
+  color: var(--emerald-primary) !important;
+}
+
+.btn-pdf-external {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold-light);
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.btn-pdf-external:hover {
+  background: rgba(212, 175, 55, 0.25);
+  color: #fff;
+  border-color: var(--gold-primary);
+}
+
+.pdf-embed-frame {
+  width: 100%;
+  height: 58vh;
+  min-height: 420px;
+  border: none;
+  background: #ffffff;
 }
 
 .modal-header-actions {
@@ -1656,20 +1747,34 @@ textarea.form-control {
   color: var(--gold-primary);
 }
 
-.bnav-center-action {
-  width: 48px;
-  height: 48px;
+/* Botón Flotante Móvil (FAB) en la esquina inferior derecha */
+.mobile-fab-btn {
+  display: none;
+  position: fixed;
+  bottom: calc(var(--bottom-nav-height) + 16px);
+  right: 18px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold-primary) 0%, #b8860b 100%);
-  color: #0b0d11;
-  border: none;
-  font-size: 20px;
-  display: flex;
+  background: var(--brand-gradient);
+  color: #080a0d;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  font-size: 22px;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-  transform: translateY(-12px);
+  box-shadow: 0 8px 24px rgba(15, 159, 117, 0.45), 0 4px 12px rgba(212, 175, 55, 0.45);
   cursor: pointer;
+  z-index: 105;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.mobile-fab-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 28px rgba(15, 159, 117, 0.6), 0 6px 18px rgba(212, 175, 55, 0.6);
+}
+
+.mobile-fab-btn:active {
+  transform: scale(0.92);
 }
 
 /* ===================================================================
@@ -1894,11 +1999,15 @@ textarea.form-control {
   .data-table td {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 6px 0;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
-    font-size: 12px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.07);
+    font-size: 12.5px;
     text-align: right;
+    gap: 12px;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .data-table td::before {
@@ -1909,7 +2018,25 @@ textarea.form-control {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-align: left;
-    margin-right: 10px;
+    margin-right: 0;
+    flex-shrink: 0;
+    max-width: 42%;
+  }
+
+  .table-cell-val,
+  .data-table td > span,
+  .data-table td > strong,
+  .data-table td > div {
+    max-width: 58%;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    text-align: right;
+    min-width: 0;
+  }
+
+  .data-table td[style*="white-space:nowrap"],
+  .data-table td[style*="white-space: nowrap"] {
+    white-space: normal !important;
   }
 
   .data-table td:last-child {
@@ -1918,7 +2045,12 @@ textarea.form-control {
     justify-content: flex-end;
   }
 
-  /* Barra de Navegación Inferior Móvil */
+  /* Botón Flotante Rápido Móvil (FAB) en el costado derecho */
+  .mobile-fab-btn {
+    display: flex;
+  }
+
+  /* Barra de Navegación Inferior Móvil: 5 opciones perfectamente centradas */
   .bottom-nav {
     display: flex;
     height: 62px;
@@ -1928,20 +2060,14 @@ textarea.form-control {
   }
 
   .bnav-item {
-    font-size: 9px;
+    font-size: 9.5px;
     flex: 1;
-    gap: 2px;
+    gap: 3px;
+    padding: 6px 0;
   }
 
   .bnav-item i {
-    font-size: 16px;
-  }
-
-  .bnav-center-action {
-    width: 44px;
-    height: 44px;
-    transform: translateY(-10px);
-    font-size: 18px;
+    font-size: 17px;
   }
 
   /* Modales en Móviles tipo Bottom-Sheet de altura completa y scroll táctil */
@@ -2018,11 +2144,20 @@ textarea.form-control {
     gap: 12px !important;
   }
 
-  .form-group.col-6 {
+  .form-row > *,
+  .form-group.col-6,
+  .form-group.col-4,
+  .col-6,
+  .col-4 {
     width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
   }
 
   .form-control {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
     font-size: 16px !important; /* Previene zoom involuntario en iPhone Safari */
     padding: 11px 13px;
     min-height: 44px;
@@ -2056,8 +2191,14 @@ textarea.form-control {
     flex-direction: column;
   }
 
+  .search-input-wrap {
+    width: 100%;
+  }
+
   .search-input-wrap input {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .search-input-wrap input:focus {
@@ -2175,8 +2316,10 @@ textarea.form-control {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   background: radial-gradient(circle at center, rgba(20, 24, 33, 0.96) 0%, rgba(10, 12, 16, 0.99) 100%);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -2185,6 +2328,8 @@ textarea.form-control {
   align-items: center;
   justify-content: center;
   padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
   transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
@@ -2423,8 +2568,28 @@ textarea.form-control {
 }
 
 @media (max-width: 768px) {
+  .pfilter-grid {
+    grid-template-columns: 1fr;
+  }
+
   .pfilter-item.col-search {
     grid-column: span 1;
+  }
+
+  .pfilter-actions-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .pfilter-btn-group {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .pfilter-btn-group button {
+    flex: 1;
+    justify-content: center;
   }
 }
 

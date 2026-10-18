@@ -698,20 +698,24 @@ const App = {
       return;
     }
 
-    tbody.innerHTML = movimientos.slice(0, 10).map(m => `
+    tbody.innerHTML = movimientos.slice(0, 10).map(m => {
+      const isPdf = m.reciboTipo && m.reciboTipo.includes('pdf');
+      return `
       <tr>
-        <td data-label="Fecha" style="white-space:nowrap; font-weight:600;">${m.fecha}</td>
-        <td data-label="Tipo"><span class="badge-tag ${m.tipoBadge}">${m.tipoLabel}</span></td>
-        <td data-label="Concepto" style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${m.concepto}">${m.concepto}</td>
-        <td data-label="Categoría"><span class="badge-tag neutral">${m.categoria}</span></td>
-        <td data-label="Método Pago">${m.metodo || 'Efectivo'}</td>
-        <td data-label="Monto Pagado" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(m.monto)}</td>
+        <td data-label="Fecha"><span class="table-cell-val" style="font-weight:600;">${m.fecha}</span></td>
+        <td data-label="Tipo"><span class="table-cell-val"><span class="badge-tag ${m.tipoBadge}">${m.tipoLabel}</span></span></td>
+        <td data-label="Concepto"><span class="table-cell-val" title="${m.concepto}">${m.concepto}</span></td>
+        <td data-label="Categoría"><span class="table-cell-val"><span class="badge-tag neutral">${m.categoria}</span></span></td>
+        <td data-label="Método Pago"><span class="table-cell-val">${m.metodo || 'Efectivo'}</span></td>
+        <td data-label="Monto Pagado"><span class="table-cell-val" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(m.monto)}</span></td>
         <td data-label="Comprobante">
-          ${m.reciboData ? `
-            <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('${m.tipo}', ${m.id})">
-              <i class="fa-solid fa-file-invoice"></i> Ver Recibo
-            </button>
-          ` : `<span class="receipt-none">Sin recibo</span>`}
+          <span class="table-cell-val">
+            ${m.reciboData ? `
+              <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('${m.tipo}', ${m.id})">
+                <i class="fa-solid ${isPdf ? 'fa-file-pdf text-emerald' : 'fa-file-invoice'}"></i> ${isPdf ? 'Ver PDF' : 'Ver Recibo'}
+              </button>
+            ` : `<span class="receipt-none">Sin recibo</span>`}
+          </span>
         </td>
         <td data-label="Acciones">
           <div class="action-buttons-cell">
@@ -724,7 +728,7 @@ const App = {
           </div>
         </td>
       </tr>
-    `).join('');
+    `}).join('');
   },
 
   // ===================================================================
@@ -963,21 +967,25 @@ const App = {
       return;
     }
 
-    tbody.innerHTML = items.map(c => `
+    tbody.innerHTML = items.map(c => {
+      const isPdf = c.reciboTipo && c.reciboTipo.includes('pdf');
+      return `
       <tr>
-        <td data-label="Fecha" style="font-weight:600; white-space:nowrap;">${c.fecha}</td>
-        <td data-label="N° Factura"><strong>${c.numeroFactura || 'S/N'}</strong></td>
-        <td data-label="Proveedor" style="font-weight:600; color:var(--text-main);">${c.proveedor}</td>
-        <td data-label="Prendas / Lote" style="max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${c.descripcion}">${c.descripcion}</td>
-        <td data-label="Categoría"><span class="badge-tag blue">${c.categoria}</span></td>
-        <td data-label="Método Pago">${c.metodoPago || 'Efectivo'}</td>
-        <td data-label="Monto Pagado" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(c.monto)}</td>
+        <td data-label="Fecha"><span class="table-cell-val" style="font-weight:600;">${c.fecha}</span></td>
+        <td data-label="N° Factura"><span class="table-cell-val"><strong>${c.numeroFactura || 'S/N'}</strong></span></td>
+        <td data-label="Proveedor"><span class="table-cell-val" style="font-weight:600; color:var(--text-main);">${c.proveedor}</span></td>
+        <td data-label="Prendas / Lote"><span class="table-cell-val" title="${c.descripcion}">${c.descripcion}</span></td>
+        <td data-label="Categoría"><span class="table-cell-val"><span class="badge-tag emerald">${c.categoria}</span></span></td>
+        <td data-label="Método Pago"><span class="table-cell-val">${c.metodoPago || 'Efectivo'}</span></td>
+        <td data-label="Monto Pagado"><span class="table-cell-val" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(c.monto)}</span></td>
         <td data-label="Comprobante">
-          ${c.reciboData ? `
-            <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('compra', ${c.id})">
-              <i class="fa-solid fa-paperclip"></i> Ver Soporte
-            </button>
-          ` : `<span class="receipt-none">Sin soporte</span>`}
+          <span class="table-cell-val">
+            ${c.reciboData ? `
+              <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('compra', ${c.id})">
+                <i class="fa-solid ${isPdf ? 'fa-file-pdf text-emerald' : 'fa-paperclip'}"></i> ${isPdf ? 'Ver PDF' : 'Ver Soporte'}
+              </button>
+            ` : `<span class="receipt-none">Sin soporte</span>`}
+          </span>
         </td>
         <td data-label="Acciones">
           <div class="action-buttons-cell">
@@ -990,7 +998,7 @@ const App = {
           </div>
         </td>
       </tr>
-    `).join('');
+    `}).join('');
   },
 
   exportarComprasPDF() {
@@ -1195,25 +1203,29 @@ const App = {
       const tel = (n.whatsapp || '').replace(/\D/g, '');
       const numWa = tel.length === 10 ? '57' + tel : tel;
 
+      const isPdf = n.reciboTipo && n.reciboTipo.includes('pdf');
+
       return `
         <tr>
-          <td data-label="Fecha Pago" style="font-weight:600; white-space:nowrap;">${n.fecha}</td>
-          <td data-label="Trabajador" style="font-weight:700;">
+          <td data-label="Fecha Pago"><span class="table-cell-val" style="font-weight:600;">${n.fecha}</span></td>
+          <td data-label="Trabajador"><span class="table-cell-val" style="font-weight:700;">
             <div>${n.trabajador}</div>
             ${n.whatsapp ? `<small style="color:#34d399;"><i class="fa-brands fa-whatsapp"></i> ${n.whatsapp}</small>` : ''}
-          </td>
-          <td data-label="Cargo / Área"><span class="badge-tag purple">${n.cargo}</span></td>
-          <td data-label="Periodo" style="font-size:12px; color:var(--text-muted);">${n.periodo}</td>
-          <td data-label="Tiempo / Base">${tiempoStr}</td>
-          <td data-label="Bonos / Comisión" style="color:var(--emerald-primary);">+${this.formatearDinero(n.bonos || 0)}</td>
-          <td data-label="Deducciones" style="color:var(--danger-primary);">${n.deducciones > 0 ? '-' + this.formatearDinero(n.deducciones) : '$0'}</td>
-          <td data-label="Neto Pagado" style="font-weight:800; color:var(--gold-light);">${this.formatearDinero(n.neto)}</td>
+          </span></td>
+          <td data-label="Cargo / Área"><span class="table-cell-val"><span class="badge-tag gold">${n.cargo}</span></span></td>
+          <td data-label="Periodo"><span class="table-cell-val" style="font-size:12px; color:var(--text-muted);">${n.periodo}</span></td>
+          <td data-label="Tiempo / Base"><span class="table-cell-val">${tiempoStr}</span></td>
+          <td data-label="Bonos / Comisión"><span class="table-cell-val" style="color:var(--emerald-primary);">+${this.formatearDinero(n.bonos || 0)}</span></td>
+          <td data-label="Deducciones"><span class="table-cell-val" style="color:var(--danger-primary);">${n.deducciones > 0 ? '-' + this.formatearDinero(n.deducciones) : '$0'}</span></td>
+          <td data-label="Neto Pagado"><span class="table-cell-val" style="font-weight:800; color:var(--gold-light);">${this.formatearDinero(n.neto)}</span></td>
           <td data-label="Soporte">
-            ${n.reciboData ? `
-              <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('nomina', ${n.id})">
-                <i class="fa-solid fa-paperclip"></i> Ver
-              </button>
-            ` : `<span class="receipt-none">Sin foto</span>`}
+            <span class="table-cell-val">
+              ${n.reciboData ? `
+                <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('nomina', ${n.id})">
+                  <i class="fa-solid ${isPdf ? 'fa-file-pdf text-emerald' : 'fa-paperclip'}"></i> ${isPdf ? 'Ver PDF' : 'Ver'}
+                </button>
+              ` : `<span class="receipt-none">Sin foto</span>`}
+            </span>
           </td>
           <td data-label="WhatsApp / Acciones">
             <div class="action-buttons-cell">
@@ -1734,43 +1746,51 @@ const App = {
     const titulo = document.getElementById('visorTitulo');
     const meta = document.getElementById('visorMeta');
     const img = document.getElementById('visorImagen');
-    const pdfBox = document.getElementById('visorPdfFallback');
+    const pdfContainer = document.getElementById('visorPdfContainer');
+    const pdfFrame = document.getElementById('visorPdfFrame');
+    const pdfNombre = document.getElementById('visorPdfNombre');
     const pdfLink = document.getElementById('visorPdfLink');
     const btnDescargar = document.getElementById('btnDescargarRecibo');
 
     if (tipo === 'compra') {
       titulo.textContent = `Factura de Mercancía: ${item.proveedor}`;
       meta.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; flex-wrap:wrap; gap:6px;">
           <strong>Proveedor: ${item.proveedor}</strong>
           <span style="color:var(--gold-primary); font-weight:700;">Total: ${this.formatearDinero(item.monto)}</span>
         </div>
-        <div>N° Factura: <strong>${item.numeroFactura || 'S/N'}</strong> | Fecha: <strong>${item.fecha}</strong> | Pago: <strong>${item.metodoPago}</strong></div>
-        <div style="color:var(--text-muted); margin-top:4px;">${item.descripcion}</div>
+        <div style="font-size:12px; color:var(--text-muted);">N° Factura: <strong>${item.numeroFactura || 'S/N'}</strong> | Fecha: <strong>${item.fecha}</strong> | Pago: <strong>${item.metodoPago}</strong></div>
+        <div style="color:var(--text-main); margin-top:6px; font-size:12.5px; word-break:break-word;">${item.descripcion}</div>
       `;
     } else {
       titulo.textContent = `Comprobante de Nómina: ${item.trabajador}`;
       meta.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; flex-wrap:wrap; gap:6px;">
           <strong>Colaborador: ${item.trabajador} (${item.cargo})</strong>
           <span style="color:var(--gold-primary); font-weight:700;">Neto Pagado: ${this.formatearDinero(item.neto)}</span>
         </div>
-        <div>Periodo: <strong>${item.periodo}</strong> | Fecha: <strong>${item.fecha}</strong> | Referencia: <strong>${item.referencia || 'N/A'}</strong></div>
-        <div style="color:var(--text-muted); margin-top:4px;">Básico: ${this.formatearDinero(item.sueldoBase)} | Bonos: ${this.formatearDinero(item.bonos)} | Deducciones: ${this.formatearDinero(item.deducciones)}</div>
+        <div style="font-size:12px; color:var(--text-muted);">Periodo: <strong>${item.periodo}</strong> | Fecha: <strong>${item.fecha}</strong> | Referencia: <strong>${item.referencia || 'N/A'}</strong></div>
+        <div style="color:var(--text-muted); margin-top:4px; font-size:12px;">Básico: ${this.formatearDinero(item.sueldoBase)} | Bonos: ${this.formatearDinero(item.bonos)} | Deducciones: ${this.formatearDinero(item.deducciones)}</div>
       `;
     }
 
+    const isPdf = item.reciboTipo && item.reciboTipo.includes('pdf');
     btnDescargar.href = item.reciboData;
-    btnDescargar.download = item.reciboNombre || `recibo-noirda-${item.fecha}.png`;
+    btnDescargar.download = item.reciboNombre || `recibo-noirda-${item.fecha}.${isPdf ? 'pdf' : 'png'}`;
 
-    if (item.reciboTipo && item.reciboTipo.includes('pdf')) {
-      img.classList.add('hidden');
-      pdfBox.classList.remove('hidden');
-      pdfLink.href = item.reciboData;
+    if (isPdf) {
+      if (img) img.classList.add('hidden');
+      if (pdfContainer) pdfContainer.classList.remove('hidden');
+      if (pdfNombre) pdfNombre.textContent = item.reciboNombre || 'comprobante_soporte.pdf';
+      if (pdfFrame) pdfFrame.src = item.reciboData;
+      if (pdfLink) pdfLink.href = item.reciboData;
     } else {
-      pdfBox.classList.add('hidden');
-      img.src = item.reciboData;
-      img.classList.remove('hidden');
+      if (pdfContainer) pdfContainer.classList.add('hidden');
+      if (pdfFrame) pdfFrame.src = '';
+      if (img) {
+        img.src = item.reciboData;
+        img.classList.remove('hidden');
+      }
     }
 
     modal.classList.add('active');
@@ -2448,7 +2468,16 @@ const App = {
   },
 
   cerrarModal(modalId) {
-    document.getElementById(modalId)?.classList.remove('active');
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove('active');
+      if (modalId === 'modalVisorRecibo') {
+        const frame = document.getElementById('visorPdfFrame');
+        if (frame) frame.src = '';
+        const img = document.getElementById('visorImagen');
+        if (img) img.src = '';
+      }
+    }
   },
 
   mostrarToast(mensaje, tipo = 'info') {

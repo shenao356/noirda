@@ -755,7 +755,12 @@
 
     </main>
 
-    <!-- BOTTOM MOBILE NAVIGATION (Smartphones) -->
+    <!-- BOTÓN FLOTANTE (FAB) PARA MÓVIL AL LADO DERECHO -->
+    <button class="mobile-fab-btn" id="btnMobileQuickAdd" title="Nuevo Registro" aria-label="Nuevo Registro">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <!-- BOTTOM MOBILE NAVIGATION (Smartphones: 5 opciones perfectamente centradas) -->
     <nav class="bottom-nav">
       <a href="#dashboard" class="bnav-item active" data-tab="dashboard">
         <i class="fa-solid fa-chart-line"></i>
@@ -765,9 +770,6 @@
         <i class="fa-solid fa-shirt"></i>
         <span>Mercancía</span>
       </a>
-      <button class="bnav-center-action" id="btnMobileQuickAdd" aria-label="Nuevo Registro">
-        <i class="fa-solid fa-plus"></i>
-      </button>
       <a href="#nomina" class="bnav-item" data-tab="nomina">
         <i class="fa-solid fa-user-tie"></i>
         <span>Nómina</span>
@@ -1317,14 +1319,23 @@
         <div class="receipt-meta-info" id="visorMeta">
           <!-- Detalles del gasto -->
         </div>
-        <div class="receipt-media-wrapper">
+        <div class="receipt-media-wrapper" id="visorMediaWrapper">
           <img id="visorImagen" class="receipt-full-img hidden" alt="Comprobante completo">
-          <div id="visorPdfFallback" class="pdf-fallback-box hidden">
-            <i class="fa-solid fa-file-pdf pdf-large-icon"></i>
-            <p>Documento PDF Adjunto</p>
-            <a id="visorPdfLink" target="_blank" class="btn-action-primary">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir PDF Completo
-            </a>
+          
+          <!-- VISTA PREVIA INTERACTIVA DE DOCUMENTO PDF -->
+          <div id="visorPdfContainer" class="pdf-viewer-container hidden">
+            <div class="pdf-viewer-header">
+              <div class="pdf-badge-title">
+                <i class="fa-solid fa-file-pdf text-emerald"></i>
+                <span id="visorPdfNombre">soporte_compra.pdf</span>
+              </div>
+              <div class="pdf-header-actions">
+                <a id="visorPdfLink" target="_blank" class="btn-pdf-external" title="Abrir en pantalla completa">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Pantalla Completa
+                </a>
+              </div>
+            </div>
+            <iframe id="visorPdfFrame" class="pdf-embed-frame" title="Previsualización de Documento PDF"></iframe>
           </div>
         </div>
       </div>
