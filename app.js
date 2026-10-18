@@ -117,8 +117,8 @@ const App = {
     showCharts: true,
     darkTheme: true,
     customCategories: [],
-    githubUser: '',
-    githubRepo: 'NOIRDA',
+    githubUser: 'shenao356',
+    githubRepo: 'noirda',
     githubToken: '',
     githubAutoSync: false
   },
