@@ -1623,8 +1623,6 @@ const App = {
     const mailtoUrl = email ? `mailto:${email}?subject=${subject}&body=${encodeURIComponent(body)}` : `mailto:?subject=${subject}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoUrl;
   },
-    `).join('');
-  },
 
   // ===================================================================
   // ARCHIVO DIGITAL DE RECIBOS Y COMPROBANTES
