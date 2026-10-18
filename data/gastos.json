@@ -2,8 +2,24 @@
   "marca": "NOIRDA",
   "propietario": "Santiago Varelas",
   "moneda": "COP",
-  "ultimaActualizacion": "2026-10-18T04:06:31.813Z",
+  "ultimaActualizacion": "2026-10-18T04:09:44.147Z",
   "compras": [
+    {
+      "fecha": "2026-10-18",
+      "anio": 2026,
+      "mes": "10",
+      "numeroFactura": "",
+      "proveedor": "Temu",
+      "categoria": "Camisetas y Polos",
+      "descripcion": "Pnatalones",
+      "monto": 50000000000,
+      "metodoPago": "Transferencia / Bancolombia",
+      "reciboData": null,
+      "reciboNombre": "",
+      "reciboTipo": "",
+      "notas": "",
+      "id": 4
+    },
     {
       "fecha": "2026-10-12",
       "anio": 2026,
