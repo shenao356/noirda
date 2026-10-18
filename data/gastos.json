@@ -2,8 +2,25 @@
   "marca": "NOIRDA",
   "propietario": "Santiago Varelas",
   "moneda": "COP",
-  "ultimaActualizacion": "2026-10-18T04:11:31.120Z",
-  "compras": [],
+  "ultimaActualizacion": "2026-10-18T04:11:56.308Z",
+  "compras": [
+    {
+      "fecha": "2026-10-18",
+      "anio": 2026,
+      "mes": "10",
+      "numeroFactura": "123456789",
+      "proveedor": "SHEIN",
+      "categoria": "Jeans y Pantalones",
+      "descripcion": "PANTALONES DE TEMPORADA",
+      "monto": 15000000,
+      "metodoPago": "Transferencia / Bancolombia",
+      "reciboData": null,
+      "reciboNombre": "",
+      "reciboTipo": "",
+      "notas": "",
+      "id": 5
+    }
+  ],
   "nomina": [
     {
       "fecha": "2026-10-18",
