@@ -26,40 +26,48 @@
 </head>
 <body class="theme-noir">
 
-  <!-- PANTALLA DE BIENVENIDA NOIRDA OPULENCE -->
+  <!-- PANTALLA DE BIENVENIDA PERSONALIZADA: LIAM VARELAS (NOIRDA OPULENCE) -->
   <div class="welcome-screen-overlay" id="welcomeScreen">
     <div class="welcome-card">
-      <div class="welcome-top-icon">
-        <i class="fa-solid fa-crown text-gold"></i>
+      <div class="welcome-brand-avatar">
+        <img src="logo.jpg" alt="NOIRDA Opulence Logo" class="welcome-logo-img">
+        <div class="welcome-crown-badge" title="Liam Varelas • Dueño y Creador">
+          <i class="fa-solid fa-crown"></i>
+        </div>
       </div>
-      <h1 class="welcome-title">NOIRDA OPULENCE</h1>
-      <p class="welcome-tagline">Atelier & Fashion Store • Control Financiero</p>
-      
+
+      <div class="welcome-greeting-pill">
+        <i class="fa-solid fa-crown text-gold"></i> Panel Privado del Dueño
+      </div>
+
+      <h1 class="welcome-title">¡Bienvenido, <span class="gold-accent">Liam</span>!</h1>
+      <p class="welcome-tagline">Dueño & Creador de <strong>NOIRDA OPULENCE</strong></p>
+
+      <div class="welcome-personal-note">
+        Hola <strong>Liam</strong>, todo está listo para gestionar tu tienda. Aquí tienes el control exclusivo de compras de ropa, nómina de tu equipo y las finanzas de tu marca.
+      </div>
+
       <div class="welcome-badge-grid">
         <div class="welcome-pill">
-          <i class="fa-solid fa-crown text-gold"></i>
-          <span><strong>Propietario:</strong> Liam Varelas</span>
+          <i class="fa-solid fa-user-check text-gold"></i>
+          <span>Liam Varelas <span class="badge-tag-owner">Dueño</span></span>
         </div>
-        <a href="https://wa.me/573045345642" target="_blank" class="welcome-pill whatsapp-pill" title="WhatsApp Oficial">
+        <a href="https://wa.me/573045345642" target="_blank" class="welcome-pill whatsapp-pill" title="WhatsApp Oficial de Liam Varelas">
           <i class="fa-brands fa-whatsapp text-emerald"></i>
-          <span>3045345642</span>
+          <span>304 534 5642</span>
         </a>
       </div>
 
-      <p class="welcome-desc">
-        Bienvenido a tu software exclusivo de finanzas, compras de mercancía, pagos de nómina y archivo de recibos de la tienda.
-      </p>
-
       <div class="welcome-features">
-        <div class="feat-item"><i class="fa-solid fa-shirt text-gold"></i> <span>Compras de Ropa & Proveedores</span></div>
-        <div class="feat-item"><i class="fa-solid fa-file-invoice-dollar text-gold"></i> <span>Comprobantes PDF & WhatsApp</span></div>
-        <div class="feat-item"><i class="fa-solid fa-address-book text-gold"></i> <span>Directorio de Empleados</span></div>
-        <div class="feat-item"><i class="fa-solid fa-cloud-arrow-up text-gold"></i> <span>Sincronización en la Nube</span></div>
+        <div class="feat-item"><i class="fa-solid fa-shirt text-emerald"></i> <span>Compras & Proveedores de Ropa</span></div>
+        <div class="feat-item"><i class="fa-solid fa-file-invoice-dollar text-gold"></i> <span>Comprobantes de Nómina PDF</span></div>
+        <div class="feat-item"><i class="fa-brands fa-whatsapp text-emerald"></i> <span>Envío Directo por WhatsApp</span></div>
+        <div class="feat-item"><i class="fa-solid fa-cloud-arrow-up text-gold"></i> <span>Respaldo en la Nube con GitHub</span></div>
       </div>
 
       <div class="welcome-actions">
         <button class="btn-welcome-enter" id="btnEntrarApp" onclick="App.cerrarBienvenida()">
-          <span>Ingresar al Sistema</span>
+          <span>Ingresar a mi Sistema, Liam</span>
           <i class="fa-solid fa-arrow-right"></i>
         </button>
       </div>
@@ -67,7 +75,7 @@
       <div class="welcome-footer-note">
         <label class="welcome-checkbox">
           <input type="checkbox" id="chkNoMostrarBienvenida">
-          <span>Omitir pantalla en los próximos ingresos</span>
+          <span>Omitir esta portada en mis próximos ingresos</span>
         </label>
       </div>
     </div>
@@ -119,8 +127,8 @@
       </nav>
 
       <div class="sidebar-footer">
-        <button class="btn-welcome-trigger" id="btnReabrirBienvenida" onclick="App.abrirBienvenida()" title="Ver portada de bienvenida e información">
-          <i class="fa-solid fa-gem text-gold"></i> Portada de la Tienda
+        <button class="btn-welcome-trigger" id="btnReabrirBienvenida" onclick="App.abrirBienvenida()" title="Ver portada de bienvenida e información del dueño">
+          <i class="fa-solid fa-crown text-gold"></i> Portada Liam / Noirda
         </button>
         <div class="sync-status">
           <span class="status-dot"></span>
