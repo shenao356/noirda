@@ -2,7 +2,7 @@
   "marca": "NOIRDA",
   "propietario": "Santiago Varelas",
   "moneda": "COP",
-  "ultimaActualizacion": "2026-10-18T04:11:56.308Z",
+  "ultimaActualizacion": "2026-10-18T04:12:13.183Z",
   "compras": [
     {
       "fecha": "2026-10-18",
@@ -19,6 +19,22 @@
       "reciboTipo": "",
       "notas": "",
       "id": 5
+    },
+    {
+      "fecha": "2026-10-18",
+      "anio": 2026,
+      "mes": "10",
+      "numeroFactura": "789456456",
+      "proveedor": "CAMISETAS",
+      "categoria": "Camisetas y Polos",
+      "descripcion": "NEGRAS",
+      "monto": 1000000,
+      "metodoPago": "Transferencia / Bancolombia",
+      "reciboData": null,
+      "reciboNombre": "",
+      "reciboTipo": "",
+      "notas": "",
+      "id": 6
     }
   ],
   "nomina": [
