@@ -87,9 +87,15 @@
           <button class="menu-toggle-btn" id="menuToggle" aria-label="Menú">
             <i class="fa-solid fa-bars"></i>
           </button>
-          <div class="mobile-brand">
-            <span class="mobile-brand-title">NOIRDA</span>
-            <span class="mobile-brand-subtitle">Control de Gastos</span>
+          <div class="mobile-brand-wrapper">
+            <div class="mobile-brand-logo-box" id="mobileLogoBox">
+              <div class="brand-logo-circle small" id="mobileLogoCircle"><span>N</span></div>
+              <img id="mobileLogoImg" class="brand-logo-img hidden" alt="Logo">
+            </div>
+            <div class="mobile-brand-meta">
+              <span class="mobile-brand-title" id="displayMobileBrandName">NOIRDA</span>
+              <span class="mobile-brand-subtitle" id="displayMobileOwnerName">Santiago Varelas</span>
+            </div>
           </div>
           <div class="month-selector-wrapper">
             <i class="fa-regular fa-calendar topbar-cal-icon"></i>
@@ -608,6 +614,10 @@
         <i class="fa-solid fa-receipt"></i>
         <span>Recibos</span>
       </a>
+      <a href="#ajustes" class="bnav-item" data-tab="ajustes">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Ajustes</span>
+      </a>
     </nav>
 
   </div>
@@ -690,11 +700,20 @@
           <div class="form-group">
             <label>Recibo / Factura Adjunta</label>
             <div class="upload-dropzone" id="dropzoneCompra">
-              <input type="file" id="compraArchivoRecibo" accept="image/*, application/pdf" capture="environment" style="display:none;">
+              <input type="file" id="compraArchivoRecibo" accept="image/*, application/pdf" style="display:none;">
+              <input type="file" id="compraCamaraRecibo" accept="image/*" capture="environment" style="display:none;">
               <div class="dropzone-content" id="dropzoneCompraPrompt">
-                <i class="fa-solid fa-camera drop-icon"></i>
-                <p>Haz clic o toma foto del recibo con la cámara</p>
-                <span class="file-hint">Imágenes (JPG, PNG) o PDF</span>
+                <i class="fa-solid fa-paperclip drop-icon"></i>
+                <p style="font-weight:700; font-size:14px; margin-bottom: 2px;">Adjuntar Recibo o Factura</p>
+                <span class="file-hint">Selecciona de tu galería de fotos o documentos (PNG, JPG, PDF)</span>
+                <div class="upload-btn-choices">
+                  <button type="button" class="btn-choice" id="btnElegirArchivoCompra">
+                    <i class="fa-solid fa-folder-open"></i> Elegir de Galería / Archivos
+                  </button>
+                  <button type="button" class="btn-choice-subtle" id="btnTomarFotoCompra">
+                    <i class="fa-solid fa-camera"></i> Tomar Foto
+                  </button>
+                </div>
               </div>
               <div class="preview-container hidden" id="previewCompraContainer">
                 <img id="imgPreviewCompra" class="preview-thumbnail" alt="Recibo">
@@ -812,11 +831,20 @@
           <div class="form-group">
             <label>Comprobante de Pago / Firma Adjunta</label>
             <div class="upload-dropzone" id="dropzoneNomina">
-              <input type="file" id="nominaArchivoRecibo" accept="image/*, application/pdf" capture="environment" style="display:none;">
+              <input type="file" id="nominaArchivoRecibo" accept="image/*, application/pdf" style="display:none;">
+              <input type="file" id="nominaCamaraRecibo" accept="image/*" capture="environment" style="display:none;">
               <div class="dropzone-content" id="dropzoneNominaPrompt">
-                <i class="fa-solid fa-file-invoice-dollar drop-icon"></i>
-                <p>Adjuntar comprobante de pago o planilla firmada</p>
-                <span class="file-hint">Foto o PDF de transferencia</span>
+                <i class="fa-solid fa-paperclip drop-icon"></i>
+                <p style="font-weight:700; font-size:14px; margin-bottom: 2px;">Adjuntar Comprobante de Pago</p>
+                <span class="file-hint">Selecciona de tu galería de fotos o documentos (PNG, JPG, PDF)</span>
+                <div class="upload-btn-choices">
+                  <button type="button" class="btn-choice" id="btnElegirArchivoNomina">
+                    <i class="fa-solid fa-folder-open"></i> Elegir de Galería / Archivos
+                  </button>
+                  <button type="button" class="btn-choice-subtle" id="btnTomarFotoNomina">
+                    <i class="fa-solid fa-camera"></i> Tomar Foto
+                  </button>
+                </div>
               </div>
               <div class="preview-container hidden" id="previewNominaContainer">
                 <img id="imgPreviewNomina" class="preview-thumbnail" alt="Comprobante">

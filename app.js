@@ -174,8 +174,17 @@ const App = {
     this.renderTodo();
   },
 
-  // Cargar configuración guardada
+  // Cargar configuración guardada (Persistencia dual: localStorage + IndexedDB)
   async cargarConfiguracion() {
+    try {
+      const localStr = localStorage.getItem('noirda_config_v2');
+      if (localStr) {
+        this.config = { ...this.config, ...JSON.parse(localStr) };
+      }
+    } catch (e) {
+      console.warn('No se pudo leer de localStorage:', e);
+    }
+
     try {
       const stored = await this.db.get('config', 'appConfig');
       if (stored && stored.value) {
@@ -187,6 +196,11 @@ const App = {
   },
 
   async guardarConfiguracion() {
+    try {
+      localStorage.setItem('noirda_config_v2', JSON.stringify(this.config));
+    } catch (e) {
+      console.warn('Error al guardar en localStorage:', e);
+    }
     await this.db.put('config', { key: 'appConfig', value: this.config });
     this.aplicarConfiguracionVisual();
   },
@@ -357,34 +371,58 @@ const App = {
 
   // Aplicar configuraciones visuales (Logo, Toggles, Nombre, Modo Oscuro/Claro)
   aplicarConfiguracionVisual() {
-    // 1. Nombres
+    // 1. Nombres (Desktop y Móvil)
     const dispBrand = document.getElementById('displayBrandName');
     const dispOwner = document.getElementById('displayOwnerName');
+    const dispMobBrand = document.getElementById('displayMobileBrandName');
+    const dispMobOwner = document.getElementById('displayMobileOwnerName');
     const inputBrand = document.getElementById('inputBrandName');
     const inputOwner = document.getElementById('inputOwnerName');
     const inputMoneda = document.getElementById('inputMoneda');
 
     if (dispBrand) dispBrand.textContent = this.config.brandName;
     if (dispOwner) dispOwner.textContent = this.config.ownerName;
+    if (dispMobBrand) dispMobBrand.textContent = this.config.brandName;
+    if (dispMobOwner) dispMobOwner.textContent = this.config.ownerName;
     if (inputBrand) inputBrand.value = this.config.brandName;
     if (inputOwner) inputOwner.value = this.config.ownerName;
     if (inputMoneda) inputMoneda.value = this.config.currency;
 
-    // 2. Logo
+    // 2. Logo (Desktop, Móvil y Vista Previa en Ajustes)
     const sidebarCircle = document.getElementById('sidebarLogoCircle');
     const sidebarImg = document.getElementById('sidebarLogoImg');
+    const mobileCircle = document.getElementById('mobileLogoCircle');
+    const mobileImg = document.getElementById('mobileLogoImg');
     const settingsPreview = document.getElementById('settingsLogoPreview');
 
-    if (this.config.logoData) {
-      sidebarImg.src = this.config.logoData;
-      sidebarImg.classList.remove('hidden');
-      sidebarCircle.classList.add('hidden');
+    const logoSrc = this.config.logoData || 'logo.jpg';
 
-      settingsPreview.innerHTML = `<img src="${this.config.logoData}" class="brand-logo-img" style="width:72px; height:72px;" alt="Logo Noirda">`;
+    if (logoSrc) {
+      if (sidebarImg) {
+        sidebarImg.src = logoSrc;
+        sidebarImg.classList.remove('hidden');
+      }
+      if (sidebarCircle) sidebarCircle.classList.add('hidden');
+
+      if (mobileImg) {
+        mobileImg.src = logoSrc;
+        mobileImg.classList.remove('hidden');
+      }
+      if (mobileCircle) mobileCircle.classList.add('hidden');
+
+      if (settingsPreview) {
+        settingsPreview.innerHTML = `<img src="${logoSrc}" class="brand-logo-img" style="width:72px; height:72px; object-fit:cover;" alt="Logo Noirda">`;
+      }
     } else {
-      sidebarImg.classList.add('hidden');
-      sidebarCircle.classList.remove('hidden');
-      settingsPreview.innerHTML = `<div class="brand-logo-circle large"><span>N</span></div>`;
+      if (sidebarImg) sidebarImg.classList.add('hidden');
+      if (sidebarCircle) sidebarCircle.classList.remove('hidden');
+
+      if (mobileImg) mobileImg.classList.add('hidden');
+      if (mobileCircle) mobileCircle.classList.remove('hidden');
+
+      if (settingsPreview) {
+        settingsPreview.innerHTML = `<div class="brand-logo-circle large"><span>N</span></div>`;
+      }
     }
 
     // 3. Toggles de Interfaz
@@ -570,20 +608,20 @@ const App = {
 
     tbody.innerHTML = movimientos.slice(0, 10).map(m => `
       <tr>
-        <td style="white-space:nowrap; font-weight:600;">${m.fecha}</td>
-        <td><span class="badge-tag ${m.tipoBadge}">${m.tipoLabel}</span></td>
-        <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${m.concepto}">${m.concepto}</td>
-        <td><span class="badge-tag neutral">${m.categoria}</span></td>
-        <td>${m.metodo || 'Efectivo'}</td>
-        <td style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(m.monto)}</td>
-        <td>
+        <td data-label="Fecha" style="white-space:nowrap; font-weight:600;">${m.fecha}</td>
+        <td data-label="Tipo"><span class="badge-tag ${m.tipoBadge}">${m.tipoLabel}</span></td>
+        <td data-label="Concepto" style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${m.concepto}">${m.concepto}</td>
+        <td data-label="Categoría"><span class="badge-tag neutral">${m.categoria}</span></td>
+        <td data-label="Método Pago">${m.metodo || 'Efectivo'}</td>
+        <td data-label="Monto Pagado" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(m.monto)}</td>
+        <td data-label="Comprobante">
           ${m.reciboData ? `
             <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('${m.tipo}', ${m.id})">
               <i class="fa-solid fa-file-invoice"></i> Ver Recibo
             </button>
           ` : `<span class="receipt-none">Sin recibo</span>`}
         </td>
-        <td>
+        <td data-label="Acciones">
           <div class="action-buttons-cell">
             <button class="btn-table-action" onclick="App.editarRegistro('${m.tipo}', ${m.id})" title="Editar">
               <i class="fa-solid fa-pen"></i>
@@ -769,21 +807,21 @@ const App = {
 
     tbody.innerHTML = items.map(c => `
       <tr>
-        <td style="font-weight:600; white-space:nowrap;">${c.fecha}</td>
-        <td><strong>${c.numeroFactura || 'S/N'}</strong></td>
-        <td style="font-weight:600; color:var(--text-main);">${c.proveedor}</td>
-        <td style="max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${c.descripcion}">${c.descripcion}</td>
-        <td><span class="badge-tag blue">${c.categoria}</span></td>
-        <td>${c.metodoPago || 'Efectivo'}</td>
-        <td style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(c.monto)}</td>
-        <td>
+        <td data-label="Fecha" style="font-weight:600; white-space:nowrap;">${c.fecha}</td>
+        <td data-label="N° Factura"><strong>${c.numeroFactura || 'S/N'}</strong></td>
+        <td data-label="Proveedor" style="font-weight:600; color:var(--text-main);">${c.proveedor}</td>
+        <td data-label="Prendas / Lote" style="max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${c.descripcion}">${c.descripcion}</td>
+        <td data-label="Categoría"><span class="badge-tag blue">${c.categoria}</span></td>
+        <td data-label="Método Pago">${c.metodoPago || 'Efectivo'}</td>
+        <td data-label="Monto Pagado" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(c.monto)}</td>
+        <td data-label="Comprobante">
           ${c.reciboData ? `
             <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('compra', ${c.id})">
               <i class="fa-solid fa-paperclip"></i> Ver Soporte
             </button>
           ` : `<span class="receipt-none">Sin soporte</span>`}
         </td>
-        <td>
+        <td data-label="Acciones">
           <div class="action-buttons-cell">
             <button class="btn-table-action" onclick="App.editarRegistro('compra', ${c.id})" title="Editar">
               <i class="fa-solid fa-pen"></i>
@@ -826,22 +864,22 @@ const App = {
 
     tbody.innerHTML = items.map(n => `
       <tr>
-        <td style="font-weight:600; white-space:nowrap;">${n.fecha}</td>
-        <td style="font-weight:700;">${n.trabajador}</td>
-        <td><span class="badge-tag purple">${n.cargo}</span></td>
-        <td style="font-size:12px; color:var(--text-muted);">${n.periodo}</td>
-        <td>${this.formatearDinero(n.sueldoBase)}</td>
-        <td style="color:var(--emerald-primary);">+${this.formatearDinero(n.bonos || 0)}</td>
-        <td style="color:var(--danger-primary);">${n.deducciones > 0 ? '-' + this.formatearDinero(n.deducciones) : '$0'}</td>
-        <td style="font-weight:800; color:var(--gold-light);">${this.formatearDinero(n.neto)}</td>
-        <td>
+        <td data-label="Fecha Pago" style="font-weight:600; white-space:nowrap;">${n.fecha}</td>
+        <td data-label="Colaborador" style="font-weight:700;">${n.trabajador}</td>
+        <td data-label="Cargo / Función"><span class="badge-tag purple">${n.cargo}</span></td>
+        <td data-label="Periodo" style="font-size:12px; color:var(--text-muted);">${n.periodo}</td>
+        <td data-label="Sueldo Base">${this.formatearDinero(n.sueldoBase)}</td>
+        <td data-label="Bonos / Ventas" style="color:var(--emerald-primary);">+${this.formatearDinero(n.bonos || 0)}</td>
+        <td data-label="Deducciones" style="color:var(--danger-primary);">${n.deducciones > 0 ? '-' + this.formatearDinero(n.deducciones) : '$0'}</td>
+        <td data-label="Neto Pagado" style="font-weight:800; color:var(--gold-light);">${this.formatearDinero(n.neto)}</td>
+        <td data-label="Comprobante">
           ${n.reciboData ? `
             <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('nomina', ${n.id})">
               <i class="fa-solid fa-file-invoice-dollar"></i> Recibo Pago
             </button>
           ` : `<span class="receipt-none">Sin comprobante</span>`}
         </td>
-        <td>
+        <td data-label="Acciones">
           <div class="action-buttons-cell">
             <button class="btn-table-action" onclick="App.editarRegistro('nomina', ${n.id})" title="Editar">
               <i class="fa-solid fa-pen"></i>
@@ -1474,6 +1512,8 @@ const App = {
         marca: this.config.brandName,
         propietario: this.config.ownerName,
         moneda: this.config.currency,
+        logoData: this.config.logoData,
+        customCategories: this.config.customCategories,
         ultimaActualizacion: new Date().toISOString(),
         compras: this.compras,
         nomina: this.nomina
@@ -1565,6 +1605,14 @@ const App = {
 
       for (const c of data.compras) await this.db.put('compras', c);
       for (const n of data.nomina) await this.db.put('nomina', n);
+
+      // Sincronizar marca y logo si existen en GitHub
+      if (data.marca) this.config.brandName = data.marca;
+      if (data.propietario) this.config.ownerName = data.propietario;
+      if (data.moneda) this.config.currency = data.moneda;
+      if (data.logoData !== undefined && data.logoData !== null) this.config.logoData = data.logoData;
+      if (data.customCategories) this.config.customCategories = data.customCategories;
+      await this.guardarConfiguracion();
 
       await this.cargarDatos();
       this.renderTodo();
@@ -1737,58 +1785,120 @@ const App = {
     });
 
     // 8. Uploads de comprobantes (Compras y Nómina)
-    const dropzoneCompra = document.getElementById('dropzoneCompra');
     const inputReciboCompra = document.getElementById('compraArchivoRecibo');
-    dropzoneCompra?.addEventListener('click', (e) => {
-      if (e.target.closest('#btnQuitarReciboCompra')) return;
-      inputReciboCompra.click();
+    const inputCamaraCompra = document.getElementById('compraCamaraRecibo');
+    const inputReciboNomina = document.getElementById('nominaArchivoRecibo');
+    const inputCamaraNomina = document.getElementById('nominaCamaraRecibo');
+
+    document.getElementById('btnElegirArchivoCompra')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      inputReciboCompra?.click();
     });
+    document.getElementById('btnTomarFotoCompra')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      inputCamaraCompra?.click();
+    });
+    document.getElementById('dropzoneCompra')?.addEventListener('click', (e) => {
+      if (e.target.closest('#btnQuitarReciboCompra') || e.target.closest('button')) return;
+      inputReciboCompra?.click();
+    });
+
     inputReciboCompra?.addEventListener('change', (e) => this.procesarArchivoRecibo(e.target.files[0], 'compra'));
+    inputCamaraCompra?.addEventListener('change', (e) => this.procesarArchivoRecibo(e.target.files[0], 'compra'));
+    
     document.getElementById('btnQuitarReciboCompra')?.addEventListener('click', () => {
       this.reciboTempCompra = null;
       this.actualizarPreviewRecibo('compra', null);
     });
 
-    const dropzoneNomina = document.getElementById('dropzoneNomina');
-    const inputReciboNomina = document.getElementById('nominaArchivoRecibo');
-    dropzoneNomina?.addEventListener('click', (e) => {
-      if (e.target.closest('#btnQuitarReciboNomina')) return;
-      inputReciboNomina.click();
+    document.getElementById('btnElegirArchivoNomina')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      inputReciboNomina?.click();
     });
+    document.getElementById('btnTomarFotoNomina')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      inputCamaraNomina?.click();
+    });
+    document.getElementById('dropzoneNomina')?.addEventListener('click', (e) => {
+      if (e.target.closest('#btnQuitarReciboNomina') || e.target.closest('button')) return;
+      inputReciboNomina?.click();
+    });
+
     inputReciboNomina?.addEventListener('change', (e) => this.procesarArchivoRecibo(e.target.files[0], 'nomina'));
+    inputCamaraNomina?.addEventListener('change', (e) => this.procesarArchivoRecibo(e.target.files[0], 'nomina'));
+
     document.getElementById('btnQuitarReciboNomina')?.addEventListener('click', () => {
       this.reciboTempNomina = null;
       this.actualizarPreviewRecibo('nomina', null);
     });
 
-    // 9. Personalización y Logo de Noirda
+    // 9. Personalización y Logo de Noirda (Optimizado y Persistente)
     const inputLogo = document.getElementById('inputLogoUpload');
     inputLogo?.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (ev) => {
-          this.config.logoData = ev.target.result;
-          this.guardarConfiguracion();
-          this.mostrarToast('Logotipo de Noirda actualizado', 'success');
+          const img = new Image();
+          img.onload = async () => {
+            const canvas = document.createElement('canvas');
+            const maxDim = 320;
+            let width = img.width;
+            let height = img.height;
+            if (width > height) {
+              if (width > maxDim) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              }
+            } else {
+              if (height > maxDim) {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            const optimizedLogo = canvas.toDataURL('image/png', 0.9);
+
+            this.config.logoData = optimizedLogo;
+            await this.guardarConfiguracion();
+            this.aplicarConfiguracionVisual();
+            this.mostrarToast('Logotipo de Noirda guardado correctamente', 'success');
+
+            if (this.config.githubAutoSync && this.config.githubToken) {
+              this.sincronizarConGithub(true);
+            }
+          };
+          img.src = ev.target.result;
         };
         reader.readAsDataURL(file);
       }
     });
 
-    document.getElementById('btnRestablecerLogo')?.addEventListener('click', () => {
+    document.getElementById('btnRestablecerLogo')?.addEventListener('click', async () => {
       this.config.logoData = null;
-      this.guardarConfiguracion();
+      await this.guardarConfiguracion();
+      this.aplicarConfiguracionVisual();
       this.mostrarToast('Logotipo restablecido al isotipo oficial', 'info');
+
+      if (this.config.githubAutoSync && this.config.githubToken) {
+        this.sincronizarConGithub(true);
+      }
     });
 
-    document.getElementById('btnGuardarAjustesMarca')?.addEventListener('click', () => {
+    document.getElementById('btnGuardarAjustesMarca')?.addEventListener('click', async () => {
       this.config.brandName = document.getElementById('inputBrandName').value.trim() || 'NOIRDA';
       this.config.ownerName = document.getElementById('inputOwnerName').value.trim() || 'Santiago Varelas';
       this.config.currency = document.getElementById('inputMoneda').value;
-      this.guardarConfiguracion();
+      await this.guardarConfiguracion();
       this.renderTodo();
-      this.mostrarToast('Identidad de marca guardada', 'success');
+      this.mostrarToast('Identidad de marca guardada con éxito', 'success');
+
+      if (this.config.githubAutoSync && this.config.githubToken) {
+        this.sincronizarConGithub(true);
+      }
     });
 
     // Toggles de interfaz

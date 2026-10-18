@@ -1370,6 +1370,54 @@ textarea.form-control {
   color: var(--text-dim);
 }
 
+.upload-btn-choices {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-choice {
+  background: linear-gradient(135deg, var(--gold-primary) 0%, #b8860b 100%);
+  color: #0b0d11;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.btn-choice:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+}
+
+.btn-choice-subtle {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.btn-choice-subtle:hover {
+  color: var(--text-main);
+  border-color: var(--gold-primary);
+}
+
 .preview-container {
   display: flex;
   align-items: center;
@@ -1668,19 +1716,72 @@ textarea.form-control {
 
   .main-content {
     margin-left: 0;
-    padding-bottom: calc(var(--bottom-nav-height) + 30px);
+    padding-bottom: calc(var(--bottom-nav-height) + 40px);
   }
 
   .topbar {
-    padding: 0 16px;
+    padding: 0 12px;
+    height: 64px;
   }
 
   .menu-toggle-btn {
-    display: block;
+    display: none;
   }
 
-  .mobile-brand {
+  .mobile-brand-wrapper {
     display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mobile-brand-logo-box {
+    width: 36px;
+    height: 36px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .mobile-brand-logo-box .brand-logo-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+
+  .mobile-brand-logo-box .brand-logo-circle span {
+    font-size: 18px;
+  }
+
+  .mobile-brand-meta {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-brand-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    font-size: 15px;
+    color: var(--gold-primary);
+    line-height: 1.1;
+  }
+
+  .mobile-brand-subtitle {
+    font-size: 10px;
+    color: var(--text-muted);
+    line-height: 1.1;
+  }
+
+  .month-selector-wrapper {
+    padding: 4px 10px;
+    gap: 4px;
+  }
+
+  .month-selector-wrapper .topbar-cal-icon {
+    font-size: 11px;
+  }
+
+  .select-periodo {
+    font-size: 11px;
   }
 
   .topbar-right .btn-text {
@@ -1688,35 +1789,171 @@ textarea.form-control {
   }
 
   .tab-panel {
-    padding: 18px 14px;
+    padding: 16px 12px;
   }
 
+  /* KPIs Móviles Limpios */
   .kpi-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
+    margin-bottom: 20px;
   }
 
   .kpi-card {
     padding: 14px;
+    border-radius: var(--radius-md);
+  }
+
+  .kpi-card#kpiCardTotal {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #1b212c 0%, #10131a 100%);
+    border: 1.5px solid var(--gold-primary);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+  }
+
+  .kpi-card#kpiCardTotal .kpi-amount {
+    font-size: 26px;
+    color: var(--gold-light);
+  }
+
+  .kpi-card#kpiCardRecibos {
+    grid-column: 1 / -1;
   }
 
   .kpi-amount {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 4px;
   }
 
   .kpi-footer {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     gap: 4px;
+    padding-top: 8px;
   }
 
+  /* Conversión de Tablas a Tarjetas Táctiles en Móviles */
+  .table-card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .table-card-header {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--border-color);
+  }
+
+  .table-responsive {
+    overflow-x: visible;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table, .data-table tbody, .data-table tr, .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table tr {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  }
+
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+    font-size: 12px;
+    text-align: right;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+    margin-right: 10px;
+  }
+
+  .data-table td:last-child {
+    border-bottom: none;
+    padding-top: 10px;
+    justify-content: flex-end;
+  }
+
+  /* Barra de Navegación Inferior Móvil */
   .bottom-nav {
     display: flex;
+    height: 62px;
+    padding: 0 4px;
+    background: rgba(18, 21, 28, 0.96);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .bnav-item {
+    font-size: 9px;
+    flex: 1;
+    gap: 2px;
+  }
+
+  .bnav-item i {
+    font-size: 16px;
+  }
+
+  .bnav-center-action {
+    width: 44px;
+    height: 44px;
+    transform: translateY(-10px);
+    font-size: 18px;
+  }
+
+  /* Modales en Móviles tipo Bottom-Sheet */
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-container {
+    max-height: 92vh;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+  }
+
+  .modal-body {
+    padding: 18px 16px;
+    gap: 14px;
+  }
+
+  .modal-header {
+    padding: 16px 20px;
+  }
+
+  .modal-footer {
+    padding: 14px 20px;
   }
 
   .section-top-actions {
     flex-direction: column;
     align-items: stretch;
+    margin-bottom: 16px;
   }
 
   .actions-group {
