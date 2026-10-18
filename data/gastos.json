@@ -2,7 +2,7 @@
   "marca": "NOIRDA",
   "propietario": "Santiago Varelas",
   "moneda": "COP",
-  "ultimaActualizacion": "2026-10-17T23:00:00Z",
+  "ultimaActualizacion": "2026-10-18T04:05:29.006Z",
   "compras": [
     {
       "fecha": "2026-10-12",
@@ -11,26 +11,46 @@
       "numeroFactura": "FAC-7821",
       "proveedor": "Textiles del Valle S.A.S",
       "categoria": "Camisetas y Polos",
-      "descripcion": "Lote 120 Camisetas Heavyweight Oversize Noirda Colecci\u00f3n Oto\u00f1o",
+      "descripcion": "Lote 120 Camisetas Heavyweight Oversize Noirda Colección Otoño",
       "monto": 3450000,
       "metodoPago": "Transferencia / Bancolombia",
+      "reciboData": "data:image/svg+xml;charset=utf-8,%0A%20%20%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%22800%22%20viewBox%3D%220%200%20600%20800%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%2312151c%22%20rx%3D%2216%22%2F%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%2220%22%20y%3D%2220%22%20width%3D%22560%22%20height%3D%22760%22%20fill%3D%22none%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%228%204%22%20rx%3D%2212%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22300%22%20cy%3D%22110%22%20r%3D%2245%22%20fill%3D%22%231c222e%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22125%22%20font-family%3D%22sans-serif%22%20font-size%3D%2244%22%20font-weight%3D%22bold%22%20fill%3D%22%23d4af37%22%20text-anchor%3D%22middle%22%3EN%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22195%22%20font-family%3D%22sans-serif%22%20font-size%3D%2228%22%20font-weight%3D%22bold%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%224%22%3ENOIRDA%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22225%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%20text-anchor%3D%22middle%22%3ESantiago%20Varelas%20%7C%20Soporte%20Contable%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Cline%20x1%3D%2260%22%20y1%3D%22260%22%20x2%3D%22540%22%20y2%3D%22260%22%20stroke%3D%22%232a3242%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22310%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3ECOMPROBANTE%20%2F%20FACTURA%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22340%22%20font-family%3D%22sans-serif%22%20font-size%3D%2222%22%20font-weight%3D%22bold%22%20fill%3D%22%23ffffff%22%3EFAC-7821%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22400%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3ECONCEPTO%20%2F%20BENEFICIARIO%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22430%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22600%22%20fill%3D%22%23f8fafc%22%3ETextiles%20del%20Valle%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22490%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3EDETALLE%20DE%20LA%20OPERACI%C3%93N%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22520%22%20font-family%3D%22sans-serif%22%20font-size%3D%2216%22%20fill%3D%22%23cbd5e1%22%3ECamisetas%20Oversize%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%2260%22%20y%3D%22570%22%20width%3D%22480%22%20height%3D%2290%22%20fill%3D%22%231c222e%22%20rx%3D%2210%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%221%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%22605%22%20font-family%3D%22sans-serif%22%20font-size%3D%2213%22%20fill%3D%22%2394a3b8%22%3EVALOR%20TOTAL%20PAGADO%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%22640%22%20font-family%3D%22sans-serif%22%20font-size%3D%2230%22%20font-weight%3D%22bold%22%20fill%3D%22%23f3e5ab%22%3E%24%203%2C450%2C000%20COP%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22730%22%20font-family%3D%22sans-serif%22%20font-size%3D%2212%22%20fill%3D%22%2364748b%22%20text-anchor%3D%22middle%22%3EDocumento%20verificado%20y%20archivado%20digitalmente%20en%20Noirda%20OS%3C%2Ftext%3E%0A%20%20%20%20%3C%2Fsvg%3E",
       "reciboNombre": "recibo_fac7821.png",
       "reciboTipo": "image/png",
-      "notas": "Entrega en bodega central. 100% algod\u00f3n peinado."
+      "notas": "Entrega en bodega central. 100% algodón peinado.",
+      "id": 1
     },
     {
       "fecha": "2026-10-05",
       "anio": 2026,
       "mes": "10",
       "numeroFactura": "INV-409",
-      "proveedor": "Denim & Confecci\u00f3n Medell\u00edn",
+      "proveedor": "Denim & Confección Medellín",
       "categoria": "Jeans y Pantalones",
       "descripcion": "60 Pantalones Cargo y Jeans Wide Leg Negro Mate",
       "monto": 2890000,
       "metodoPago": "Transferencia / Bancolombia",
+      "reciboData": "data:image/svg+xml;charset=utf-8,%0A%20%20%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%22800%22%20viewBox%3D%220%200%20600%20800%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%2312151c%22%20rx%3D%2216%22%2F%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%2220%22%20y%3D%2220%22%20width%3D%22560%22%20height%3D%22760%22%20fill%3D%22none%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%228%204%22%20rx%3D%2212%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22300%22%20cy%3D%22110%22%20r%3D%2245%22%20fill%3D%22%231c222e%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22125%22%20font-family%3D%22sans-serif%22%20font-size%3D%2244%22%20font-weight%3D%22bold%22%20fill%3D%22%23d4af37%22%20text-anchor%3D%22middle%22%3EN%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22195%22%20font-family%3D%22sans-serif%22%20font-size%3D%2228%22%20font-weight%3D%22bold%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%224%22%3ENOIRDA%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22225%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%20text-anchor%3D%22middle%22%3ESantiago%20Varelas%20%7C%20Soporte%20Contable%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Cline%20x1%3D%2260%22%20y1%3D%22260%22%20x2%3D%22540%22%20y2%3D%22260%22%20stroke%3D%22%232a3242%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22310%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3ECOMPROBANTE%20%2F%20FACTURA%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22340%22%20font-family%3D%22sans-serif%22%20font-size%3D%2222%22%20font-weight%3D%22bold%22%20fill%3D%22%23ffffff%22%3EINV-409%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22400%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3ECONCEPTO%20%2F%20BENEFICIARIO%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22430%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22600%22%20fill%3D%22%23f8fafc%22%3EDenim%20%26%20Confecci%C3%B3n%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22490%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3EDETALLE%20DE%20LA%20OPERACI%C3%93N%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22520%22%20font-family%3D%22sans-serif%22%20font-size%3D%2216%22%20fill%3D%22%23cbd5e1%22%3EJeans%20Wide%20Leg%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%2260%22%20y%3D%22570%22%20width%3D%22480%22%20height%3D%2290%22%20fill%3D%22%231c222e%22%20rx%3D%2210%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%221%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%22605%22%20font-family%3D%22sans-serif%22%20font-size%3D%2213%22%20fill%3D%22%2394a3b8%22%3EVALOR%20TOTAL%20PAGADO%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%22640%22%20font-family%3D%22sans-serif%22%20font-size%3D%2230%22%20font-weight%3D%22bold%22%20fill%3D%22%23f3e5ab%22%3E%24%202%2C890%2C000%20COP%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22730%22%20font-family%3D%22sans-serif%22%20font-size%3D%2212%22%20fill%3D%22%2364748b%22%20text-anchor%3D%22middle%22%3EDocumento%20verificado%20y%20archivado%20digitalmente%20en%20Noirda%20OS%3C%2Ftext%3E%0A%20%20%20%20%3C%2Fsvg%3E",
       "reciboNombre": "factura_jeans.png",
       "reciboTipo": "image/png",
-      "notas": "Prendas con marquillas Noirda listas para percheros."
+      "notas": "Prendas con marquillas Noirda listas para percheros.",
+      "id": 2
+    },
+    {
+      "fecha": "2026-10-02",
+      "anio": 2026,
+      "mes": "10",
+      "numeroFactura": "EMP-982",
+      "proveedor": "Bolsas & Etiquetas Premium",
+      "categoria": "Empaques y Marquillas",
+      "descripcion": "500 Bolsas kraft negras con estampado dorado Noirda",
+      "monto": 650000,
+      "metodoPago": "Nequi / Daviplata",
+      "reciboData": null,
+      "reciboNombre": "",
+      "reciboTipo": "",
+      "notas": "Empaque para ventas en tienda y envíos.",
+      "id": 3
     }
   ],
   "nomina": [
@@ -40,14 +60,37 @@
       "mes": "10",
       "periodo": "1ra Quincena Octubre 2026",
       "trabajador": "Camila Morales",
-      "cargo": "Vendedor / Atenci\u00f3n Almac\u00e9n",
+      "cargo": "Vendedor / Atención Almacén",
       "sueldoBase": 800000,
       "bonos": 150000,
       "deducciones": 0,
       "neto": 950000,
       "metodoPago": "Transferencia Bancaria",
       "referencia": "TR-99410",
-      "notas": "Comisi\u00f3n de ventas cumplida."
+      "reciboData": "data:image/svg+xml;charset=utf-8,%0A%20%20%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%22800%22%20viewBox%3D%220%200%20600%20800%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%2312151c%22%20rx%3D%2216%22%2F%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%2220%22%20y%3D%2220%22%20width%3D%22560%22%20height%3D%22760%22%20fill%3D%22none%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%228%204%22%20rx%3D%2212%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22300%22%20cy%3D%22110%22%20r%3D%2245%22%20fill%3D%22%231c222e%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22125%22%20font-family%3D%22sans-serif%22%20font-size%3D%2244%22%20font-weight%3D%22bold%22%20fill%3D%22%23d4af37%22%20text-anchor%3D%22middle%22%3EN%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22195%22%20font-family%3D%22sans-serif%22%20font-size%3D%2228%22%20font-weight%3D%22bold%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%224%22%3ENOIRDA%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22225%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%20text-anchor%3D%22middle%22%3ESantiago%20Varelas%20%7C%20Soporte%20Contable%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Cline%20x1%3D%2260%22%20y1%3D%22260%22%20x2%3D%22540%22%20y2%3D%22260%22%20stroke%3D%22%232a3242%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22310%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3ECOMPROBANTE%20%2F%20FACTURA%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22340%22%20font-family%3D%22sans-serif%22%20font-size%3D%2222%22%20font-weight%3D%22bold%22%20fill%3D%22%23ffffff%22%3ETR-99410%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22400%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3ECONCEPTO%20%2F%20BENEFICIARIO%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22430%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22600%22%20fill%3D%22%23f8fafc%22%3EComprobante%20N%C3%B3mina%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22490%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3EDETALLE%20DE%20LA%20OPERACI%C3%93N%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22520%22%20font-family%3D%22sans-serif%22%20font-size%3D%2216%22%20fill%3D%22%23cbd5e1%22%3ECamila%20Morales%20-%20Ventas%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%2260%22%20y%3D%22570%22%20width%3D%22480%22%20height%3D%2290%22%20fill%3D%22%231c222e%22%20rx%3D%2210%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%221%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%22605%22%20font-family%3D%22sans-serif%22%20font-size%3D%2213%22%20fill%3D%22%2394a3b8%22%3EVALOR%20TOTAL%20PAGADO%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%22640%22%20font-family%3D%22sans-serif%22%20font-size%3D%2230%22%20font-weight%3D%22bold%22%20fill%3D%22%23f3e5ab%22%3E%24%20950%2C000%20COP%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22730%22%20font-family%3D%22sans-serif%22%20font-size%3D%2212%22%20fill%3D%22%2364748b%22%20text-anchor%3D%22middle%22%3EDocumento%20verificado%20y%20archivado%20digitalmente%20en%20Noirda%20OS%3C%2Ftext%3E%0A%20%20%20%20%3C%2Fsvg%3E",
+      "reciboNombre": "pago_camila.png",
+      "reciboTipo": "image/png",
+      "notas": "Incluye comisión meta mensual de ventas cumplida.",
+      "id": 1
+    },
+    {
+      "fecha": "2026-10-15",
+      "anio": 2026,
+      "mes": "10",
+      "periodo": "1ra Quincena Octubre 2026",
+      "trabajador": "Andrés Felipe Gómez",
+      "cargo": "Administrador Tienda",
+      "sueldoBase": 1200000,
+      "bonos": 100000,
+      "deducciones": 50000,
+      "neto": 1250000,
+      "metodoPago": "Transferencia Bancaria",
+      "referencia": "TR-99411",
+      "reciboData": "data:image/svg+xml;charset=utf-8,%0A%20%20%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%22800%22%20viewBox%3D%220%200%20600%20800%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%2312151c%22%20rx%3D%2216%22%2F%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%2220%22%20y%3D%2220%22%20width%3D%22560%22%20height%3D%22760%22%20fill%3D%22none%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%228%204%22%20rx%3D%2212%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22300%22%20cy%3D%22110%22%20r%3D%2245%22%20fill%3D%22%231c222e%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22125%22%20font-family%3D%22sans-serif%22%20font-size%3D%2244%22%20font-weight%3D%22bold%22%20fill%3D%22%23d4af37%22%20text-anchor%3D%22middle%22%3EN%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22195%22%20font-family%3D%22sans-serif%22%20font-size%3D%2228%22%20font-weight%3D%22bold%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%224%22%3ENOIRDA%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22225%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%20text-anchor%3D%22middle%22%3ESantiago%20Varelas%20%7C%20Soporte%20Contable%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Cline%20x1%3D%2260%22%20y1%3D%22260%22%20x2%3D%22540%22%20y2%3D%22260%22%20stroke%3D%22%232a3242%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22310%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3ECOMPROBANTE%20%2F%20FACTURA%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22340%22%20font-family%3D%22sans-serif%22%20font-size%3D%2222%22%20font-weight%3D%22bold%22%20fill%3D%22%23ffffff%22%3ETR-99411%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22400%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3ECONCEPTO%20%2F%20BENEFICIARIO%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22430%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220%22%20font-weight%3D%22600%22%20fill%3D%22%23f8fafc%22%3EComprobante%20N%C3%B3mina%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22490%22%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%2394a3b8%22%3EDETALLE%20DE%20LA%20OPERACI%C3%93N%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2260%22%20y%3D%22520%22%20font-family%3D%22sans-serif%22%20font-size%3D%2216%22%20fill%3D%22%23cbd5e1%22%3EAndr%C3%A9s%20G%C3%B3mez%20-%20Admin%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%2260%22%20y%3D%22570%22%20width%3D%22480%22%20height%3D%2290%22%20fill%3D%22%231c222e%22%20rx%3D%2210%22%20stroke%3D%22%23d4af37%22%20stroke-width%3D%221%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%22605%22%20font-family%3D%22sans-serif%22%20font-size%3D%2213%22%20fill%3D%22%2394a3b8%22%3EVALOR%20TOTAL%20PAGADO%3A%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%22640%22%20font-family%3D%22sans-serif%22%20font-size%3D%2230%22%20font-weight%3D%22bold%22%20fill%3D%22%23f3e5ab%22%3E%24%201%2C250%2C000%20COP%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22300%22%20y%3D%22730%22%20font-family%3D%22sans-serif%22%20font-size%3D%2212%22%20fill%3D%22%2364748b%22%20text-anchor%3D%22middle%22%3EDocumento%20verificado%20y%20archivado%20digitalmente%20en%20Noirda%20OS%3C%2Ftext%3E%0A%20%20%20%20%3C%2Fsvg%3E",
+      "reciboNombre": "pago_andres.png",
+      "reciboTipo": "image/png",
+      "notas": "Descuento anticipo pactado de 50.000.",
+      "id": 2
     }
   ]
 }
