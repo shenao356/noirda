@@ -154,13 +154,6 @@
             </select>
           </div>
         </div>
-
-        <div class="topbar-right">
-          <button class="btn-action-primary" id="btnNuevoGastoGlobal">
-            <i class="fa-solid fa-plus"></i>
-            <span class="btn-text">Nuevo Registro</span>
-          </button>
-        </div>
       </header>
 
       <!-- TAB 1: DASHBOARD / CONSOLIDADO MENSUAL -->
@@ -298,11 +291,6 @@
             <h2 class="section-heading"><i class="fa-solid fa-shirt text-gold"></i> Compras de Mercancía</h2>
             <p class="section-subheading">Control de stock de ropa, prendas, confección y proveedores de NOIRDA Opulence</p>
           </div>
-          <div class="actions-group">
-            <button class="btn-action-primary" id="btnAbrirModalCompra">
-              <i class="fa-solid fa-plus"></i> Registrar Compra
-            </button>
-          </div>
         </div>
 
         <!-- BARRA AVANZADA DE FILTROS Y ACCIONES DE COMPRA -->
@@ -386,7 +374,6 @@
               <thead>
                 <tr>
                   <th>Fecha</th>
-                  <th>Factura / N°</th>
                   <th>Proveedor</th>
                   <th>Descripción / Prendas</th>
                   <th>Categoría</th>
@@ -414,13 +401,10 @@
           <div class="actions-group">
             <div class="search-input-wrap">
               <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" id="searchNomina" placeholder="Buscar trabajador, cargo o periodo...">
+              <input type="text" id="searchNomina" placeholder="Buscar trabajador o cargo...">
             </div>
             <button class="btn-secondary" id="btnIrADirectorioPersonal" title="Ver base de datos de empleados">
               <i class="fa-solid fa-address-book"></i> Directorio Empleados
-            </button>
-            <button class="btn-action-primary" id="btnAbrirModalNomina">
-              <i class="fa-solid fa-hand-holding-dollar"></i> Registrar Nómina
             </button>
           </div>
         </div>
@@ -433,10 +417,8 @@
                   <th>Fecha Pago</th>
                   <th>Trabajador</th>
                   <th>Cargo / Área</th>
-                  <th>Periodo</th>
                   <th>Tiempo / Base</th>
                   <th>Bonos / Comisión</th>
-                  <th>Deducciones</th>
                   <th>Neto Pagado</th>
                   <th>Comprobante</th>
                   <th>WhatsApp / Acciones</th>
@@ -792,103 +774,135 @@
       </div>
       <form id="formCompra">
         <input type="hidden" id="compraId">
-        <div class="modal-body">
-          <div class="form-row">
-            <div class="form-group col-6">
-              <label for="compraFecha">Fecha de Compra *</label>
-              <input type="date" id="compraFecha" class="form-control" required>
-            </div>
-            <div class="form-group col-6">
-              <label for="compraNumeroFactura">N° Factura / Recibo</label>
-              <input type="text" id="compraNumeroFactura" class="form-control" placeholder="Ej: FAC-1042">
-            </div>
-          </div>
+        <input type="hidden" id="compraNumeroFactura" value="">
+        <input type="hidden" id="compraNotas" value="">
+        <div class="modal-body compact-cards-body">
 
-          <div class="form-row">
-            <div class="form-group col-6">
-              <label for="compraProveedor">Proveedor / Distribuidor *</label>
-              <input type="text" id="compraProveedor" class="form-control" placeholder="Ej: Confecciones Medellín, Telas Bogotá" required>
+          <!-- TARJETA 1: DATOS ESENCIALES DE LA COMPRA -->
+          <div class="form-collapse-card" id="cardCompraDatos">
+            <div class="form-card-header" onclick="App.toggleFormCard('cardCompraDatos')">
+              <div class="form-card-title">
+                <i class="fa-solid fa-shirt text-gold"></i>
+                <span>1. Mercancía y Monto</span>
+              </div>
+              <div class="form-card-meta">
+                <span class="form-card-summary" id="summaryCompraDatos">Datos principales</span>
+                <i class="fa-solid fa-chevron-down form-card-chevron"></i>
+              </div>
             </div>
-            <div class="form-group col-6">
-              <label for="compraCategoria">Categoría *</label>
-              <select id="compraCategoria" class="form-control" required>
-                <option value="Camisetas y Polos">Camisetas y Polos</option>
-                <option value="Jeans y Pantalones">Jeans y Pantalones</option>
-                <option value="Chaquetas y Buzos">Chaquetas y Buzos</option>
-                <option value="Vestidos y Conjuntos">Vestidos y Conjuntos</option>
-                <option value="Ropa Interior / Pijamas">Ropa Interior / Pijamas</option>
-                <option value="Calzado">Calzado</option>
-                <option value="Accesorios / Gorras">Accesorios / Gorras</option>
-                <option value="Telas y Confección">Telas y Confección</option>
-                <option value="Empaques y Marquillas">Empaques y Marquillas</option>
-                <option value="Otros Suministros">Otros Suministros</option>
-                <option value="__custom__">➕ Otra categoría (Escribir personalizada)...</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group hidden" id="grupoCategoriaPersonalizada">
-            <label for="compraCategoriaPersonalizada">Escribe la Categoría Personalizada *</label>
-            <input type="text" id="compraCategoriaPersonalizada" class="form-control" placeholder="Ej: Botones dorados, Estampado serigrafía, Marquillas de cuero...">
-          </div>
-
-          <div class="form-group">
-            <label for="compraDescripcion">Detalle de Prendas o Lote *</label>
-            <input type="text" id="compraDescripcion" class="form-control" placeholder="Ej: Lote 50 camisetas oversize cuello redondo colección Noir" required>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-6">
-              <label for="compraMonto">Monto Total Pagado ($) *</label>
-              <input type="number" id="compraMonto" class="form-control text-right" placeholder="0" min="0" step="any" required>
-            </div>
-            <div class="form-group col-6">
-              <label for="compraMetodoPago">Método de Pago</label>
-              <select id="compraMetodoPago" class="form-control">
-                <option value="Transferencia / Bancolombia">Transferencia / Bancolombia</option>
-                <option value="Nequi / Daviplata">Nequi / Daviplata</option>
-                <option value="Efectivo Caja">Efectivo Caja</option>
-                <option value="Tarjeta Débito / Crédito">Tarjeta Débito / Crédito</option>
-                <option value="Crédito Proveedor (Pendiente)">Crédito Proveedor (Pendiente)</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- SECCIÓN DE RECIBO / COMPROBANTE ADJUNTO -->
-          <div class="form-group">
-            <label>Recibo / Factura Adjunta</label>
-            <div class="upload-dropzone" id="dropzoneCompra">
-              <input type="file" id="compraArchivoRecibo" accept="image/*, application/pdf" style="display:none;">
-              <input type="file" id="compraCamaraRecibo" accept="image/*" capture="environment" style="display:none;">
-              <div class="dropzone-content" id="dropzoneCompraPrompt">
-                <i class="fa-solid fa-paperclip drop-icon"></i>
-                <p style="font-weight:700; font-size:14px; margin-bottom: 2px;">Adjuntar Recibo o Factura</p>
-                <span class="file-hint">Selecciona de tu galería de fotos o documentos (PNG, JPG, PDF)</span>
-                <div class="upload-btn-choices">
-                  <button type="button" class="btn-choice" id="btnElegirArchivoCompra">
-                    <i class="fa-solid fa-folder-open"></i> Elegir de Galería / Archivos
-                  </button>
-                  <button type="button" class="btn-choice-subtle" id="btnTomarFotoCompra">
-                    <i class="fa-solid fa-camera"></i> Tomar Foto
-                  </button>
+            <div class="form-card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="compraProveedor">Proveedor *</label>
+                  <input type="text" id="compraProveedor" class="form-control" placeholder="Ej: Confecciones Medellín" required>
+                </div>
+                <div class="form-group">
+                  <label for="compraCategoria">Categoría *</label>
+                  <select id="compraCategoria" class="form-control" required>
+                    <option value="Camisetas y Polos">Camisetas y Polos</option>
+                    <option value="Jeans y Pantalones">Jeans y Pantalones</option>
+                    <option value="Chaquetas y Buzos">Chaquetas y Buzos</option>
+                    <option value="Vestidos y Conjuntos">Vestidos y Conjuntos</option>
+                    <option value="Ropa Interior / Pijamas">Ropa Interior / Pijamas</option>
+                    <option value="Calzado">Calzado</option>
+                    <option value="Accesorios / Gorras">Accesorios / Gorras</option>
+                    <option value="Telas y Confección">Telas y Confección</option>
+                    <option value="Empaques y Marquillas">Empaques y Marquillas</option>
+                    <option value="Otros Suministros">Otros Suministros</option>
+                    <option value="__custom__">➕ Otra categoría...</option>
+                  </select>
                 </div>
               </div>
-              <div class="preview-container hidden" id="previewCompraContainer">
-                <img id="imgPreviewCompra" class="preview-thumbnail" alt="Recibo">
-                <div class="preview-actions">
-                  <span id="previewCompraNombre" class="preview-name">recibo.jpg</span>
-                  <button type="button" class="btn-remove-attachment" id="btnQuitarReciboCompra" title="Eliminar recibo">
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
+
+              <div class="form-group hidden" id="grupoCategoriaPersonalizada">
+                <label for="compraCategoriaPersonalizada">Categoría Personalizada *</label>
+                <input type="text" id="compraCategoriaPersonalizada" class="form-control" placeholder="Ej: Botones dorados, Serigrafía...">
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="compraDescripcion">Prendas o Concepto *</label>
+                  <input type="text" id="compraDescripcion" class="form-control" placeholder="Ej: 50 camisetas oversize" required>
+                </div>
+                <div class="form-group">
+                  <label for="compraMonto">Monto Pagado ($) *</label>
+                  <input type="number" id="compraMonto" class="form-control text-right" placeholder="0" min="0" step="any" required>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="compraNotas">Notas Adicionales</label>
-            <textarea id="compraNotas" class="form-control" rows="2" placeholder="Observaciones, estado de entrega, garantías..."></textarea>
+          <!-- TARJETA 2: PAGO Y FECHA (COLAPSADA POR DEFECTO) -->
+          <div class="form-collapse-card collapsed" id="cardCompraPago">
+            <div class="form-card-header" onclick="App.toggleFormCard('cardCompraPago')">
+              <div class="form-card-title">
+                <i class="fa-solid fa-credit-card text-emerald"></i>
+                <span>2. Pago y Fecha</span>
+              </div>
+              <div class="form-card-meta">
+                <span class="form-card-summary" id="summaryCompraPago">Transferencia • Hoy</span>
+                <i class="fa-solid fa-chevron-down form-card-chevron"></i>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="compraMetodoPago">Método de Pago</label>
+                  <select id="compraMetodoPago" class="form-control">
+                    <option value="Transferencia / Bancolombia">Transferencia / Bancolombia</option>
+                    <option value="Nequi / Daviplata">Nequi / Daviplata</option>
+                    <option value="Efectivo Caja">Efectivo Caja</option>
+                    <option value="Tarjeta Débito / Crédito">Tarjeta Débito / Crédito</option>
+                    <option value="Crédito Proveedor (Pendiente)">Crédito Proveedor (Pendiente)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="compraFecha">Fecha de Compra *</label>
+                  <input type="date" id="compraFecha" class="form-control" required>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- TARJETA 3: RECIBO / FACTURA ADJUNTA (COLAPSADA POR DEFECTO) -->
+          <div class="form-collapse-card collapsed" id="cardCompraRecibo">
+            <div class="form-card-header" onclick="App.toggleFormCard('cardCompraRecibo')">
+              <div class="form-card-title">
+                <i class="fa-solid fa-paperclip text-gold"></i>
+                <span>3. Recibo / Factura</span>
+              </div>
+              <div class="form-card-meta">
+                <span class="form-card-summary" id="summaryCompraRecibo">Opcional</span>
+                <i class="fa-solid fa-chevron-down form-card-chevron"></i>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <div class="upload-dropzone compact-dropzone" id="dropzoneCompra">
+                <input type="file" id="compraArchivoRecibo" accept="image/*, application/pdf" style="display:none;">
+                <input type="file" id="compraCamaraRecibo" accept="image/*" capture="environment" style="display:none;">
+                <div class="dropzone-content" id="dropzoneCompraPrompt">
+                  <div class="upload-btn-choices">
+                    <button type="button" class="btn-choice" id="btnElegirArchivoCompra">
+                      <i class="fa-solid fa-folder-open"></i> Galería / Archivo
+                    </button>
+                    <button type="button" class="btn-choice-subtle" id="btnTomarFotoCompra">
+                      <i class="fa-solid fa-camera"></i> Tomar Foto
+                    </button>
+                  </div>
+                </div>
+                <div class="preview-container hidden" id="previewCompraContainer">
+                  <img id="imgPreviewCompra" class="preview-thumbnail" alt="Recibo">
+                  <div class="preview-actions">
+                    <span id="previewCompraNombre" class="preview-name">recibo.jpg</span>
+                    <button type="button" class="btn-remove-attachment" id="btnQuitarReciboCompra" title="Eliminar recibo">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <div class="modal-footer">
@@ -913,167 +927,176 @@
       </div>
       <form id="formNomina">
         <input type="hidden" id="nominaId">
-        <div class="modal-body">
-          
-          <!-- SELECCIONAR EMPLEADO REGISTRADO -->
-          <div class="form-group mb-3">
-            <label for="nominaEmpleadoSelect"><i class="fa-solid fa-address-book text-gold"></i> Cargar de Base de Datos de Empleados</label>
-            <select id="nominaEmpleadoSelect" class="form-control select-highlight">
-              <option value="">-- Seleccionar Trabajador (o escribir nuevo abajo) --</option>
-            </select>
-          </div>
+        <input type="hidden" id="nominaPeriodo" value="">
+        <input type="hidden" id="nominaDocumento" value="">
+        <input type="hidden" id="nominaEmail" value="">
+        <input type="hidden" id="nominaDeducciones" value="0">
+        <input type="hidden" id="nominaReferencia" value="">
+        <input type="hidden" id="nominaNotas" value="">
 
-          <div class="form-row">
-            <div class="form-group col-6">
-              <label for="nominaFecha">Fecha de Pago *</label>
-              <input type="date" id="nominaFecha" class="form-control" required>
-            </div>
-            <div class="form-group col-6">
-              <label for="nominaPeriodo">Periodo Correspondiente *</label>
-              <input type="text" id="nominaPeriodo" class="form-control" placeholder="Ej: 1ra Quincena Octubre 2026" required>
-            </div>
-          </div>
+        <div class="modal-body compact-cards-body">
 
-          <div class="form-row">
-            <div class="form-group col-6">
-              <label for="nominaTrabajador">Nombre del Trabajador *</label>
-              <input type="text" id="nominaTrabajador" class="form-control" placeholder="Nombre completo" required>
-            </div>
-            <div class="form-group col-6">
-              <label for="nominaDocumento">Cédula / Documento</label>
-              <input type="text" id="nominaDocumento" class="form-control" placeholder="Ej: 1037648921">
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-6">
-              <label for="nominaWhatsapp"><i class="fa-brands fa-whatsapp text-emerald"></i> Teléfono / WhatsApp *</label>
-              <input type="tel" id="nominaWhatsapp" class="form-control" placeholder="Ej: 3045345642" required>
-              <span class="file-hint">Para enviarle el comprobante en 1 clic</span>
-            </div>
-            <div class="form-group col-6">
-              <label for="nominaEmail"><i class="fa-regular fa-envelope"></i> Correo Electrónico</label>
-              <input type="email" id="nominaEmail" class="form-control" placeholder="empleado@correo.com">
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-6">
-              <label for="nominaCargo">Cargo / Función *</label>
-              <select id="nominaCargo" class="form-control" required>
-                <option value="Vendedor / Atención Almacén">Vendedor / Atención Almacén</option>
-                <option value="Administrador Tienda">Administrador Tienda</option>
-                <option value="Costurero / Modista">Costurero / Modista</option>
-                <option value="Cajero / Facturación">Cajero / Facturación</option>
-                <option value="Bodega / Inventario">Bodega / Inventario</option>
-                <option value="Community Manager / Redes">Community Manager / Redes</option>
-                <option value="Seguridad / Servicios Generales">Seguridad / Servicios Generales</option>
-                <option value="Auxiliar Temporal">Auxiliar Temporal</option>
-              </select>
-            </div>
-            <div class="form-group col-6">
-              <label for="nominaModoTiempo">Modalidad de Tiempo Laborado</label>
-              <select id="nominaModoTiempo" class="form-control">
-                <option value="fijo">Sueldo Fijo (Mensual / Quincenal)</option>
-                <option value="horas">Por Horas Laboradas</option>
-                <option value="dias">Por Días Laborados</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- REGISTRO DINÁMICO DE HORAS O DÍAS LABORADOS -->
-          <div class="salary-calc-box hidden" id="boxCalculoTiempo">
-            <div class="form-row">
-              <div class="form-group col-6">
-                <label id="lblCantidadTiempo">Horas Laboradas</label>
-                <input type="number" id="nominaCantidadTiempo" class="form-control text-right" placeholder="0" min="0" step="any">
+          <!-- TARJETA 1: TRABAJADOR -->
+          <div class="form-collapse-card" id="cardNominaTrabajador">
+            <div class="form-card-header" onclick="App.toggleFormCard('cardNominaTrabajador')">
+              <div class="form-card-title">
+                <i class="fa-solid fa-user-check text-gold"></i>
+                <span>1. Trabajador</span>
               </div>
-              <div class="form-group col-6">
-                <label id="lblTarifaTiempo">Tarifa por Hora ($)</label>
-                <input type="number" id="nominaTarifaTiempo" class="form-control text-right" placeholder="0" min="0" step="any">
+              <div class="form-card-meta">
+                <span class="form-card-summary" id="summaryNominaTrabajador">Seleccionar del equipo</span>
+                <i class="fa-solid fa-chevron-down form-card-chevron"></i>
               </div>
             </div>
-            <div class="calc-subtotal-row">
-              <span>Subtotal por tiempo trabajado:</span>
-              <strong id="displaySubtotalTiempo">$0</strong>
-            </div>
-          </div>
-
-          <!-- CÁLCULO SALARIAL -->
-          <div class="salary-breakdown-box">
-            <h4 class="box-title"><i class="fa-solid fa-calculator"></i> Liquidación Salarial</h4>
-            <div class="form-row">
-              <div class="form-group col-4">
-                <label for="nominaSueldoBase">Sueldo Base ($) *</label>
-                <input type="number" id="nominaSueldoBase" class="form-control text-right" placeholder="0" min="0" step="any" required>
+            <div class="form-card-body">
+              <div class="form-group">
+                <label for="nominaEmpleadoSelect"><i class="fa-solid fa-address-book text-gold"></i> Elegir Empleado Registrado</label>
+                <select id="nominaEmpleadoSelect" class="form-control select-highlight">
+                  <option value="">-- Seleccionar Trabajador (o escribir abajo) --</option>
+                </select>
               </div>
-              <div class="form-group col-4">
-                <label for="nominaBonos">Bonos / Comisiones ($)</label>
-                <input type="number" id="nominaBonos" class="form-control text-right" placeholder="0" min="0" step="any" value="0">
-              </div>
-              <div class="form-group col-4">
-                <label for="nominaDeducciones">Deducciones ($)</label>
-                <input type="number" id="nominaDeducciones" class="form-control text-right" placeholder="0" min="0" step="any" value="0">
-              </div>
-            </div>
 
-            <div class="neto-display-box">
-              <span>Total Neto a Pagar:</span>
-              <strong id="displayNetoCalculado">$0</strong>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-6">
-              <label for="nominaMetodoPago">Medio de Pago</label>
-              <select id="nominaMetodoPago" class="form-control">
-                <option value="Transferencia Bancaria">Transferencia Bancaria</option>
-                <option value="Nequi / Daviplata">Nequi / Daviplata</option>
-                <option value="Efectivo en Sobre">Efectivo en Sobre</option>
-                <option value="Cheque">Cheque</option>
-              </select>
-            </div>
-            <div class="form-group col-6">
-              <label for="nominaReferencia">N° Comprobante / Transacción</label>
-              <input type="text" id="nominaReferencia" class="form-control" placeholder="Ej: Transacción #89123">
-            </div>
-          </div>
-
-          <!-- COMPROBANTE ADJUNTO -->
-          <div class="form-group">
-            <label>Comprobante de Pago / Firma Adjunta</label>
-            <div class="upload-dropzone" id="dropzoneNomina">
-              <input type="file" id="nominaArchivoRecibo" accept="image/*, application/pdf" style="display:none;">
-              <input type="file" id="nominaCamaraRecibo" accept="image/*" capture="environment" style="display:none;">
-              <div class="dropzone-content" id="dropzoneNominaPrompt">
-                <i class="fa-solid fa-paperclip drop-icon"></i>
-                <p style="font-weight:700; font-size:14px; margin-bottom: 2px;">Adjuntar Comprobante de Pago</p>
-                <span class="file-hint">Selecciona de tu galería de fotos o documentos (PNG, JPG, PDF)</span>
-                <div class="upload-btn-choices">
-                  <button type="button" class="btn-choice" id="btnElegirArchivoNomina">
-                    <i class="fa-solid fa-folder-open"></i> Elegir de Galería / Archivos
-                  </button>
-                  <button type="button" class="btn-choice-subtle" id="btnTomarFotoNomina">
-                    <i class="fa-solid fa-camera"></i> Tomar Foto
-                  </button>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="nominaTrabajador">Nombre *</label>
+                  <input type="text" id="nominaTrabajador" class="form-control" placeholder="Nombre completo" required>
+                </div>
+                <div class="form-group">
+                  <label for="nominaWhatsapp"><i class="fa-brands fa-whatsapp text-emerald"></i> WhatsApp *</label>
+                  <input type="tel" id="nominaWhatsapp" class="form-control" placeholder="Ej: 3045345642" required>
                 </div>
               </div>
-              <div class="preview-container hidden" id="previewNominaContainer">
-                <img id="imgPreviewNomina" class="preview-thumbnail" alt="Comprobante">
-                <div class="preview-actions">
-                  <span id="previewNominaNombre" class="preview-name">recibo.jpg</span>
-                  <button type="button" class="btn-remove-attachment" id="btnQuitarReciboNomina" title="Eliminar recibo">
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
+
+              <div class="form-group">
+                <label for="nominaCargo">Cargo / Función *</label>
+                <select id="nominaCargo" class="form-control" required>
+                  <option value="Vendedor / Atención Almacén">Vendedor / Atención Almacén</option>
+                  <option value="Administrador Tienda">Administrador Tienda</option>
+                  <option value="Costurero / Modista">Costurero / Modista</option>
+                  <option value="Cajero / Facturación">Cajero / Facturación</option>
+                  <option value="Bodega / Inventario">Bodega / Inventario</option>
+                  <option value="Community Manager / Redes">Community Manager / Redes</option>
+                  <option value="Seguridad / Servicios Generales">Seguridad / Servicios Generales</option>
+                  <option value="Auxiliar Temporal">Auxiliar Temporal</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- TARJETA 2: LIQUIDACIÓN Y VALOR A PAGAR -->
+          <div class="form-collapse-card" id="cardNominaLiquidacion">
+            <div class="form-card-header" onclick="App.toggleFormCard('cardNominaLiquidacion')">
+              <div class="form-card-title">
+                <i class="fa-solid fa-coins text-gold"></i>
+                <span>2. Valor a Pagar</span>
+              </div>
+              <div class="form-card-meta">
+                <span class="form-card-summary text-gold" id="summaryNominaMonto">$ 0</span>
+                <i class="fa-solid fa-chevron-down form-card-chevron"></i>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="nominaModoTiempo">Modalidad</label>
+                  <select id="nominaModoTiempo" class="form-control">
+                    <option value="fijo">Sueldo Fijo</option>
+                    <option value="horas">Por Horas</option>
+                    <option value="dias">Por Días</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="nominaSueldoBase">Sueldo Base ($) *</label>
+                  <input type="number" id="nominaSueldoBase" class="form-control text-right" placeholder="0" min="0" step="any" required>
+                </div>
+              </div>
+
+              <!-- REGISTRO DINÁMICO DE HORAS O DÍAS LABORADOS -->
+              <div class="salary-calc-box hidden" id="boxCalculoTiempo">
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label id="lblCantidadTiempo">Horas Laboradas</label>
+                    <input type="number" id="nominaCantidadTiempo" class="form-control text-right" placeholder="0" min="0" step="any">
+                  </div>
+                  <div class="form-group">
+                    <label id="lblTarifaTiempo">Tarifa por Hora ($)</label>
+                    <input type="number" id="nominaTarifaTiempo" class="form-control text-right" placeholder="0" min="0" step="any">
+                  </div>
+                </div>
+                <div class="calc-subtotal-row">
+                  <span>Subtotal tiempo:</span>
+                  <strong id="displaySubtotalTiempo">$0</strong>
+                </div>
+              </div>
+
+              <div class="form-grid-2 align-end">
+                <div class="form-group">
+                  <label for="nominaBonos">Bonos / Comisión ($)</label>
+                  <input type="number" id="nominaBonos" class="form-control text-right" placeholder="0" min="0" step="any" value="0">
+                </div>
+                <div class="neto-display-box compact-neto">
+                  <span>Neto:</span>
+                  <strong id="displayNetoCalculado">$0</strong>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="nominaNotas">Observaciones</label>
-            <textarea id="nominaNotas" class="form-control" rows="2" placeholder="Detalle de comisión por ventas logradas, días laborados..."></textarea>
+          <!-- TARJETA 3: MEDIO DE PAGO, FECHA Y COMPROBANTE (COLAPSADA POR DEFECTO) -->
+          <div class="form-collapse-card collapsed" id="cardNominaExtras">
+            <div class="form-card-header" onclick="App.toggleFormCard('cardNominaExtras')">
+              <div class="form-card-title">
+                <i class="fa-solid fa-paperclip text-emerald"></i>
+                <span>3. Pago, Fecha y Soporte</span>
+              </div>
+              <div class="form-card-meta">
+                <span class="form-card-summary" id="summaryNominaExtras">Transferencia • Hoy</span>
+                <i class="fa-solid fa-chevron-down form-card-chevron"></i>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="nominaMetodoPago">Medio de Pago</label>
+                  <select id="nominaMetodoPago" class="form-control">
+                    <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+                    <option value="Nequi / Daviplata">Nequi / Daviplata</option>
+                    <option value="Efectivo en Sobre">Efectivo en Sobre</option>
+                    <option value="Cheque">Cheque</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="nominaFecha">Fecha de Pago *</label>
+                  <input type="date" id="nominaFecha" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="upload-dropzone compact-dropzone" id="dropzoneNomina">
+                <input type="file" id="nominaArchivoRecibo" accept="image/*, application/pdf" style="display:none;">
+                <input type="file" id="nominaCamaraRecibo" accept="image/*" capture="environment" style="display:none;">
+                <div class="dropzone-content" id="dropzoneNominaPrompt">
+                  <div class="upload-btn-choices">
+                    <button type="button" class="btn-choice" id="btnElegirArchivoNomina">
+                      <i class="fa-solid fa-folder-open"></i> Galería / Archivo
+                    </button>
+                    <button type="button" class="btn-choice-subtle" id="btnTomarFotoNomina">
+                      <i class="fa-solid fa-camera"></i> Tomar Foto
+                    </button>
+                  </div>
+                </div>
+                <div class="preview-container hidden" id="previewNominaContainer">
+                  <img id="imgPreviewNomina" class="preview-thumbnail" alt="Comprobante">
+                  <div class="preview-actions">
+                    <span id="previewNominaNombre" class="preview-name">recibo.jpg</span>
+                    <button type="button" class="btn-remove-attachment" id="btnQuitarReciboNomina" title="Eliminar recibo">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
 
         <div class="modal-footer">

@@ -694,21 +694,21 @@ const App = {
     ].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
     if (movimientos.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--text-dim);">No hay registros en el periodo seleccionado. Haz clic en "Nuevo Registro" para comenzar.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--text-dim);">No hay registros en el periodo seleccionado. Usa el botón flotante (+) para agregar.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = movimientos.slice(0, 10).map(m => {
       const isPdf = m.reciboTipo && m.reciboTipo.includes('pdf');
       return `
-      <tr>
-        <td data-label="Fecha"><span class="table-cell-val" style="font-weight:600;">${m.fecha}</span></td>
-        <td data-label="Tipo"><span class="table-cell-val"><span class="badge-tag ${m.tipoBadge}">${m.tipoLabel}</span></span></td>
-        <td data-label="Concepto"><span class="table-cell-val" title="${m.concepto}">${m.concepto}</span></td>
-        <td data-label="Categoría"><span class="table-cell-val"><span class="badge-tag neutral">${m.categoria}</span></span></td>
-        <td data-label="Método Pago"><span class="table-cell-val">${m.metodo || 'Efectivo'}</span></td>
-        <td data-label="Monto Pagado"><span class="table-cell-val" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(m.monto)}</span></td>
-        <td data-label="Comprobante">
+      <tr class="collapsible-record-row" onclick="App.toggleRecordRow(event, this)">
+        <td class="primary-col col-date" data-label="Fecha"><span class="table-cell-val" style="font-weight:600;">${m.fecha}</span></td>
+        <td class="primary-col col-badge" data-label="Tipo"><span class="table-cell-val"><span class="badge-tag ${m.tipoBadge}">${m.tipoLabel}</span></span></td>
+        <td class="primary-col col-title" data-label="Concepto"><span class="table-cell-val" title="${m.concepto}">${m.concepto}</span></td>
+        <td class="detail-col" data-label="Categoría"><span class="table-cell-val"><span class="badge-tag neutral">${m.categoria}</span></span></td>
+        <td class="detail-col" data-label="Método Pago"><span class="table-cell-val">${m.metodo || 'Efectivo'}</span></td>
+        <td class="primary-col col-amount" data-label="Monto Pagado"><span class="table-cell-val" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(m.monto)} <i class="fa-solid fa-chevron-down mobile-row-chevron"></i></span></td>
+        <td class="detail-col" data-label="Comprobante">
           <span class="table-cell-val">
             ${m.reciboData ? `
               <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('${m.tipo}', ${m.id})">
@@ -717,7 +717,7 @@ const App = {
             ` : `<span class="receipt-none">Sin recibo</span>`}
           </span>
         </td>
-        <td data-label="Acciones">
+        <td class="detail-col" data-label="Acciones">
           <div class="action-buttons-cell">
             <button class="btn-table-action" onclick="App.editarRegistro('${m.tipo}', ${m.id})" title="Editar">
               <i class="fa-solid fa-pen"></i>
@@ -963,22 +963,21 @@ const App = {
     if (cntEl) cntEl.textContent = `(${items.length} compras)`;
 
     if (items.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:var(--text-dim);">No se encontraron compras con los filtros seleccionados.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--text-dim);">No se encontraron compras con los filtros seleccionados.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = items.map(c => {
       const isPdf = c.reciboTipo && c.reciboTipo.includes('pdf');
       return `
-      <tr>
-        <td data-label="Fecha"><span class="table-cell-val" style="font-weight:600;">${c.fecha}</span></td>
-        <td data-label="N° Factura"><span class="table-cell-val"><strong>${c.numeroFactura || 'S/N'}</strong></span></td>
-        <td data-label="Proveedor"><span class="table-cell-val" style="font-weight:600; color:var(--text-main);">${c.proveedor}</span></td>
-        <td data-label="Prendas / Lote"><span class="table-cell-val" title="${c.descripcion}">${c.descripcion}</span></td>
-        <td data-label="Categoría"><span class="table-cell-val"><span class="badge-tag emerald">${c.categoria}</span></span></td>
-        <td data-label="Método Pago"><span class="table-cell-val">${c.metodoPago || 'Efectivo'}</span></td>
-        <td data-label="Monto Pagado"><span class="table-cell-val" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(c.monto)}</span></td>
-        <td data-label="Comprobante">
+      <tr class="collapsible-record-row" onclick="App.toggleRecordRow(event, this)">
+        <td class="primary-col col-date" data-label="Fecha"><span class="table-cell-val" style="font-weight:600;">${c.fecha}</span></td>
+        <td class="primary-col col-title" data-label="Proveedor"><span class="table-cell-val" style="font-weight:600; color:var(--text-main);">${c.proveedor}</span></td>
+        <td class="detail-col" data-label="Prendas / Lote"><span class="table-cell-val" title="${c.descripcion}">${c.descripcion}</span></td>
+        <td class="primary-col col-badge" data-label="Categoría"><span class="table-cell-val"><span class="badge-tag emerald">${c.categoria}</span></span></td>
+        <td class="detail-col" data-label="Método Pago"><span class="table-cell-val">${c.metodoPago || 'Efectivo'}</span></td>
+        <td class="primary-col col-amount" data-label="Monto Pagado"><span class="table-cell-val" style="font-weight:700; color:var(--gold-light);">${this.formatearDinero(c.monto)} <i class="fa-solid fa-chevron-down mobile-row-chevron"></i></span></td>
+        <td class="detail-col" data-label="Comprobante">
           <span class="table-cell-val">
             ${c.reciboData ? `
               <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('compra', ${c.id})">
@@ -987,7 +986,7 @@ const App = {
             ` : `<span class="receipt-none">Sin soporte</span>`}
           </span>
         </td>
-        <td data-label="Acciones">
+        <td class="detail-col" data-label="Acciones">
           <div class="action-buttons-cell">
             <button class="btn-table-action" onclick="App.editarRegistro('compra', ${c.id})" title="Editar">
               <i class="fa-solid fa-pen"></i>
@@ -1188,7 +1187,7 @@ const App = {
     if (cntEl) cntEl.textContent = `${items.length} trabajadores pagados`;
 
     if (items.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:30px; color:var(--text-dim);">No se encontraron pagos de nómina en este periodo o búsqueda.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--text-dim);">No se encontraron pagos de nómina en este periodo o búsqueda.</td></tr>`;
       return;
     }
 
@@ -1206,19 +1205,17 @@ const App = {
       const isPdf = n.reciboTipo && n.reciboTipo.includes('pdf');
 
       return `
-        <tr>
-          <td data-label="Fecha Pago"><span class="table-cell-val" style="font-weight:600;">${n.fecha}</span></td>
-          <td data-label="Trabajador"><span class="table-cell-val" style="font-weight:700;">
+        <tr class="collapsible-record-row" onclick="App.toggleRecordRow(event, this)">
+          <td class="primary-col col-date" data-label="Fecha Pago"><span class="table-cell-val" style="font-weight:600;">${n.fecha}</span></td>
+          <td class="primary-col col-title" data-label="Trabajador"><span class="table-cell-val" style="font-weight:700;">
             <div>${n.trabajador}</div>
             ${n.whatsapp ? `<small style="color:#34d399;"><i class="fa-brands fa-whatsapp"></i> ${n.whatsapp}</small>` : ''}
           </span></td>
-          <td data-label="Cargo / Área"><span class="table-cell-val"><span class="badge-tag gold">${n.cargo}</span></span></td>
-          <td data-label="Periodo"><span class="table-cell-val" style="font-size:12px; color:var(--text-muted);">${n.periodo}</span></td>
-          <td data-label="Tiempo / Base"><span class="table-cell-val">${tiempoStr}</span></td>
-          <td data-label="Bonos / Comisión"><span class="table-cell-val" style="color:var(--emerald-primary);">+${this.formatearDinero(n.bonos || 0)}</span></td>
-          <td data-label="Deducciones"><span class="table-cell-val" style="color:var(--danger-primary);">${n.deducciones > 0 ? '-' + this.formatearDinero(n.deducciones) : '$0'}</span></td>
-          <td data-label="Neto Pagado"><span class="table-cell-val" style="font-weight:800; color:var(--gold-light);">${this.formatearDinero(n.neto)}</span></td>
-          <td data-label="Soporte">
+          <td class="primary-col col-badge" data-label="Cargo / Área"><span class="table-cell-val"><span class="badge-tag gold">${n.cargo}</span></span></td>
+          <td class="detail-col" data-label="Tiempo / Base"><span class="table-cell-val">${tiempoStr}</span></td>
+          <td class="detail-col" data-label="Bonos / Comisión"><span class="table-cell-val" style="color:var(--emerald-primary);">+${this.formatearDinero(n.bonos || 0)}</span></td>
+          <td class="primary-col col-amount" data-label="Neto Pagado"><span class="table-cell-val" style="font-weight:800; color:var(--gold-light);">${this.formatearDinero(n.neto)} <i class="fa-solid fa-chevron-down mobile-row-chevron"></i></span></td>
+          <td class="detail-col" data-label="Soporte">
             <span class="table-cell-val">
               ${n.reciboData ? `
                 <button class="receipt-pill-btn" onclick="App.abrirVisorRecibo('nomina', ${n.id})">
@@ -1227,7 +1224,7 @@ const App = {
               ` : `<span class="receipt-none">Sin foto</span>`}
             </span>
           </td>
-          <td data-label="WhatsApp / Acciones">
+          <td class="detail-col" data-label="WhatsApp / Acciones">
             <div class="action-buttons-cell">
               <button class="btn-table-action" style="color:var(--gold-light); border-color:rgba(212,175,55,0.4);" onclick="App.abrirComprobanteNomina(${n.id})" title="Ver e imprimir comprobante oficial PDF">
                 <i class="fa-solid fa-file-invoice-dollar"></i>
@@ -1491,6 +1488,11 @@ const App = {
       document.getElementById('nominaSueldoBase').value = emp.tarifa || 0;
       this.calcularNetoNomina();
     }
+
+    // Colapsar automáticamente la tarjeta de trabajador tras seleccionarlo y abrir liquidación
+    document.getElementById('cardNominaTrabajador')?.classList.add('collapsed');
+    document.getElementById('cardNominaLiquidacion')?.classList.remove('collapsed');
+    this.actualizarResumenTarjetasForm();
   },
 
   actualizarModoTiempoNomina() {
@@ -1808,8 +1810,78 @@ const App = {
   },
 
   // ===================================================================
-  // GESTIÓN DE FORMULARIOS: COMPRA Y NÓMINA
+  // GESTIÓN DE FORMULARIOS: COMPRA Y NÓMINA (TARJETAS COLAPSABLES)
   // ===================================================================
+  toggleFormCard(cardId) {
+    const card = document.getElementById(cardId);
+    if (!card) return;
+    const isCollapsed = card.classList.contains('collapsed');
+    const parentBody = card.closest('.modal-body');
+    if (parentBody && isCollapsed) {
+      parentBody.querySelectorAll('.form-collapse-card').forEach(c => {
+        if (c.id !== cardId) c.classList.add('collapsed');
+      });
+      card.classList.remove('collapsed');
+    } else {
+      card.classList.toggle('collapsed');
+    }
+    this.actualizarResumenTarjetasForm();
+  },
+
+  toggleRecordRow(event, trEl) {
+    if (!trEl) return;
+    if (event && event.target && event.target.closest('button, a')) return;
+    trEl.classList.toggle('expanded');
+  },
+
+  actualizarResumenTarjetasForm() {
+    // Resumen Tarjetas Compra
+    const prov = document.getElementById('compraProveedor')?.value.trim() || '';
+    const montoC = parseFloat(document.getElementById('compraMonto')?.value) || 0;
+    const metC = (document.getElementById('compraMetodoPago')?.value || 'Transferencia').split('/')[0].trim();
+    const fechaC = document.getElementById('compraFecha')?.value || '';
+    const sumDatosC = document.getElementById('summaryCompraDatos');
+    const sumPagoC = document.getElementById('summaryCompraPago');
+    const sumReciboC = document.getElementById('summaryCompraRecibo');
+
+    if (sumDatosC) {
+      sumDatosC.textContent = prov
+        ? `${prov} • ${this.formatearDinero(montoC)}`
+        : (montoC > 0 ? this.formatearDinero(montoC) : 'Datos principales');
+    }
+    if (sumPagoC) {
+      sumPagoC.textContent = `${metC} • ${fechaC || 'Hoy'}`;
+    }
+    if (sumReciboC) {
+      sumReciboC.textContent = this.reciboTempCompra ? '✅ Adjuntado' : 'Opcional';
+    }
+
+    // Resumen Tarjetas Nómina
+    const trab = document.getElementById('nominaTrabajador')?.value.trim() || '';
+    const cargo = (document.getElementById('nominaCargo')?.value || '').split('/')[0].trim();
+    const baseN = parseFloat(document.getElementById('nominaSueldoBase')?.value) || 0;
+    const bonosN = parseFloat(document.getElementById('nominaBonos')?.value) || 0;
+    const dedN = parseFloat(document.getElementById('nominaDeducciones')?.value) || 0;
+    const netoN = Math.max(0, baseN + bonosN - dedN);
+    const metN = (document.getElementById('nominaMetodoPago')?.value || 'Transferencia').split(' ')[0].trim();
+    const fechaN = document.getElementById('nominaFecha')?.value || '';
+
+    const sumTrabN = document.getElementById('summaryNominaTrabajador');
+    const sumMontoN = document.getElementById('summaryNominaMonto');
+    const sumExtrasN = document.getElementById('summaryNominaExtras');
+
+    if (sumTrabN) {
+      sumTrabN.textContent = trab ? `✅ ${trab} (${cargo})` : 'Seleccionar del equipo';
+    }
+    if (sumMontoN) {
+      sumMontoN.textContent = this.formatearDinero(netoN);
+    }
+    if (sumExtrasN) {
+      const recTxt = this.reciboTempNomina ? ' • ✅ Foto' : '';
+      sumExtrasN.textContent = `${metN} • ${fechaN || 'Hoy'}${recTxt}`;
+    }
+  },
+
   abrirModalCompra(id = null) {
     const modal = document.getElementById('modalCompra');
     const form = document.getElementById('formCompra');
@@ -1817,6 +1889,13 @@ const App = {
 
     document.getElementById('compraId').value = '';
     document.getElementById('compraFecha').value = new Date().toISOString().split('T')[0];
+    document.getElementById('compraNumeroFactura').value = '';
+    document.getElementById('compraNotas').value = '';
+
+    // Estado inicial de tarjetas colapsadas: 1 abierta, 2 y 3 colapsadas
+    document.getElementById('cardCompraDatos')?.classList.remove('collapsed');
+    document.getElementById('cardCompraPago')?.classList.add('collapsed');
+    document.getElementById('cardCompraRecibo')?.classList.add('collapsed');
     
     // Resetear campo personalizado
     const grupoPers = document.getElementById('grupoCategoriaPersonalizada');
@@ -1871,6 +1950,7 @@ const App = {
       document.getElementById('modalCompraTitulo').textContent = 'Registrar Compra de Mercancía';
     }
 
+    this.actualizarResumenTarjetasForm();
     modal.classList.add('active');
   },
 
@@ -1890,6 +1970,13 @@ const App = {
     document.getElementById('nominaDocumento').value = '';
     document.getElementById('nominaWhatsapp').value = '';
     document.getElementById('nominaEmail').value = '';
+    document.getElementById('nominaReferencia').value = '';
+    document.getElementById('nominaNotas').value = '';
+
+    // Estado inicial de tarjetas colapsadas en Nómina: 1 abierta, 2 y 3 colapsadas
+    document.getElementById('cardNominaTrabajador')?.classList.remove('collapsed');
+    document.getElementById('cardNominaLiquidacion')?.classList.add('collapsed');
+    document.getElementById('cardNominaExtras')?.classList.add('collapsed');
     
     const modoSel = document.getElementById('nominaModoTiempo');
     if (modoSel) modoSel.value = 'fijo';
@@ -1911,6 +1998,10 @@ const App = {
         document.getElementById('nominaWhatsapp').value = item.whatsapp || '';
         document.getElementById('nominaEmail').value = item.email || '';
         document.getElementById('nominaCargo').value = item.cargo;
+
+        // En edición colapsamos trabajador y abrimos liquidación para ir directo a valores
+        document.getElementById('cardNominaTrabajador')?.classList.add('collapsed');
+        document.getElementById('cardNominaLiquidacion')?.classList.remove('collapsed');
 
         if (modoSel) {
           modoSel.value = item.modoTiempo || 'fijo';
@@ -1941,6 +2032,7 @@ const App = {
       document.getElementById('modalNominaTitulo').textContent = 'Registrar Pago de Nómina';
     }
 
+    this.actualizarResumenTarjetasForm();
     modal.classList.add('active');
   },
 
@@ -1950,6 +2042,7 @@ const App = {
     const deducciones = parseFloat(document.getElementById('nominaDeducciones').value) || 0;
     const neto = Math.max(0, base + bonos - deducciones);
     document.getElementById('displayNetoCalculado').textContent = this.formatearDinero(neto);
+    this.actualizarResumenTarjetasForm();
     return neto;
   },
 
@@ -2029,11 +2122,12 @@ const App = {
     const cantTiempo = parseFloat(document.getElementById('nominaCantidadTiempo')?.value) || 0;
     const tarifaTiempo = parseFloat(document.getElementById('nominaTarifaTiempo')?.value) || 0;
 
+    const periodoAuto = `Mes ${this.obtenerNombreMes(mes)} ${anio}`;
     const datosNomina = {
       fecha,
       anio: parseInt(anio),
       mes: mes,
-      periodo: document.getElementById('nominaPeriodo').value.trim(),
+      periodo: document.getElementById('nominaPeriodo').value.trim() || periodoAuto,
       trabajador: nombreTrabajador,
       documento: docTrabajador,
       whatsapp: telTrabajador,
@@ -2166,6 +2260,7 @@ const App = {
       prompt.classList.remove('hidden');
       container.classList.add('hidden');
     }
+    this.actualizarResumenTarjetasForm();
   },
 
   // ===================================================================
@@ -2572,9 +2667,33 @@ const App = {
       });
     });
 
-    // 6. Envíos de Formulario
-    document.getElementById('formCompra')?.addEventListener('submit', (e) => this.guardarCompra(e));
-    document.getElementById('formNomina')?.addEventListener('submit', (e) => this.guardarNomina(e));
+    // 6. Envíos de Formulario y Validación en Tarjetas Colapsadas
+    const formCompraEl = document.getElementById('formCompra');
+    const formNominaEl = document.getElementById('formNomina');
+    formCompraEl?.addEventListener('submit', (e) => this.guardarCompra(e));
+    formNominaEl?.addEventListener('submit', (e) => this.guardarNomina(e));
+
+    // Si algún campo requerido está dentro de una tarjeta colapsada al enviar, abrirla automáticamente
+    [formCompraEl, formNominaEl].forEach(formEl => {
+      formEl?.addEventListener('invalid', (e) => {
+        const card = e.target.closest('.form-collapse-card');
+        if (card && card.classList.contains('collapsed')) {
+          this.toggleFormCard(card.id);
+        }
+      }, true);
+    });
+
+    // Actualizar resúmenes en vivo de las tarjetas colapsables
+    ['compraProveedor', 'compraMonto', 'compraMetodoPago', 'compraFecha',
+     'nominaTrabajador', 'nominaCargo', 'nominaMetodoPago', 'nominaFecha'].forEach(id => {
+      const el = document.getElementById(id);
+      el?.addEventListener('input', () => this.actualizarResumenTarjetasForm());
+      el?.addEventListener('change', () => this.actualizarResumenTarjetasForm());
+    });
+
+    document.getElementById('btnIrADirectorioPersonal')?.addEventListener('click', () => {
+      this.cambiarPestana('empleados');
+    });
 
     // Desglose salarial reactivo
     ['nominaSueldoBase', 'nominaBonos', 'nominaDeducciones'].forEach(id => {
