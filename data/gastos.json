@@ -5,7 +5,8 @@
   "moneda": "COP",
   "logoData": null,
   "customCategories": [],
-  "ultimaActualizacion": "2026-10-28T04:33:09.010Z",
+  "customLocalCategories": [],
+  "ultimaActualizacion": "2026-10-28T05:05:27.916Z",
   "empleados": [
     {
       "id": 1,
@@ -39,19 +40,9 @@
       "tipoPago": "horas",
       "tarifa": 15000,
       "notas": "Ventas y styling"
-    },
-    {
-      "id": 4,
-      "nombre": "Carlos Gómez",
-      "cargo": "Logística & Bodega de Ropa",
-      "documento": "1048291039",
-      "telefono": "3001234567",
-      "email": "carlos@noirda.com",
-      "tipoPago": "dias",
-      "tarifa": 55000,
-      "notas": "Recepción y percheros"
     }
   ],
   "compras": [],
+  "gastosLocal": [],
   "nomina": []
 }
