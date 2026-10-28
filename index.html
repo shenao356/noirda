@@ -30,7 +30,7 @@
   <div class="welcome-screen-overlay" id="welcomeScreen">
     <div class="welcome-card">
       <div class="welcome-brand-avatar">
-        <img src="logo.jpg" alt="NOIRDA Opulence Logo" class="welcome-logo-img">
+        <img src="logo.jpg" id="welcomeLogoImg" alt="NOIRDA Opulence Logo" class="welcome-logo-img">
       </div>
 
       <h1 class="welcome-title">¡Bienvenido, <span class="gold-accent">Liam</span>!</h1>
@@ -91,6 +91,11 @@
           <i class="fa-solid fa-shirt"></i>
           <span>Mercancía</span>
           <span class="badge" id="badgeCompras">0</span>
+        </a>
+        <a href="#local" class="nav-item" data-tab="local">
+          <i class="fa-solid fa-store"></i>
+          <span>Gastos Local</span>
+          <span class="badge" id="badgeLocal">0</span>
         </a>
         <a href="#nomina" class="nav-item" data-tab="nomina">
           <i class="fa-solid fa-user-tie"></i>
@@ -154,10 +159,50 @@
             </select>
           </div>
         </div>
+
+        <div class="topbar-right">
+          <!-- SELECTOR RÁPIDO DE TEMAS DE COLOR EN LA BARRA SUPERIOR -->
+          <div class="topbar-theme-palette" title="Cambiar el tema de color de la página">
+            <span class="palette-label"><i class="fa-solid fa-palette"></i> Tema:</span>
+            <button type="button" class="theme-dot-btn active" data-theme-color="gold" onclick="App.cambiarTemaColor('gold')" title="Oro Imperial (Clásico)" style="--dot-color: #d4af37;"></button>
+            <button type="button" class="theme-dot-btn" data-theme-color="emerald" onclick="App.cambiarTemaColor('emerald')" title="Esmeralda Opulence" style="--dot-color: #10b981;"></button>
+            <button type="button" class="theme-dot-btn" data-theme-color="rose" onclick="App.cambiarTemaColor('rose')" title="Rosa Champagne" style="--dot-color: #ec4899;"></button>
+            <button type="button" class="theme-dot-btn" data-theme-color="sapphire" onclick="App.cambiarTemaColor('sapphire')" title="Azul Zafiro Real" style="--dot-color: #3b82f6;"></button>
+            <button type="button" class="theme-dot-btn" data-theme-color="amethyst" onclick="App.cambiarTemaColor('amethyst')" title="Amatista Luxury" style="--dot-color: #a855f7;"></button>
+            <button type="button" class="theme-dot-btn" data-theme-color="amber" onclick="App.cambiarTemaColor('amber')" title="Ámbar Terracota" style="--dot-color: #f59e0b;"></button>
+            <button type="button" class="theme-dot-btn" data-theme-color="crimson" onclick="App.cambiarTemaColor('crimson')" title="Rubí Carmesí" style="--dot-color: #ef4444;"></button>
+            <label class="theme-custom-picker-label" title="Elegir color personalizado">
+              <i class="fa-solid fa-eye-dropper"></i>
+              <input type="color" id="topbarCustomColorInput" value="#d4af37">
+            </label>
+          </div>
+
+          <!-- BOTÓN RÁPIDO MODO CLARO / MODO OSCURO -->
+          <button type="button" class="btn-mode-toggle" id="btnQuickToggleModo" onclick="App.alternarModoClaroOscuro()" title="Alternar entre Modo Claro y Modo Oscuro">
+            <i class="fa-solid fa-sun" id="iconQuickModo"></i>
+            <span id="textQuickModo">Modo Claro</span>
+          </button>
+        </div>
       </header>
 
-      <!-- TAB 1: DASHBOARD / CONSOLIDADO MENSUAL -->
+      <!-- TAB 1: DASHBOARD / CONSOLIDADO MENSUAL Y ANUAL -->
       <section id="tab-dashboard" class="tab-panel active">
+        <!-- BARRA SUPERIOR DEL CONSOLIDADO CON EXPORTACIÓN PDF ANUAL COMPLETA -->
+        <div class="consolidado-top-banner">
+          <div class="consolidado-banner-info">
+            <h2 class="consolidado-banner-title"><i class="fa-solid fa-chart-pie text-gold"></i> Consolidado General y Balance Contable</h2>
+            <p class="consolidado-banner-sub">Resumen ejecutivo e informe detallado de Consumo de Mercancía, Gastos del Local y Pagos de Nómina</p>
+          </div>
+          <div class="consolidado-banner-actions">
+            <button class="btn-action-primary" id="btnExportarConsolidadoAnualPDF" onclick="App.exportarConsolidadoAnualPDF(false)" title="Generar PDF con todos los registros del año (Mercancía, Local y Nómina)">
+              <i class="fa-solid fa-file-pdf"></i> Exportar PDF Consolidado del Año
+            </button>
+            <button class="btn-secondary btn-gold-accent" id="btnExportarConsolidadoPeriodoPDF" onclick="App.exportarConsolidadoAnualPDF(true)" title="Generar PDF del mes o periodo filtrado actualmente">
+              <i class="fa-solid fa-print"></i> PDF Periodo Filtrado
+            </button>
+          </div>
+        </div>
+
         <!-- KPI METRICS ROW -->
         <div class="kpi-grid">
           <div class="kpi-card total-gastos" id="kpiCardTotal">
@@ -185,6 +230,20 @@
             <div class="kpi-footer">
               <span class="kpi-percent" id="kpiPercentCompras">0% del total</span>
               <span class="kpi-badge" id="kpiCountCompras">0 facturas</span>
+            </div>
+          </div>
+
+          <div class="kpi-card gastos-local" id="kpiCardLocal">
+            <div class="kpi-header">
+              <span class="kpi-title">Gastos del Local</span>
+              <div class="kpi-icon-box amber">
+                <i class="fa-solid fa-store"></i>
+              </div>
+            </div>
+            <div class="kpi-amount" id="kpiTotalLocal">$0</div>
+            <div class="kpi-footer">
+              <span class="kpi-percent" id="kpiPercentLocal">0% del total</span>
+              <span class="kpi-badge" id="kpiCountLocal">0 gastos</span>
             </div>
           </div>
 
@@ -223,7 +282,7 @@
             <div class="chart-header">
               <div>
                 <h3 class="chart-title">Evolución de Gastos Mensuales</h3>
-                <p class="chart-subtitle">Histórico comparativo de compras vs nómina</p>
+                <p class="chart-subtitle">Histórico comparativo de mercancía, local y nómina</p>
               </div>
               <span class="chart-tag">NOIRDA Balance</span>
             </div>
@@ -256,8 +315,8 @@
               <button class="btn-secondary" id="btnExportarExcelPeriodo">
                 <i class="fa-solid fa-file-excel"></i> Exportar Excel
               </button>
-              <button class="btn-secondary" id="btnPrintReporteMensual">
-                <i class="fa-solid fa-print"></i> Imprimir Informe
+              <button class="btn-secondary btn-gold-accent" id="btnPrintReporteMensual">
+                <i class="fa-solid fa-file-pdf"></i> Exportar PDF Consolidado Anual
               </button>
             </div>
           </div>
@@ -391,6 +450,175 @@
         </div>
       </section>
 
+      <!-- TAB 2.5: GASTOS DEL LOCAL / OPERATIVOS (APARTE DE MERCANCÍA Y NÓMINA) -->
+      <section id="tab-local" class="tab-panel">
+        <div class="section-top-actions">
+          <div class="section-title-wrap">
+            <h2 class="section-heading"><i class="fa-solid fa-store text-gold"></i> Gastos del Local y Operación</h2>
+            <p class="section-subheading">Control de arriendo, servicios públicos, adecuaciones, bolsas, aseo, papelería de prendas, etiquetas, rollos térmicos, papelería general, publicidad, modelos y pautas</p>
+          </div>
+          <div class="actions-group">
+            <button class="btn-secondary btn-gold-accent" id="btnAbrirModalLocalPersonalizado" onclick="App.abrirModalLocalPersonalizado()">
+              <i class="fa-solid fa-pen-to-square"></i> ➕ Gasto Personalizado / Manual
+            </button>
+            <button class="btn-action-primary" id="btnAbrirModalLocal">
+              <i class="fa-solid fa-plus"></i> Registrar Gasto del Local
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL ESPECIAL ADICIONAL: SEMÁFORO OPERATIVO POR BLOQUES DEL LOCAL -->
+        <div class="local-rubros-grid" id="localRubrosGrid">
+          <div class="local-rubro-card active" data-grupo="todos" onclick="App.filtrarPorGrupoLocal('todos')">
+            <div class="lrubro-icon gold"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="lrubro-info">
+              <span class="lrubro-label">Total Gastos Local</span>
+              <strong class="lrubro-amount" id="rubroTotalLocal">$0</strong>
+              <span class="lrubro-sub" id="rubroCountTodos">Todos los rubros</span>
+            </div>
+          </div>
+
+          <div class="local-rubro-card" data-grupo="instalaciones" onclick="App.filtrarPorGrupoLocal('instalaciones')">
+            <div class="lrubro-icon emerald"><i class="fa-solid fa-building-shield"></i></div>
+            <div class="lrubro-info">
+              <span class="lrubro-label">Local, Servicios y Aseo</span>
+              <strong class="lrubro-amount" id="rubroInstalaciones">$0</strong>
+              <span class="lrubro-sub">Arriendo • Servicios • Adecuaciones • Bolsas y Aseo</span>
+            </div>
+          </div>
+
+          <div class="local-rubro-card" data-grupo="prendas" onclick="App.filtrarPorGrupoLocal('prendas')">
+            <div class="lrubro-icon amber"><i class="fa-solid fa-barcode"></i></div>
+            <div class="lrubro-info">
+              <span class="lrubro-label">Papelería de Prendas</span>
+              <strong class="lrubro-amount" id="rubroPrendas">$0</strong>
+              <span class="lrubro-sub">Etiquetas • Códigos Barras • Rollos Térmicos • Cuerdas</span>
+            </div>
+          </div>
+
+          <div class="local-rubro-card" data-grupo="papeleria" onclick="App.filtrarPorGrupoLocal('papeleria')">
+            <div class="lrubro-icon blue"><i class="fa-solid fa-file-pen"></i></div>
+            <div class="lrubro-info">
+              <span class="lrubro-label">Papelería General y Caja</span>
+              <strong class="lrubro-amount" id="rubroPapeleria">$0</strong>
+              <span class="lrubro-sub">Recibos de Caja • Lapiceros • Hojas • Blocks</span>
+            </div>
+          </div>
+
+          <div class="local-rubro-card" data-grupo="marketing" onclick="App.filtrarPorGrupoLocal('marketing')">
+            <div class="lrubro-icon purple"><i class="fa-solid fa-camera-retro"></i></div>
+            <div class="lrubro-info">
+              <span class="lrubro-label">Publicidad, Modelos y Pautas</span>
+              <strong class="lrubro-amount" id="rubroMarketing">$0</strong>
+              <span class="lrubro-sub">Litografía • Pago de Modelos • Pautas Publicitarias</span>
+            </div>
+          </div>
+
+          <div class="local-rubro-card" data-grupo="otros" onclick="App.filtrarPorGrupoLocal('otros')">
+            <div class="lrubro-icon gold"><i class="fa-solid fa-pen-to-square"></i></div>
+            <div class="lrubro-info">
+              <span class="lrubro-label">Gastos Personalizados / Otros</span>
+              <strong class="lrubro-amount" id="rubroOtrosLocal">$0</strong>
+              <span class="lrubro-sub">Gastos manuales y rubros adicionales del local</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BARRA DE FILTROS Y EXPORTACIÓN DE GASTOS DEL LOCAL -->
+        <div class="purchases-filter-card">
+          <div class="pfilter-grid">
+            <div class="pfilter-item col-search">
+              <label class="pfilter-label"><i class="fa-solid fa-magnifying-glass"></i> Buscar Gasto del Local</label>
+              <input type="text" id="searchLocal" class="form-control" placeholder="Concepto, proveedor, recibo, modelo, pauta...">
+            </div>
+
+            <div class="pfilter-item">
+              <label class="pfilter-label"><i class="fa-solid fa-tags"></i> Categoría del Local</label>
+              <select id="filtroCategoriaLocal" class="form-control">
+                <option value="todas">Todas las categorías del local</option>
+                <option value="Servicios Públicos">Servicios Públicos</option>
+                <option value="Arriendo">Arriendo</option>
+                <option value="Adecuaciones de Espacios">Adecuaciones de Espacios</option>
+                <option value="Bolsas e Insumos de Aseo">Bolsas e Insumos de Aseo</option>
+                <option value="Papelería de Prendas">Papelería de Prendas</option>
+                <option value="Etiquetas">Etiquetas</option>
+                <option value="Códigos de Barras">Códigos de Barras</option>
+                <option value="Rollos Térmicos">Rollos Térmicos</option>
+                <option value="Cuerdas">Cuerdas</option>
+                <option value="Recibos de Caja">Recibos de Caja</option>
+                <option value="Papelería General (Lapiceros, Hojas, Blocks)">Papelería General (Lapiceros, Hojas, Blocks)</option>
+                <option value="Publicidad y Litografía">Publicidad y Litografía</option>
+                <option value="Pago de Modelos">Pago de Modelos</option>
+                <option value="Pautas Publicitarias">Pautas Publicitarias</option>
+                <option value="Otros Gastos del Local">Otros Gastos del Local</option>
+              </select>
+            </div>
+
+            <div class="pfilter-item">
+              <label class="pfilter-label"><i class="fa-solid fa-circle-check"></i> Estado / Tipo</label>
+              <select id="filtroEstadoLocal" class="form-control">
+                <option value="todos">Todos los estados</option>
+                <option value="Pagado">Pagado al Día</option>
+                <option value="Pendiente">Pendiente por Pagar</option>
+                <option value="Fijo Mensual">Gasto Fijo Mensual</option>
+              </select>
+            </div>
+
+            <div class="pfilter-item">
+              <label class="pfilter-label"><i class="fa-solid fa-credit-card"></i> Método de Pago</label>
+              <select id="filtroMetodoPagoLocal" class="form-control">
+                <option value="todos">Todos los métodos</option>
+                <option value="Transferencia / Bancolombia">Transferencia / Bancolombia</option>
+                <option value="Nequi / Daviplata">Nequi / Daviplata</option>
+                <option value="Efectivo Caja">Efectivo Caja</option>
+                <option value="Tarjeta Débito / Crédito">Tarjeta Débito / Crédito</option>
+                <option value="Pendiente por Pagar">Pendiente por Pagar</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pfilter-actions-bar">
+            <div class="pfilter-summary-inline">
+              <span>Gastos del local mostrados: <strong id="sumatoriaLocalFiltrados" class="text-gold">$0</strong></span>
+              <span class="pfilter-count" id="conteoLocalFiltrados">(0 registros)</span>
+            </div>
+            <div class="pfilter-btn-group">
+              <button class="btn-secondary" id="btnLimpiarFiltrosLocal" title="Restablecer filtros">
+                <i class="fa-solid fa-rotate-left"></i> Limpiar
+              </button>
+              <button class="btn-secondary btn-gold-accent" id="btnExportarLocalPDF" title="Descargar o imprimir informe oficial de gastos del local en PDF">
+                <i class="fa-solid fa-file-pdf"></i> Consolidado PDF Local
+              </button>
+              <button class="btn-secondary" id="btnEnviarLocalCorreo" title="Enviar resumen de gastos del local por correo">
+                <i class="fa-solid fa-envelope"></i> Enviar por Email
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-responsive">
+            <table class="data-table" id="tableLocal">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Beneficiario / Entidad</th>
+                  <th>Concepto / Detalle</th>
+                  <th>Categoría Local</th>
+                  <th>Estado / Pago</th>
+                  <th>Monto</th>
+                  <th>Soporte</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyLocal">
+                <!-- Se llena dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <!-- TAB 3: NÓMINA DE TRABAJADORES -->
       <section id="tab-nomina" class="tab-panel">
         <div class="section-top-actions">
@@ -469,7 +697,8 @@
           <div class="actions-group">
             <div class="filter-pills" id="filtroTipoRecibo">
               <button class="pill active" data-type="all">Todos</button>
-              <button class="pill" data-type="compra">Compras</button>
+              <button class="pill" data-type="compra">Mercancía</button>
+              <button class="pill" data-type="local">Gastos Local</button>
               <button class="pill" data-type="nomina">Nómina</button>
             </div>
           </div>
@@ -587,6 +816,17 @@
 
               <div class="toggle-option">
                 <div class="toggle-info">
+                  <span class="toggle-label">Tarjeta: Gastos del Local</span>
+                  <span class="toggle-desc">Arriendo, servicios, papelería, modelos y pautas</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleKpiLocal" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-option">
+                <div class="toggle-info">
                   <span class="toggle-label">Tarjeta: Gastos de Nómina</span>
                   <span class="toggle-desc">Total pagado en salarios del equipo</span>
                 </div>
@@ -620,13 +860,74 @@
 
               <div class="toggle-option">
                 <div class="toggle-info">
-                  <span class="toggle-label">Modo Visual Oscuro "Noir Luxury"</span>
-                  <span class="toggle-desc">Alternar entre tema oscuro elegante y tema claro</span>
+                  <span class="toggle-label">Modo Visual Oscuro / Claro</span>
+                  <span class="toggle-desc">Alternar entre modo oscuro elegante y modo claro</span>
                 </div>
                 <label class="switch">
                   <input type="checkbox" id="toggleTemaOscuro" checked>
                   <span class="slider"></span>
                 </label>
+              </div>
+
+              <!-- ESTUDIO DE TEMAS Y COLORES DE LA PÁGINA -->
+              <div class="theme-studio-box">
+                <h4 class="theme-studio-title"><i class="fa-solid fa-palette text-gold"></i> Modo de Pantalla y Temas de Color</h4>
+                <p class="help-text mb-2">Elige entre Modo Oscuro o Modo Claro y personaliza el color principal de toda la aplicación:</p>
+
+                <!-- Botones grandes de Modo Oscuro vs Modo Claro -->
+                <div class="mode-selector-cards">
+                  <button type="button" class="mode-card-btn active" id="btnModoOscuroCard" onclick="App.establecerModoOscuro(true)">
+                    <i class="fa-solid fa-moon"></i>
+                    <div>
+                      <strong>Modo Oscuro</strong>
+                      <small>Noir Luxury</small>
+                    </div>
+                  </button>
+                  <button type="button" class="mode-card-btn" id="btnModoClaroCard" onclick="App.establecerModoOscuro(false)">
+                    <i class="fa-solid fa-sun"></i>
+                    <div>
+                      <strong>Modo Claro</strong>
+                      <small>Marfil Ejecutivo</small>
+                    </div>
+                  </button>
+                </div>
+
+                <!-- Tarjetas de Temas de Color -->
+                <div class="color-themes-grid" id="settingsThemesGrid">
+                  <button type="button" class="color-theme-card active" data-theme-color="gold" onclick="App.cambiarTemaColor('gold')">
+                    <span class="theme-swatch" style="background: linear-gradient(135deg, #d4af37, #0f9f75);"></span>
+                    <span class="theme-name">Oro Imperial</span>
+                  </button>
+                  <button type="button" class="color-theme-card" data-theme-color="emerald" onclick="App.cambiarTemaColor('emerald')">
+                    <span class="theme-swatch" style="background: linear-gradient(135deg, #10b981, #047857);"></span>
+                    <span class="theme-name">Esmeralda</span>
+                  </button>
+                  <button type="button" class="color-theme-card" data-theme-color="rose" onclick="App.cambiarTemaColor('rose')">
+                    <span class="theme-swatch" style="background: linear-gradient(135deg, #ec4899, #be185d);"></span>
+                    <span class="theme-name">Rosa Champagne</span>
+                  </button>
+                  <button type="button" class="color-theme-card" data-theme-color="sapphire" onclick="App.cambiarTemaColor('sapphire')">
+                    <span class="theme-swatch" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);"></span>
+                    <span class="theme-name">Azul Zafiro</span>
+                  </button>
+                  <button type="button" class="color-theme-card" data-theme-color="amethyst" onclick="App.cambiarTemaColor('amethyst')">
+                    <span class="theme-swatch" style="background: linear-gradient(135deg, #a855f7, #6d28d9);"></span>
+                    <span class="theme-name">Amatista</span>
+                  </button>
+                  <button type="button" class="color-theme-card" data-theme-color="amber" onclick="App.cambiarTemaColor('amber')">
+                    <span class="theme-swatch" style="background: linear-gradient(135deg, #f59e0b, #b45309);"></span>
+                    <span class="theme-name">Ámbar Cobre</span>
+                  </button>
+                  <button type="button" class="color-theme-card" data-theme-color="crimson" onclick="App.cambiarTemaColor('crimson')">
+                    <span class="theme-swatch" style="background: linear-gradient(135deg, #ef4444, #b91c1c);"></span>
+                    <span class="theme-name">Rubí Carmesí</span>
+                  </button>
+                  <label class="color-theme-card custom-color-card" data-theme-color="custom" title="Selecciona cualquier color libremente">
+                    <input type="color" id="inputCustomThemeColor" value="#d4af37" style="position:absolute; opacity:0; width:1px; height:1px;">
+                    <span class="theme-swatch" id="customThemeSwatchPreview" style="background: conic-gradient(#ef4444, #f59e0b, #10b981, #3b82f6, #a855f7, #ec4899, #ef4444);"></span>
+                    <span class="theme-name">Personalizado</span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -698,7 +999,7 @@
 
               <div class="form-group mb-2">
                 <label>Token de Acceso Personal (GitHub Token)</label>
-                <input type="password" id="inputGithubToken" class="form-control" placeholder="ghp_xxxxxxxxxxxx...">
+                <input type="password" id="inputGithubToken" class="form-control" placeholder="Ingresa tu token de GitHub">
                 <span class="file-hint">Token con permisos 'repo' generado en github.com/settings/tokens</span>
               </div>
 
@@ -736,7 +1037,7 @@
       <i class="fa-solid fa-plus"></i>
     </button>
 
-    <!-- BOTTOM MOBILE NAVIGATION (Smartphones: 5 opciones perfectamente centradas) -->
+    <!-- BOTTOM MOBILE NAVIGATION -->
     <nav class="bottom-nav">
       <a href="#dashboard" class="bnav-item active" data-tab="dashboard">
         <i class="fa-solid fa-chart-line"></i>
@@ -745,6 +1046,10 @@
       <a href="#compras" class="bnav-item" data-tab="compras">
         <i class="fa-solid fa-shirt"></i>
         <span>Mercancía</span>
+      </a>
+      <a href="#local" class="bnav-item" data-tab="local">
+        <i class="fa-solid fa-store"></i>
+        <span>Local</span>
       </a>
       <a href="#nomina" class="bnav-item" data-tab="nomina">
         <i class="fa-solid fa-user-tie"></i>
@@ -909,6 +1214,208 @@
           <button type="button" class="btn-secondary" data-close="modalCompra">Cancelar</button>
           <button type="submit" class="btn-action-primary">
             <i class="fa-solid fa-floppy-disk"></i> Guardar Compra
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRAR / EDITAR GASTO DEL LOCAL (APARTE DE MERCANCÍA Y NÓMINA) -->
+  <div class="modal-overlay" id="modalLocal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-store modal-icon gold"></i>
+          <h3 id="modalLocalTitulo">Registrar Gasto del Local</h3>
+        </div>
+        <button class="modal-close-btn" data-close="modalLocal">&times;</button>
+      </div>
+      <form id="formLocal">
+        <input type="hidden" id="localId">
+        <div class="modal-body compact-cards-body">
+
+          <!-- TARJETA 1: SELECCIÓN RÁPIDA Y CATEGORÍA DEL GASTO DEL LOCAL -->
+          <div class="form-collapse-card" id="cardLocalDatos">
+            <div class="form-card-header" onclick="App.toggleFormCard('cardLocalDatos')">
+              <div class="form-card-title">
+                <i class="fa-solid fa-store text-gold"></i>
+                <span>1. Categoría, Concepto y Monto</span>
+              </div>
+              <div class="form-card-meta">
+                <span class="form-card-summary" id="summaryLocalDatos">Seleccionar rubro</span>
+                <i class="fa-solid fa-chevron-down form-card-chevron"></i>
+              </div>
+            </div>
+            <div class="form-card-body">
+
+              <!-- SELECTOR RÁPIDO CON 1 TOQUE (ALGO ADICIONAL EXCLUSIVO PARA GASTOS DEL LOCAL) -->
+              <div class="quick-local-chips-box">
+                <span class="quick-chips-title"><i class="fa-solid fa-wand-magic-sparkles text-gold"></i> Selección rápida de gasto del local (o elige Personalizado para escribir manual):</span>
+                <div class="quick-local-chips" id="quickLocalChips">
+                  <button type="button" class="local-chip custom-manual-chip" id="chipGastoPersonalizadoLocal" onclick="App.activarGastoLocalPersonalizado()"><i class="fa-solid fa-pen-to-square"></i> ➕ Personalizado (Escribir Gasto Manual)</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Servicios Públicos', 'Pago de servicios públicos (Energía / Agua / Internet)')"><i class="fa-solid fa-bolt"></i> Servicios Públicos</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Arriendo', 'Canon de arriendo mensual del local')"><i class="fa-solid fa-key"></i> Arriendo</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Adecuaciones de Espacios', 'Adecuación, arreglo o decoración del local')"><i class="fa-solid fa-hammer"></i> Adecuaciones</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Bolsas e Insumos de Aseo', 'Bolsas e insumos de aseo y limpieza para el local')"><i class="fa-solid fa-spray-can-sparkles"></i> Bolsas y Aseo</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Papelería de Prendas', 'Papelería de prendas y marquillas para ropa')"><i class="fa-solid fa-tag"></i> Papelería Prendas</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Etiquetas', 'Etiquetas colgantes y marquillas de prendas')"><i class="fa-solid fa-tags"></i> Etiquetas</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Códigos de Barras', 'Stickers y etiquetas de códigos de barras')"><i class="fa-solid fa-barcode"></i> Códigos de Barras</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Rollos Térmicos', 'Rollos térmicos para impresora POS y facturación')"><i class="fa-solid fa-scroll"></i> Rollos Térmicos</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Cuerdas', 'Cuerdas / plastiflechas sujetadoras de etiquetas')"><i class="fa-solid fa-link"></i> Cuerdas</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Recibos de Caja', 'Talonarios de recibos de caja y factureros')"><i class="fa-solid fa-file-invoice"></i> Recibos de Caja</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Papelería General (Lapiceros, Hojas, Blocks)', 'Lapiceros, hojas, blocks y papelería de oficina')"><i class="fa-solid fa-pen-clip"></i> Lapiceros / Hojas / Blocks</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Publicidad y Litografía', 'Impresión litográfica, tarjetas, flyers y pendones')"><i class="fa-solid fa-print"></i> Publicidad Litografía</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Pago de Modelos', 'Pago de modelos para sesión de fotos / contenido')"><i class="fa-solid fa-camera"></i> Pago de Modelos</button>
+                  <button type="button" class="local-chip" onclick="App.seleccionarChipLocal('Pautas Publicitarias', 'Pautas publicitarias en Instagram / Meta Ads / TikTok')"><i class="fa-solid fa-bullhorn"></i> Pautas Publicitarias</button>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <div class="label-with-action">
+                    <label for="localCategoria">Categoría del Local *</label>
+                    <button type="button" class="btn-inline-custom-cat" onclick="App.activarGastoLocalPersonalizado()">
+                      <i class="fa-solid fa-pen-to-square"></i> Escribir gasto manual
+                    </button>
+                  </div>
+                  <select id="localCategoria" class="form-control" required>
+                    <option value="Servicios Públicos">Servicios Públicos</option>
+                    <option value="Arriendo">Arriendo</option>
+                    <option value="Adecuaciones de Espacios">Adecuaciones de Espacios</option>
+                    <option value="Bolsas e Insumos de Aseo">Bolsas e Insumos de Aseo</option>
+                    <option value="Papelería de Prendas">Papelería de Prendas</option>
+                    <option value="Etiquetas">Etiquetas</option>
+                    <option value="Códigos de Barras">Códigos de Barras</option>
+                    <option value="Rollos Térmicos">Rollos Térmicos</option>
+                    <option value="Cuerdas">Cuerdas</option>
+                    <option value="Recibos de Caja">Recibos de Caja</option>
+                    <option value="Papelería General (Lapiceros, Hojas, Blocks)">Papelería General (Lapiceros, Hojas, Blocks)</option>
+                    <option value="Publicidad y Litografía">Publicidad y Litografía</option>
+                    <option value="Pago de Modelos">Pago de Modelos</option>
+                    <option value="Pautas Publicitarias">Pautas Publicitarias</option>
+                    <option value="Otros Gastos del Local">Otros Gastos del Local</option>
+                    <option value="__custom__">➕ Personalizado (Escribir gasto manual)...</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="localProveedor">Beneficiario / Entidad / Modelo *</label>
+                  <input type="text" id="localProveedor" class="form-control" placeholder="Ej: EPM, Inmobiliaria, Litografía, Modelo..." required>
+                </div>
+              </div>
+
+              <div class="form-group custom-local-expense-box hidden" id="grupoCategoriaLocalPersonalizada">
+                <label for="localCategoriaPersonalizada"><i class="fa-solid fa-pen-fancy text-gold"></i> Escribe manualmente la Categoría o Gasto del Local que requieres *</label>
+                <input type="text" id="localCategoriaPersonalizada" class="form-control" placeholder="Escribe el gasto manual aquí (Ej: Vigilancia, Mantenimiento Aire, Cafetería, Fletes...)">
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="localDescripcion">Detalle del Gasto / Insumos *</label>
+                  <input type="text" id="localDescripcion" class="form-control" placeholder="Ej: Rollos térmicos, etiquetas, pauta colección..." required>
+                </div>
+                <div class="form-group">
+                  <label for="localMonto">Monto del Gasto ($) *</label>
+                  <input type="number" id="localMonto" class="form-control text-right" placeholder="0" min="0" step="any" required>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TARJETA 2: ESTADO, FRECUENCIA, PAGO Y FECHA -->
+          <div class="form-collapse-card collapsed" id="cardLocalPago">
+            <div class="form-card-header" onclick="App.toggleFormCard('cardLocalPago')">
+              <div class="form-card-title">
+                <i class="fa-solid fa-calendar-check text-emerald"></i>
+                <span>2. Estado, Modalidad y Fecha</span>
+              </div>
+              <div class="form-card-meta">
+                <span class="form-card-summary" id="summaryLocalPago">Pagado • Hoy</span>
+                <i class="fa-solid fa-chevron-down form-card-chevron"></i>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="localEstado">Estado / Frecuencia</label>
+                  <select id="localEstado" class="form-control">
+                    <option value="Pagado">✅ Pagado al Día</option>
+                    <option value="Fijo Mensual">🔄 Gasto Fijo Mensual (Pagado)</option>
+                    <option value="Pendiente">⏳ Pendiente por Pagar</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="localMetodoPago">Método de Pago</label>
+                  <select id="localMetodoPago" class="form-control">
+                    <option value="Transferencia / Bancolombia">Transferencia / Bancolombia</option>
+                    <option value="Nequi / Daviplata">Nequi / Daviplata</option>
+                    <option value="Efectivo Caja">Efectivo Caja</option>
+                    <option value="Tarjeta Débito / Crédito">Tarjeta Débito / Crédito</option>
+                    <option value="Pendiente por Pagar">Pendiente por Pagar</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="localFecha">Fecha del Gasto *</label>
+                  <input type="date" id="localFecha" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="localNumeroFactura">N° Recibo / Factura (Opcional)</label>
+                  <input type="text" id="localNumeroFactura" class="form-control" placeholder="Ej: REC-104">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TARJETA 3: RECIBO / SOPORTE ADJUNTO -->
+          <div class="form-collapse-card collapsed" id="cardLocalRecibo">
+            <div class="form-card-header" onclick="App.toggleFormCard('cardLocalRecibo')">
+              <div class="form-card-title">
+                <i class="fa-solid fa-paperclip text-gold"></i>
+                <span>3. Recibo / Factura del Local</span>
+              </div>
+              <div class="form-card-meta">
+                <span class="form-card-summary" id="summaryLocalRecibo">Opcional</span>
+                <i class="fa-solid fa-chevron-down form-card-chevron"></i>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <div class="upload-dropzone compact-dropzone" id="dropzoneLocal">
+                <input type="file" id="localArchivoRecibo" accept="image/*, application/pdf" style="display:none;">
+                <input type="file" id="localCamaraRecibo" accept="image/*" capture="environment" style="display:none;">
+                <div class="dropzone-content" id="dropzoneLocalPrompt">
+                  <div class="upload-btn-choices">
+                    <button type="button" class="btn-choice" id="btnElegirArchivoLocal">
+                      <i class="fa-solid fa-folder-open"></i> Galería / Archivo
+                    </button>
+                    <button type="button" class="btn-choice-subtle" id="btnTomarFotoLocal">
+                      <i class="fa-solid fa-camera"></i> Tomar Foto
+                    </button>
+                  </div>
+                </div>
+                <div class="preview-container hidden" id="previewLocalContainer">
+                  <img id="imgPreviewLocal" class="preview-thumbnail" alt="Recibo Local">
+                  <div class="preview-actions">
+                    <span id="previewLocalNombre" class="preview-name">recibo_local.jpg</span>
+                    <button type="button" class="btn-remove-attachment" id="btnQuitarReciboLocal" title="Eliminar recibo">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" style="margin-top: 8px;">
+                <label for="localNotas">Notas / Observaciones (Opcional)</label>
+                <input type="text" id="localNotas" class="form-control" placeholder="Ej: Factura mensual pagada con descuento, abono 50%...">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close="modalLocal">Cancelar</button>
+          <button type="submit" class="btn-action-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Gasto del Local
           </button>
         </div>
       </form>
@@ -1126,11 +1633,32 @@
       </div>
 
       <div class="modal-body voucher-modal-body">
+        <!-- AVISO DE WHATSAPP DIRECTO Y COPIA DE IMAGEN -->
+        <div class="voucher-wa-notice" id="voucherWaNotice">
+          <div class="voucher-wa-notice-info">
+            <i class="fa-brands fa-whatsapp wa-notice-icon"></i>
+            <div>
+              <div class="wa-notice-title">
+                WhatsApp del Colaborador: <strong id="voucherWaNoticeNombre">Colaborador</strong> 
+                <span id="voucherWaNoticeTel" class="badge-tel">+57 --</span>
+              </div>
+              <p class="wa-notice-desc">
+                📸 Comprobante listo en imagen. En WhatsApp presiona <kbd>Ctrl + V</kbd> (Pegar) y dale <strong>Enviar</strong>.
+              </p>
+            </div>
+          </div>
+          <button type="button" class="btn-whatsapp-action btn-sm-wa" id="btnReabrirChatWhatsapp" title="Abrir chat de WhatsApp directamente">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Chat
+          </button>
+        </div>
+
         <!-- VOUCHER RENDERIZADO PARA PANTALLA E IMPRESIÓN -->
         <div class="luxury-voucher-sheet" id="luxuryVoucherSheet">
           <div class="voucher-header">
             <div class="voucher-brand-box">
-              <img src="logo.jpg" alt="NOIRDA Opulence" class="voucher-logo">
+              <div class="voucher-logo-frame">
+                <img src="logo.jpg" id="voucherLogoImg" alt="NOIRDA Opulence" class="voucher-logo">
+              </div>
               <div>
                 <h2 class="voucher-brand-name">NOIRDA OPULENCE</h2>
                 <p class="voucher-tagline">Atelier & Fashion Store • Control Contable</p>
@@ -1216,16 +1744,19 @@
         </div>
       </div>
 
-      <!-- BOTONES DE ENVÍO DIRECTO: WHATSAPP, EMAIL, PRINT -->
+      <!-- BOTONES DE ENVÍO DIRECTO: WHATSAPP IMAGEN, DESCARGAR PNG, EMAIL, PRINT -->
       <div class="modal-footer voucher-footer">
-        <button type="button" class="btn-whatsapp-action" id="btnEnviarWhatsappVoucher">
-          <i class="fa-brands fa-whatsapp"></i> Enviar por WhatsApp
+        <button type="button" class="btn-whatsapp-action" id="btnEnviarWhatsappVoucher" title="Genera el comprobante en imagen PNG de alta calidad y lo envía por WhatsApp">
+          <i class="fa-brands fa-whatsapp"></i> Enviar Imagen por WhatsApp
+        </button>
+        <button type="button" class="btn-secondary btn-gold-accent" id="btnDescargarImagenVoucher" title="Descargar comprobante como imagen PNG">
+          <i class="fa-solid fa-image"></i> Descargar Imagen
         </button>
         <button type="button" class="btn-secondary" id="btnEnviarEmailVoucher">
-          <i class="fa-solid fa-envelope"></i> Enviar por Email
+          <i class="fa-solid fa-envelope"></i> Email
         </button>
         <button type="button" class="btn-action-primary" id="btnImprimirVoucherFinal">
-          <i class="fa-solid fa-print"></i> Imprimir / Guardar PDF
+          <i class="fa-solid fa-print"></i> Imprimir / PDF
         </button>
       </div>
     </div>
@@ -1369,13 +1900,21 @@
         </div>
         <button class="modal-close-btn" data-close="modalSelectorRapido">&times;</button>
       </div>
-      <div class="modal-body quick-select-grid">
+      <div class="modal-body quick-select-grid three-cols">
         <button class="quick-btn" id="btnRapidoCompra">
           <div class="quick-btn-icon blue">
             <i class="fa-solid fa-shirt"></i>
           </div>
           <h4>Compra de Mercancía</h4>
           <p>Factura de ropa, prendas, telas y proveedores</p>
+        </button>
+
+        <button class="quick-btn" id="btnRapidoLocal">
+          <div class="quick-btn-icon amber">
+            <i class="fa-solid fa-store"></i>
+          </div>
+          <h4>Gasto del Local</h4>
+          <p>Servicios, arriendo, adecuaciones, papelería, etiquetas, modelos y pautas</p>
         </button>
 
         <button class="quick-btn" id="btnRapidoNomina">
@@ -1389,8 +1928,10 @@
     </div>
   </div>
 
-  <!-- CONTENEDOR OCULTO PARA IMPRESIÓN OFICIAL DEL CONSOLIDADO DE COMPRAS (PDF / PRINT) -->
+  <!-- CONTENEDORES OCULTOS PARA IMPRESIÓN OFICIAL DE CONSOLIDADOS (PDF / PRINT) -->
   <div id="comprasPrintSheet" class="printable-report-sheet hidden"></div>
+  <div id="localPrintSheet" class="printable-report-sheet hidden"></div>
+  <div id="anualConsolidadoPrintSheet" class="printable-report-sheet hidden"></div>
 
   <!-- NOTIFICACIÓN TOAST FLOTANTE -->
   <div id="toastContainer" class="toast-container"></div>
