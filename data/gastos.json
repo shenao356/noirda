@@ -6,7 +6,7 @@
   "logoData": null,
   "customCategories": [],
   "customLocalCategories": [],
-  "ultimaActualizacion": "2026-10-28T05:05:27.916Z",
+  "ultimaActualizacion": "2026-10-28T05:06:16.453Z",
   "empleados": [
     {
       "id": 1,
@@ -18,17 +18,6 @@
       "tipoPago": "mensual",
       "tarifa": 10000000,
       "notas": "Gestión y dirección general"
-    },
-    {
-      "id": 2,
-      "nombre": "Kim Zuluaga",
-      "cargo": "Costurero / Modista",
-      "documento": "1028394857",
-      "telefono": "3124567890",
-      "email": "kimzuluaga@gmail.com",
-      "tipoPago": "quincenal",
-      "tarifa": 500000,
-      "notas": "Confección y costura"
     },
     {
       "id": 3,
