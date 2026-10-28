@@ -6,18 +6,18 @@
   "logoData": null,
   "customCategories": [],
   "customLocalCategories": [],
-  "ultimaActualizacion": "2026-10-28T05:06:18.386Z",
+  "ultimaActualizacion": "2026-10-28T05:07:25.956Z",
   "empleados": [
     {
-      "id": 1,
       "nombre": "Liam Varelas",
-      "cargo": "Director Creativo & Propietario",
-      "documento": "1037648921",
+      "documento": "1045023148",
       "telefono": "3045345642",
-      "email": "liamvarelas@gmail.com",
+      "email": "tiiagokpop@gmail.com",
+      "cargo": "Administrador Tienda",
       "tipoPago": "mensual",
-      "tarifa": 10000000,
-      "notas": "Gestión y dirección general"
+      "tarifa": 5000000,
+      "notas": "Gestión y Dirección General",
+      "id": 1
     }
   ],
   "compras": [],
