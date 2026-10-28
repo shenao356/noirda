@@ -6,7 +6,7 @@
   "logoData": null,
   "customCategories": [],
   "customLocalCategories": [],
-  "ultimaActualizacion": "2026-10-28T05:09:49.651Z",
+  "ultimaActualizacion": "2026-10-28T05:11:59.665Z",
   "empleados": [
     {
       "nombre": "Liam Varelas",
@@ -18,6 +18,17 @@
       "tarifa": 5000000,
       "notas": "Gestión y Dirección General",
       "id": 1
+    },
+    {
+      "nombre": "Santiago Henao",
+      "documento": "1036956453",
+      "telefono": "3148277728",
+      "email": "shenao356@gmail.com",
+      "cargo": "Auxiliar Temporal",
+      "tipoPago": "quincenal",
+      "tarifa": 2500000,
+      "notas": "",
+      "id": 1793164319243
     }
   ],
   "compras": [
