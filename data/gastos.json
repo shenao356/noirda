@@ -6,7 +6,7 @@
   "logoData": null,
   "customCategories": [],
   "customLocalCategories": [],
-  "ultimaActualizacion": "2026-10-28T05:06:16.453Z",
+  "ultimaActualizacion": "2026-10-28T05:06:18.386Z",
   "empleados": [
     {
       "id": 1,
@@ -18,17 +18,6 @@
       "tipoPago": "mensual",
       "tarifa": 10000000,
       "notas": "Gestión y dirección general"
-    },
-    {
-      "id": 3,
-      "nombre": "Luna Gil",
-      "cargo": "Vendedor / Atención Almacén",
-      "documento": "1019283746",
-      "telefono": "3156789012",
-      "email": "lunagil@gmail.com",
-      "tipoPago": "horas",
-      "tarifa": 15000,
-      "notas": "Ventas y styling"
     }
   ],
   "compras": [],
